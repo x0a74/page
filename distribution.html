@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Simple Atmospheric Dispersion Calculation</title>
+    <link rel="stylesheet" type="text/css" href="css/ress.css">
+    <link rel="stylesheet" type="text/css" href="./distribution.css">
+</head>
+
+<body>
+    <div class="h_div">Instructor Training Program</div>
+    <div id="title">Simple Atmospheric Dispersion Calculation</div>
+    <div id="expbar">
+        <p id="exp_left"></p>
+        <p>for Training on ITP NREP</p>
+        <p id="exp_right">What's this?</p>
+    </div>
+    <div id="explanation">
+        <p>This simplified calculation simulator is based on the formulas provided in the meteorological guidelines.</p>
+        <p><a href="http://www.aec.go.jp/jicst/NC/about/hakusho/wp1977/ss1010107.htm" target="_blank"
+                rel="noopener noreferrer">http://www.aec.go.jp/jicst/NC/about/hakusho/wp1977/ss1010107.htm
+                (In Japanese.)</a></p>
+        <p>This was created for training purposes and is not recommended for use for any other purpose.</p>
+        <p>If you wish to use this for FTC in your country, please contact to YOKOYAMA (<a
+                href="mailto:yokoyama.hiroya@jaea.go.jp">yokoyama.hiroya@jaea.go.jp</a>)
+        </p>
+    </div>
+    <div id="calculation-condition1">
+        <div id="release-rate" class="select">
+            Release rate
+            <div class="input">
+                <input type="tel" id="releaserate" class="numinput" value="1000"> Bq/h
+            </div>
+        </div>
+        <div id="wind-speed" class="select">
+            Wind Speed<div class="input">
+                <input type="tel" id="windspeed" class="numinput" value="0.5"> m/s
+            </div>
+        </div>
+        <div id="height" class="select">
+            Effective Height<div class="input">
+                <input type="tel" id="effectiveheight" class="numinput" value="80.0"> m
+            </div>
+        </div>
+        <div id="astability" class="select">
+            Atmospheric stability
+            <div id="airstability">
+                <input type="radio" id="asChoice0" name="as" value="0" /><label for="asChoice0">A</label>
+                <input type="radio" id="asChoice1" name="as" value="1" /><label for="asChoice1">B</label>
+                <input type="radio" id="asChoice2" name="as" value="2" /><label for="asChoice2">C</label><br>
+                <input type="radio" id="asChoice3" name="as" value="3" checked /><label for="asChoice3">D</label>
+                <input type="radio" id="asChoice4" name="as" value="4" /><label for="asChoice4">E</label>
+                <input type="radio" id="asChoice5" name="as" value="5" /><label for="asChoice5">F</label>
+            </div>
+        </div>
+        <div id="c-height" class="select">
+            Calculation Height<div class="input">
+                <input type="tel" id="calculationheight" class="numinput" value="0"> m
+            </div>
+        </div>
+    </div>
+    <div id="canvases">
+        <div id="canvavs1">
+            <div id="resolution">
+                <label for="resolution-select">Choose Resolution:</label>
+                <select id="resolution-select">
+                    <option value="0">Rough</option>
+                    <option value="1">Moderate</option>
+                    <option value="2">Smooth</option>
+                </select>
+            </div>
+            <div id="canvas-container">
+                <canvas id="myCanvas"></canvas>
+                <div id="result-container">
+                    <div id="calc-condition"></div>
+                    <div id="result-message"></div>
+                </div>
+                <p id="show-result"></p>
+            </div>
+        </div>
+        <div id="canvas2">
+            <canvas id="myCanvas2"></canvas>
+        </div>
+        <div>
+            <input type="range" id="calcheight" min="0" max="100" value="0" step="0.1" orient="vertical" />
+        </div>
+    </div>
+    <div class="f_div"></div>
+    <div id="copy_right">
+        Copyright © JAEA, Nuclear Human Resource Development Center
+    </div>
+    <script src="./distribution.js"></script>
+</body>
+
+</html>

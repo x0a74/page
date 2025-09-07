@@ -1,0 +1,157 @@
+/*YOKOYAMA*/
+@charset "utf-8";
+
+html {
+    height: 100%;
+    font-size: medium;
+}
+
+body {
+    width: 95%;
+    max-width: 1280px;
+    margin: auto;
+    font-family: "Helvetica Neue",
+        Arial,
+        "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans",
+        Meiryo,
+        sans-serif;
+}
+
+.h_div {
+    color: #ffffff;
+    font-weight: bold;
+    background-color: navy;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-shadow: 1px 2px 3px #000;
+}
+
+#title {
+    text-align: center;
+    font-size: xx-large;
+    padding-top: 10px;
+}
+
+#canvas-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    border: 1px solid black;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+}
+
+#resolution {
+    margin: auto;
+    max-width: 960px;
+    text-align: right;
+}
+
+#resolution-select {
+    border: 1px solid black;
+}
+
+#refresh-button {
+    margin-top: 20px;
+}
+
+#calculation-condition1 {
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+.select {
+    padding-right: 0.2em;
+    margin: 0.2em;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+    border-radius: 10px;
+    color: #000;
+    text-align: center;
+}
+
+.numinput {
+    width: 150px;
+    margin: 0.5em;
+    text-align: right;
+    border: 1px solid #9C9C9C;
+    border-radius: 5px;
+}
+
+#astability {
+    width: 200px;
+}
+
+.f_div {
+    padding-top: 10px;
+    border-bottom: 4px solid #9C9C9C;
+    border-image: linear-gradient(to right, #E8E8E8 10%, navy 100%);
+    border-image-slice: 1;
+}
+
+#copy_right {
+    text-align: right;
+    padding-right: 10px;
+}
+
+#result-container {
+    width: 960px;
+    display: flex;
+    padding-top: 10px;
+}
+
+#calc-condition {
+    width: 350px;
+}
+
+.red {
+    color: red;
+    text-decoration: underline;
+}
+
+#canvases {
+    display: flex;
+    justify-content: center;
+}
+
+#canvas2 {
+    padding-top: 10px;
+}
+
+input[type="range"] {
+    writing-mode: bt-lr;
+    /* IE, Edge */
+    -webkit-appearance: slider-vertical;
+    /* Chrome, Opera, Safari */
+    width: 1em;
+    height: 540px
+}
+
+#expbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+#exp_left {
+    width: 87px;
+}
+
+#exp_right {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#explanation {
+    display: none;
+    padding: 5px;
+    width: fit-content;
+    border: 1px solid black;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+    margin: 5px auto;
+}
