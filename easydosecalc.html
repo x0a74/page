@@ -1,0 +1,4604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MONDAL Modernized - Internal Dosimetry & Bioassay Assessment System</title>
+  <!-- Digital Agency Design System (DADS) Typography: Noto Sans JP & Noto Sans Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Mono:wght@400;600&display=swap">
+  <style>
+/* --- Embedded css/style.css --- */
+/**
+ * MONDAL Modernized - Digital Agency Design System (DADS) Implementation
+ * Compliant with Digital Agency Design System Guidelines (Foundations & Components)
+ * - Accessibility (WCAG 2.2 Level AA, High Contrast >= 4.5:1)
+ * - Typography: Noto Sans JP, Noto Sans Mono
+ * - Official DADS Color Palette & Dual-layer Focus Ring
+ * - Standard DADS Buttons, Forms, Tables, and Cards
+ */
+
+:root {
+  /* DADS Key Color: Blue (Primary) */
+  --dads-blue-900: #002966;
+  --dads-blue-800: #003780;
+  --dads-blue-700: #00479c; /* DADS Primary Blue */
+  --dads-blue-600: #005bb8;
+  --dads-blue-100: #eef4fc;
+  --dads-blue-50:  #f5f8fd;
+
+  /* DADS Neutral / Common Colors */
+  --dads-gray-900: #1c2430; /* High-contrast main text (13:1) */
+  --dads-gray-800: #334155;
+  --dads-gray-700: #475569;
+  --dads-gray-600: #546274; /* Sub-text (4.5:1+) */
+  --dads-gray-300: #cbd5e1; /* UI borders */
+  --dads-gray-200: #e2e8f0; /* Dividers */
+  --dads-gray-100: #f1f5f9; /* Table headers, backgrounds */
+  --dads-gray-50:  #f8fafc; /* Alternating row stripe */
+  --dads-white:    #ffffff;
+
+  /* DADS Semantic Colors */
+  --dads-success:       #008037;
+  --dads-success-bg:    #e6f6ec;
+  --dads-success-border:#86d9a5;
+  
+  --dads-error:         #c81e28;
+  --dads-error-bg:      #fdf0f0;
+  --dads-error-border:  #fca5a5;
+
+  --dads-warning:       #b85900;
+  --dads-warning-bg:    #fff7ed;
+  --dads-warning-border:#fed7aa;
+
+  /* Focus Indicator (DADS Specification: Dual Yellow-300 + Black) */
+  --dads-focus-yellow:  #ffbf00;
+  --dads-focus-black:   #1c2430;
+
+  /* Radii (DADS Corner Shapes: 4px to 8px standard) */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* Typography Stacks */
+  --font-base: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: 'Noto Sans Mono', Consolas, "Courier New", monospace;
+  --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* DADS Focus Indicator: High-Visibility Double-Ring Outline */
+:focus-visible {
+  outline: 3px solid var(--dads-focus-yellow) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px var(--dads-focus-black) !important;
+}
+
+body {
+  background-color: var(--dads-gray-100);
+  color: var(--dads-gray-900);
+  font-family: var(--font-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  padding: 10px 16px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.app-container {
+  max-width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   Header: Digital Agency Style (Clean, Official, Accessible)
+   ========================================================================== */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid var(--dads-blue-700);
+  background: var(--dads-white);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+.app-title-group h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--dads-blue-900);
+  letter-spacing: -0.01em;
+  display: inline-block;
+  margin-right: 12px;
+}
+
+.app-subtitle {
+  font-size: 0.8rem;
+  color: var(--dads-gray-600);
+  display: inline-block;
+  margin: 0;
+}
+
+.app-badges {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.badge-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--dads-gray-100);
+  border: 1px solid var(--dads-gray-300);
+  color: var(--dads-gray-800);
+}
+
+.badge-tag.highlight {
+  background: var(--dads-blue-100);
+  border-color: var(--dads-blue-700);
+  color: var(--dads-blue-900);
+}
+
+.app-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* DADS Segmented Controls (Mode & Language Switchers) */
+.dads-segmented-control {
+  display: inline-flex;
+  background: var(--dads-gray-100);
+  border: 1px solid var(--dads-gray-300);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  gap: 2px;
+  box-sizing: border-box;
+  height: 32px;
+  align-items: center;
+}
+
+.seg-btn {
+  font-family: var(--font-base);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0 10px;
+  height: 26px;
+  line-height: 26px;
+  border: none;
+  background: transparent;
+  color: var(--dads-gray-800);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  outline: none;
+}
+
+.seg-btn:hover {
+  background: rgba(0, 71, 156, 0.08);
+  color: var(--dads-blue-900);
+}
+
+.seg-btn.active {
+  background: var(--dads-blue-700);
+  color: var(--dads-white);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.seg-btn:focus-visible {
+  outline: 2px solid var(--dads-focus-outer);
+  outline-offset: 1px;
+}
+
+/* ==========================================================================
+   DADS Button Components (Primary, Secondary, Tertiary)
+   ========================================================================== */
+.btn {
+  font-family: var(--font-base);
+  font-weight: 700;
+  font-size: 0.84rem;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  min-height: 36px;
+}
+
+.btn:hover {
+  text-decoration: underline;
+}
+
+.btn-sm {
+  padding: 4px 10px !important;
+  font-size: 0.78rem !important;
+  min-height: 32px !important;
+}
+
+/* DADS Primary Button (Filled Blue) */
+.btn-primary {
+  background-color: var(--dads-blue-700);
+  color: var(--dads-white);
+  border: 1px solid var(--dads-blue-700);
+}
+
+.btn-primary:hover {
+  background-color: var(--dads-blue-800);
+  border-color: var(--dads-blue-800);
+  color: var(--dads-white);
+}
+
+.btn-primary:active {
+  background-color: var(--dads-blue-900);
+  border-color: var(--dads-blue-900);
+}
+
+/* DADS Secondary Button (Outline Blue) */
+.btn-secondary {
+  background-color: var(--dads-white);
+  color: var(--dads-blue-700);
+  border: 1px solid var(--dads-blue-700);
+}
+
+.btn-secondary:hover {
+  background-color: var(--dads-blue-100);
+  color: var(--dads-blue-900);
+}
+
+.btn-secondary:active {
+  background-color: #dbe8fa;
+}
+
+/* ==========================================================================
+   Main Grid Layout (1920x1080 Fullscreen Responsive)
+   ========================================================================== */
+.main-layout {
+  display: grid;
+  grid-template-columns: 390px 1fr;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   DADS Card Component
+   ========================================================================== */
+.glass-card {
+  background: var(--dads-white);
+  border: 1px solid var(--dads-gray-300);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+/* Input Column */
+.input-column {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-panel-card {
+  height: 100%;
+  margin-bottom: 0;
+  padding: 12px 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-section-header {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--dads-blue-900);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 2px solid var(--dads-blue-100);
+  padding-bottom: 4px;
+}
+
+/* ==========================================================================
+   DADS Form Controls (Select, Input, Radio) - Accessible & Non-clipping
+   ========================================================================== */
+.form-group-compact {
+  margin-bottom: 6px;
+}
+
+.form-group-compact label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--dads-gray-800);
+  margin-bottom: 3px;
+}
+
+.form-control, .form-control-sm {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  font-size: 0.84rem;
+  font-family: var(--font-base);
+  line-height: 34px;
+  background-color: var(--dads-white);
+  border: 1px solid var(--dads-gray-700);
+  border-radius: var(--radius-sm);
+  color: var(--dads-gray-900);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.form-control:focus, .form-control-sm:focus {
+  border-color: var(--dads-blue-700);
+}
+
+select.form-control, select.form-control-sm {
+  height: 36px;
+  line-height: 34px;
+  padding: 0 32px 0 10px;
+  background-color: var(--dads-white);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%231c2430' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+select.form-control option, select.form-control-sm option {
+  background-color: var(--dads-white);
+  color: var(--dads-gray-900);
+  padding: 8px 10px;
+}
+
+input.form-control, input.form-control-sm {
+  height: 36px;
+  line-height: 34px;
+}
+
+.rad-info-box-compact {
+  background: var(--dads-blue-50);
+  border-left: 4px solid var(--dads-blue-700);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+}
+
+.rad-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 8px;
+  font-size: 0.78rem;
+  margin-bottom: 4px;
+}
+
+.rad-meta-item strong {
+  color: var(--dads-blue-800);
+  font-weight: 700;
+}
+
+.rad-desc-compact {
+  font-size: 0.74rem;
+  color: var(--dads-gray-800);
+  line-height: 1.35;
+  margin-bottom: 2px;
+}
+
+.rad-note-compact {
+  font-size: 0.71rem;
+  color: var(--dads-gray-600);
+}
+
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.radio-group-compact {
+  display: flex;
+  gap: 6px;
+}
+
+.radio-label-compact {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 0.76rem;
+  cursor: pointer;
+  color: var(--dads-gray-800);
+  background: var(--dads-white);
+  padding: 6px 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--dads-gray-300);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.radio-label-compact:hover {
+  background: var(--dads-blue-50);
+  border-color: var(--dads-blue-600);
+}
+
+.radio-label-compact input[type="radio"]:checked + span {
+  color: var(--dads-blue-900);
+  font-weight: 700;
+}
+
+.btn-row-compact {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+/* ==========================================================================
+   Results Column: DADS High-Contrast Color-Chip Dashboards
+   ========================================================================== */
+.results-column {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Comparison Notice Banner (DADS Color-Chip Notification Style) */
+.diff-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+.badge-increase {
+  background: var(--dads-error-bg);
+  border: 1px solid var(--dads-error-border);
+  border-left: 4px solid var(--dads-error);
+  color: #991b1b;
+}
+
+.badge-decrease {
+  background: var(--dads-success-bg);
+  border: 1px solid var(--dads-success-border);
+  border-left: 4px solid var(--dads-success);
+  color: #065f46;
+}
+
+.badge-neutral {
+  background: var(--dads-blue-50);
+  border: 1px solid var(--dads-gray-300);
+  border-left: 4px solid var(--dads-blue-700);
+  color: var(--dads-blue-900);
+}
+
+/* Upper Comparison Grid (Pillars) */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  transition: grid-template-columns 0.2s ease;
+}
+
+/* ==========================================================================
+   Mode: Latest ICRP Only (Stretch & Hide Legacy Elements)
+   ========================================================================== */
+body.mode-latest-only #comparison-badge-container {
+  display: none !important;
+}
+
+body.mode-latest-only .pillar-legacy {
+  display: none !important;
+}
+
+body.mode-latest-only .comparison-grid {
+  grid-template-columns: 1fr;
+}
+
+body.mode-latest-only .pillar-new {
+  padding: 12px 20px;
+}
+
+body.mode-latest-only .pillar-new .pillar-body-grid {
+  grid-template-columns: 1.15fr 1.35fr;
+  gap: 36px;
+}
+
+body.mode-latest-only .legend-item-legacy {
+  display: none !important;
+}
+
+body.mode-latest-only .badge-legacy-mode {
+  display: none !important;
+}
+
+.result-pillar {
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  position: relative;
+  background: var(--dads-white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.pillar-new {
+  border: 1px solid var(--dads-blue-border);
+  border-left: 4px solid var(--dads-blue-700);
+}
+
+.pillar-legacy {
+  border: 1px solid var(--dads-warning-border);
+  border-left: 4px solid var(--dads-warning);
+}
+
+.pillar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pillar-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+}
+
+.pillar-new .pillar-badge {
+  background: var(--dads-blue-700);
+  color: var(--dads-white);
+}
+
+.pillar-legacy .pillar-badge {
+  background: var(--dads-warning);
+  color: var(--dads-white);
+}
+
+.pillar-body-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.pillar-left-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--dads-gray-600);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.stat-label-mini {
+  font-size: 0.74rem;
+  color: var(--dads-gray-600);
+}
+
+.stat-value-huge {
+  font-size: 1.55rem;
+  font-weight: 700;
+  font-family: var(--font-base);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.pillar-new .stat-value-huge {
+  color: var(--dads-blue-900);
+}
+
+.pillar-legacy .stat-value-huge {
+  color: #92400e;
+}
+
+.stat-sub {
+  font-size: 0.74rem;
+  color: var(--dads-gray-600);
+  font-family: var(--font-mono);
+  margin-top: 1px;
+}
+
+.stat-val-intake {
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--dads-gray-900);
+}
+
+.stat-row-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 3px;
+  margin-bottom: 3px;
+  border-bottom: 1px solid var(--dads-gray-200);
+}
+
+.stat-grid-row-compact {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  padding: 1px 0;
+}
+
+.stat-grid-row-compact strong {
+  font-family: var(--font-mono);
+  color: var(--dads-gray-900);
+}
+
+.legacy-note-compact {
+  font-size: 0.71rem;
+  color: #92400e;
+  margin-top: 4px;
+}
+
+/* Progress bar (Annual Dose Limit) */
+.dose-bar-container {
+  margin-top: 6px;
+}
+
+.dose-bar-track {
+  width: 100%;
+  height: 6px;
+  background: var(--dads-gray-200);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-top: 3px;
+}
+
+.dose-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--dads-success);
+  transition: width 0.4s ease;
+}
+
+.dose-bar-legend {
+  font-size: 0.68rem;
+  color: var(--dads-gray-600);
+  font-weight: 600;
+  margin-top: 2px;
+  text-align: right;
+}
+
+/* ==========================================================================
+   Lower Split Grid: Chart (Left) + Tissue Dose Table (Right)
+   ========================================================================== */
+.results-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.split-panel-card {
+  margin-bottom: 0;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--dads-white);
+}
+
+.card-title-compact {
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--dads-blue-900);
+}
+
+.sub-caption-compact {
+  font-size: 0.72rem;
+  color: var(--dads-gray-600);
+  display: block;
+}
+
+/* Chart Controls */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.chart-toggles {
+  display: flex;
+  gap: 4px;
+}
+
+.toggle-btn {
+  padding: 3px 8px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background: var(--dads-gray-100);
+  border: 1px solid var(--dads-gray-300);
+  color: var(--dads-gray-800);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toggle-btn.active {
+  background: var(--dads-blue-700);
+  color: var(--dads-white);
+  border-color: var(--dads-blue-700);
+}
+
+.chart-container-flex {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: var(--dads-white);
+}
+
+.chart-legend-compact {
+  display: flex;
+  gap: 14px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  margin-top: 4px;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--dads-gray-800);
+}
+
+.legend-line-new {
+  width: 18px;
+  height: 3px;
+  background: var(--dads-blue-700);
+  border-radius: 2px;
+}
+
+.legend-line-legacy {
+  width: 18px;
+  height: 2px;
+  background: var(--dads-warning);
+  border-top: 2px dashed var(--dads-warning);
+}
+
+/* ==========================================================================
+   DADS Table Component (Clean, High-Contrast, Dense, Striped)
+   ========================================================================== */
+.tissue-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+.tissue-table-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  border: 1px solid var(--dads-gray-300);
+  border-radius: var(--radius-sm);
+  background: var(--dads-white);
+}
+
+.data-table-compact {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table-compact th, .data-table-compact td {
+  padding: 6px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--dads-gray-200);
+  font-size: 0.8rem;
+}
+
+.data-table-compact th {
+  position: sticky;
+  top: 0;
+  background: var(--dads-gray-100);
+  color: var(--dads-gray-900);
+  font-weight: 700;
+  font-size: 0.76rem;
+  text-transform: none;
+  z-index: 2;
+  border-bottom: 2px solid var(--dads-gray-800);
+}
+
+.data-table-compact tr:nth-child(even) {
+  background-color: var(--dads-gray-50);
+}
+
+.data-table-compact tr:hover {
+  background-color: var(--dads-blue-50);
+}
+
+.tissue-row-highlight {
+  background-color: rgba(0, 71, 156, 0.04) !important;
+}
+
+.tissue-badge-primary {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  background: var(--dads-blue-100);
+  border: 1px solid var(--dads-blue-700);
+  color: var(--dads-blue-900);
+  border-radius: var(--radius-sm);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.tissue-card-footer {
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.btn-outline-full {
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--dads-white);
+  border: 1px solid var(--dads-blue-700);
+  color: var(--dads-blue-700);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-outline-full:hover {
+  background: var(--dads-blue-100);
+  color: var(--dads-blue-900);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   DADS Modal Dialog Component
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal-dialog {
+  background: var(--dads-white);
+  border: 1px solid var(--dads-gray-300);
+  border-top: 4px solid var(--dads-blue-700);
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+  width: 95%;
+  max-width: 1100px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 24px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--dads-gray-200);
+}
+
+.modal-title {
+  color: var(--dads-blue-900);
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--dads-gray-600);
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  border-radius: var(--radius-sm);
+}
+
+.btn-close:hover {
+  background: var(--dads-gray-100);
+  color: var(--dads-gray-900);
+}
+
+.modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+}
+
+.modal-info-bar {
+  background: var(--dads-blue-50);
+  border-left: 4px solid var(--dads-blue-700);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  font-size: 0.84rem;
+  color: var(--dads-gray-900);
+  line-height: 1.5;
+}
+
+.table-scroll-container {
+  border: 1px solid var(--dads-gray-300);
+  border-radius: var(--radius-sm);
+}
+
+/* Modal Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th, .data-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--dads-gray-200);
+  font-size: 0.82rem;
+}
+
+.data-table th {
+  background: var(--dads-gray-100);
+  color: var(--dads-gray-900);
+  font-weight: 700;
+  border-bottom: 2px solid var(--dads-gray-800);
+}
+
+.data-table tr:nth-child(even) {
+  background-color: var(--dads-gray-50);
+}
+
+.data-table tr:hover {
+  background-color: var(--dads-blue-50);
+}
+
+#modal-tissue-tfoot tr {
+  background: var(--dads-blue-50) !important;
+  color: var(--dads-blue-900) !important;
+  font-weight: 700;
+  border-top: 2px solid var(--dads-blue-700);
+}
+
+/* ==========================================================================
+   Math Formula Component
+   ========================================================================== */
+.math-expr {
+  font-family: var(--font-math);
+  font-size: 1.02rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  background: var(--dads-white);
+  border: 1px solid var(--dads-blue-border);
+  border-radius: var(--radius-sm);
+  color: var(--dads-blue-900);
+  vertical-align: middle;
+}
+
+.math-expr i {
+  font-style: italic;
+  font-family: var(--font-math);
+  padding-right: 1px;
+}
+
+.math-expr sub {
+  font-size: 0.72rem;
+  color: var(--dads-blue-800);
+}
+
+.math-expr .math-sum {
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--dads-blue-700);
+  font-weight: 700;
+  margin: 0 3px;
+  vertical-align: -1px;
+}
+
+.math-expr-small {
+  font-family: var(--font-math);
+  font-size: 0.88rem;
+  color: var(--dads-blue-900);
+  display: inline-block;
+}
+
+.math-expr-small i {
+  font-style: italic;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0;
+  }
+  .glass-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+  .app-header-actions, .chart-toggles, .modal-overlay {
+    display: none !important;
+  }
+}
+
+</style>
+  <!-- KaTeX for elegant mathematical formula rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" crossorigin="anonymous"></script>
+</head>
+<body class="mode-latest-only">
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-title-group">
+        <h1 id="app-title">MONDAL Modernized</h1>
+        <p class="app-subtitle" id="app-subtitle">Internal Dosimetry &amp; Bioassay Assessment System (ICRP Pub 103 / OIR)</p>
+      </div>
+      <div class="app-badges">
+        <span class="badge-tag highlight" id="badge-icrp">ICRP Pub 103 / 119 / OIR Compliant</span>
+        <span class="badge-tag badge-legacy-mode" id="badge-mode">Comparison Mode</span>
+        <span class="badge-tag" id="badge-offline">Offline Ready</span>
+      </div>
+      <div class="app-header-actions">
+        <!-- Mode Switcher -->
+        <div class="dads-segmented-control" role="group" aria-label="Mode switch">
+          <button id="btn-mode-latest" class="seg-btn active" title="Display Latest ICRP Recommendations only">Latest ICRP</button>
+          <button id="btn-mode-compare" class="seg-btn" title="Compare with Legacy MONDAL3">Compare</button>
+        </div>
+
+        <!-- Language Switcher -->
+        <div class="dads-segmented-control" role="group" aria-label="Language switch">
+          <button id="btn-lang-en" class="seg-btn active" title="English">EN</button>
+          <button id="btn-lang-ja" class="seg-btn" title="日本語">JA</button>
+        </div>
+
+        <button id="btn-export-txt" class="btn btn-secondary btn-sm" title="Download Text Report"><span class="btn-icon">📄</span><span id="text-btn-export-txt">TXT</span></button>
+        <button id="btn-export-csv" class="btn btn-secondary btn-sm" title="Download CSV Report"><span class="btn-icon">📊</span><span id="text-btn-export-csv">CSV</span></button>
+        <button id="btn-print" class="btn btn-secondary btn-sm" title="Print or Save PDF"><span class="btn-icon">🖨️</span><span id="text-btn-print">Print</span></button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-layout">
+      <!-- Left Column: Input Form (Single Unified Card) -->
+      <section class="input-column">
+        <div class="glass-card input-panel-card">
+          <!-- Section 1: Radionuclide & Intake Parameters -->
+          <div class="input-section-header">
+            <span class="icon">☢️</span> <span id="sec1-title">1. Radionuclide &amp; Intake Parameters</span>
+          </div>
+          
+          <div class="form-group-compact">
+            <label for="radionuclide-select" id="lbl-radionuclide">Radionuclide</label>
+            <select id="radionuclide-select" class="form-control form-control-sm"></select>
+          </div>
+
+          <!-- Dynamic Radionuclide Info Banner -->
+          <div class="rad-info-box-compact">
+            <div class="rad-meta-grid">
+              <div class="rad-meta-item"><span id="lbl-half-life">Half-life:</span> <strong id="rad-half-life">-</strong></div>
+              <div class="rad-meta-item"><span id="lbl-emissions">Emissions:</span> <strong id="rad-emissions">-</strong></div>
+            </div>
+            <div class="rad-desc-compact" id="rad-desc-text"></div>
+            <div class="rad-note-compact" id="rad-icrp-note"></div>
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group-compact">
+              <label for="route-select" id="lbl-route">Intake Route</label>
+              <select id="route-select" class="form-control form-control-sm"></select>
+            </div>
+            <div class="form-group-compact">
+              <label for="type-select" id="lbl-type">Absorption Type / f1</label>
+              <select id="type-select" class="form-control form-control-sm"></select>
+            </div>
+          </div>
+
+          <div class="form-group-compact" id="amad-container">
+            <label for="amad-select" id="lbl-amad">Aerosol Size AMAD (Inhalation)</label>
+            <select id="amad-select" class="form-control form-control-sm"></select>
+          </div>
+
+          <!-- Section 2: Bioassay Measurement Parameters -->
+          <div class="input-section-header" style="margin-top: 10px;">
+            <span class="icon">⏱️</span> <span id="sec2-title">2. Bioassay &amp; Measurement Data</span>
+          </div>
+
+          <div class="form-group-compact">
+            <label id="lbl-intake-mode">Mode of Intake</label>
+            <div class="radio-group-compact">
+              <label class="radio-label-compact">
+                <input type="radio" name="intake-mode" value="acute" checked>
+                <span id="lbl-mode-acute">Acute</span>
+              </label>
+              <label class="radio-label-compact">
+                <input type="radio" name="intake-mode" value="chronic">
+                <span id="lbl-mode-chronic">Uniform Chronic</span>
+              </label>
+              <label class="radio-label-compact">
+                <input type="radio" name="intake-mode" value="uneven">
+                <span id="lbl-mode-uneven">Uneven Chronic</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Chronic Days Group -->
+          <div class="form-group-compact" id="chronic-input-group" style="display: none;">
+            <label for="chronic-days" id="lbl-chronic-days">Intake Period (days)</label>
+            <input type="number" id="chronic-days" class="form-control form-control-sm" value="7" min="1">
+          </div>
+
+          <!-- Uneven Hours File Group -->
+          <div class="form-group-compact" id="uneven-input-group" style="display: none;">
+            <label for="uneven-file-input" id="lbl-uneven-file">Daily Work Hours File (.txt / .csv)</label>
+            <input type="file" id="uneven-file-input" class="form-control form-control-sm" accept=".txt,.csv">
+            <small id="uneven-hours-text" style="color: var(--text-muted); font-size: 0.74rem; display: block; margin-top: 2px;">Default: 7-day pattern [8, 8, 4, 0, 0, 5, 2 h]</small>
+          </div>
+
+          <div class="form-group-compact">
+            <label for="bioassay-select" id="lbl-bioassay">Bioassay Measurement</label>
+            <select id="bioassay-select" class="form-control form-control-sm"></select>
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group-compact">
+              <label for="days-post-intake" id="lbl-days-post">Time post intake (days)</label>
+              <input type="number" id="days-post-intake" class="form-control form-control-sm" value="2" min="0.1" step="0.5">
+            </div>
+            <div class="form-group-compact">
+              <label for="measured-activity" id="lbl-measured-activity">Measurement (Bq, Bq/d)</label>
+              <input type="number" id="measured-activity" class="form-control form-control-sm" value="1500" min="0.01">
+            </div>
+          </div>
+
+          <div class="btn-row-compact">
+            <button id="btn-calculate" class="btn btn-primary" style="flex: 2;">⚡ Calculate</button>
+            <button id="btn-reset" class="btn btn-secondary" style="flex: 1;">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Results & Interactive Split Dashboard -->
+      <section class="results-column">
+        <!-- Comparison Banner -->
+        <div id="comparison-badge-container"></div>
+
+        <!-- Upper: Pillars: New vs Legacy Side-by-Side (Compact Grid) -->
+        <div class="comparison-grid">
+          <!-- New ICRP Pillar -->
+          <div class="result-pillar pillar-new">
+            <div class="pillar-header">
+              <span class="pillar-badge" id="pillar-new-badge">Latest ICRP Standards</span>
+              <small style="color: var(--dads-blue-700); font-weight: 700; font-size: 0.75rem;">Pub 103 / Pub 119 / OIR</small>
+            </div>
+            <div class="pillar-body-grid">
+              <div class="pillar-left-block">
+                <div class="stat-label" id="lbl-new-dose">Committed Effective Dose</div>
+                <div class="stat-value-huge" id="res-new-dose-msv">- mSv</div>
+                <div class="stat-sub" id="res-new-dose-sv">(- Sv)</div>
+                <div class="dose-bar-container">
+                  <div class="dose-bar-track">
+                    <div class="dose-bar-fill" id="new-dose-bar"></div>
+                  </div>
+                  <div class="dose-bar-legend" id="new-dose-bar-text">0.0% (Annual Limit 20 mSv)</div>
+                </div>
+              </div>
+              <div class="pillar-right-block">
+                <div class="stat-row-item">
+                  <span class="stat-label-mini" id="lbl-new-intake">Estimated Intake:</span>
+                  <strong class="stat-val-intake" id="res-new-intake">- Bq</strong>
+                </div>
+                <div class="stat-grid-row-compact">
+                  <span style="color: var(--dads-gray-600);" id="lbl-new-mval">Fraction m(t):</span>
+                  <strong id="res-new-mval">-</strong>
+                </div>
+                <div class="stat-grid-row-compact">
+                  <span style="color: var(--dads-gray-600);" id="lbl-new-coeff">Dose Coeff e(50):</span>
+                  <strong id="res-new-coeff">-</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Legacy MONDAL3 Pillar -->
+          <div class="result-pillar pillar-legacy">
+            <div class="pillar-header">
+              <span class="pillar-badge" id="pillar-legacy-badge">Legacy MONDAL3 Standards</span>
+              <small style="color: #92400e; font-weight: 700; font-size: 0.75rem;">ICRP Pub 60 / 68 / 78</small>
+            </div>
+            <div class="pillar-body-grid">
+              <div class="pillar-left-block">
+                <div class="stat-label" id="lbl-legacy-dose">Committed Effective Dose</div>
+                <div class="stat-value-huge" id="res-legacy-dose-msv">- mSv</div>
+                <div class="stat-sub" id="res-legacy-dose-sv">(- Sv)</div>
+                <div class="legacy-note-compact" id="lbl-legacy-note">
+                  * MONDAL3 identical conditions &amp; interpolation
+                </div>
+              </div>
+              <div class="pillar-right-block">
+                <div class="stat-row-item">
+                  <span class="stat-label-mini" id="lbl-legacy-intake">Estimated Intake:</span>
+                  <strong class="stat-val-intake" id="res-legacy-intake">- Bq</strong>
+                </div>
+                <div class="stat-grid-row-compact">
+                  <span style="color: var(--dads-gray-600);" id="lbl-legacy-mval">Fraction m(t):</span>
+                  <strong id="res-legacy-mval">-</strong>
+                </div>
+                <div class="stat-grid-row-compact">
+                  <span style="color: var(--dads-gray-600);" id="lbl-legacy-coeff">Dose Coeff e(50):</span>
+                  <strong id="res-legacy-coeff">-</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lower: Split Grid: Left = Curve Graph, Right = Tissue Equivalent Dose -->
+        <div class="results-split-grid">
+          <!-- Interactive SVG Chart Card -->
+          <div class="glass-card split-panel-card chart-card">
+            <div class="chart-header">
+              <h3 class="card-title-compact"><span class="icon">📈</span> <span id="chart-card-title">Retention &amp; Excretion Fraction Curve m(t)</span></h3>
+              <div class="chart-toggles">
+                <button id="btn-log-scale" class="toggle-btn active">Log</button>
+                <button id="btn-linear-scale" class="toggle-btn">Linear</button>
+              </div>
+            </div>
+            <div id="chart-container" class="chart-container-flex"></div>
+            <div class="chart-legend-compact">
+              <div class="legend-item"><span class="legend-line-new"></span> <span id="legend-text-new">Latest ICRP</span></div>
+              <div class="legend-item legend-item-legacy"><span class="legend-line-legacy"></span> <span id="legend-text-legacy">Legacy MONDAL3</span></div>
+              <div class="legend-item"><span style="width: 8px; height: 8px; background: #c81e28; border-radius: 50%; display: inline-block;"></span> <span id="legend-text-measured">Measurement Point</span></div>
+            </div>
+          </div>
+
+          <!-- Tissue Equivalent Dose Table Card -->
+          <div class="glass-card split-panel-card tissue-card" id="tissue-table-card">
+            <div class="tissue-card-header">
+              <div>
+                <h3 class="card-title-compact"><span class="icon">🫁</span> <span id="tissue-card-title">Primary Tissue Equivalent Doses</span></h3>
+                <span class="sub-caption-compact" id="tissue-card-sub">* ICRP 103 / OIR primary radiosensitive tissues</span>
+              </div>
+              <button id="btn-open-tissue-modal" class="btn btn-secondary btn-sm">
+                View All 30 Tissues ↗
+              </button>
+            </div>
+            <div class="tissue-table-container">
+              <table class="data-table data-table-compact">
+                <thead>
+                  <tr>
+                    <th id="th-tissue-name">Tissue / Organ</th>
+                    <th style="text-align: center;" id="th-wt">wT</th>
+                    <th style="text-align: right;" id="th-ht-coeff">hT(50) [Sv/Bq]</th>
+                    <th style="text-align: right;" id="th-ht-dose">HT(50) [mSv]</th>
+                    <th style="text-align: right;" id="th-contr">Contribution [mSv]</th>
+                    <th style="text-align: right;" id="th-share">Share (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="tissue-dose-tbody"></tbody>
+              </table>
+            </div>
+            <div class="tissue-card-footer">
+              <button id="btn-open-tissue-modal-bottom" class="btn btn-outline-full">
+                Open Detailed 30-Tissue Equivalent Dose Table ↗
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full 30-Tissue Modal Dialog -->
+        <div id="tissue-modal-overlay" class="modal-overlay" style="display: none;">
+          <div class="modal-dialog glass-card">
+            <div class="modal-header">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5rem;">🫁</span>
+                <div>
+                  <h3 class="modal-title" id="modal-title-text" style="margin: 0; font-size: 1.15rem; font-weight: 700;">All 30 Tissues &amp; Organs Committed Equivalent Dose (ICRP 103 / OIR)</h3>
+                  <div id="modal-condition-summary" style="font-size: 0.8rem; color: var(--dads-gray-600); margin-top: 2px;"></div>
+                </div>
+              </div>
+              <button id="btn-close-tissue-modal" class="btn-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="modal-info-bar" style="background: var(--dads-blue-50); border-left: 4px solid var(--dads-blue-700); padding: 10px 14px; border-radius: 4px; margin-bottom: 12px; font-size: 0.84rem; color: var(--dads-gray-900); line-height: 1.6;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
+                  <span>💡 <strong id="modal-formula-prefix">ICRP 103 Standard:</strong></span>
+                  <span id="modal-formula-lead">Committed effective dose</span>
+                  <span id="katex-formula-modal" class="math-expr">
+                    <i>E</i>(50) = <span class="math-sum">&sum;</span><sub>T</sub> (<i>w</i><sub>T</sub> &times; <i>H</i><sub>T</sub>(50))
+                  </span>
+                  <span id="modal-formula-tail">. The sum of tissue dose contributions equals total effective dose.</span>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--dads-gray-600); margin-left: 24px;" id="modal-remainder-note">
+                  * 14 tissues including adrenals and kidneys belong to the "Remainder" group with collective <span class="math-expr-small"><i>w</i><sub>rem</sub> = 0.12</span> (mean equivalent dose).
+                </div>
+              </div>
+              <div class="table-scroll-container" style="max-height: 480px; overflow-y: auto;">
+                <table class="data-table" id="modal-tissue-table">
+                  <thead style="position: sticky; top: 0; background: var(--dads-white); z-index: 2;">
+                    <tr>
+                      <th style="width: 40px; text-align: center;">#</th>
+                      <th id="modal-th-name">Tissue / Organ</th>
+                      <th style="text-align: center;" id="modal-th-wt">Weighting Factor wT</th>
+                      <th style="text-align: right;" id="modal-th-ht-coeff">Dose Coeff hT(50) [Sv/Bq]</th>
+                      <th style="text-align: right;" id="modal-th-ht-dose">Equivalent Dose HT(50) [mSv]</th>
+                      <th style="text-align: right;" id="modal-th-contr">Contribution [mSv]</th>
+                      <th style="text-align: right;" id="modal-th-share">Share (%)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="modal-tissue-tbody"></tbody>
+                  <tfoot id="modal-tissue-tfoot" style="position: sticky; bottom: 0; background: var(--dads-gray-100); font-weight: 700; border-top: 2px solid var(--dads-blue-700);"></tfoot>
+                </table>
+              </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--dads-gray-300);">
+              <span id="modal-table-summary" style="font-size: 0.82rem; color: var(--dads-gray-600);">Displaying all 30 tissues</span>
+              <div style="display: flex; gap: 8px;">
+                <button id="btn-modal-copy-csv" class="btn btn-secondary">📋 Copy Tissue CSV</button>
+                <button id="btn-modal-close" class="btn btn-primary">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+<script>
+/* ==========================================================================
+   Embedded js/data.js
+   ========================================================================== */
+/**
+ * ICRP 30 Tissues and Organs Metadata (ICRP Publication 103 / 2022 OIR Annex)
+ */
+const ICRP_TISSUE_METADATA = [
+  // 主要組織・臓器 (固有の組織加重係数 wT を持つ組織 + Remainder代表)
+  { id: "bone_marrow", en: "Bone marrow", ja: "赤色骨髄", wt: 0.12, wtDisplay: "0.12", isPrimary: true, isRemainderGroup: false },
+  { id: "colon", en: "Colon", ja: "結腸", wt: 0.12, wtDisplay: "0.12", isPrimary: true, isRemainderGroup: false },
+  { id: "lung", en: "Lung", ja: "肺", wt: 0.12, wtDisplay: "0.12", isPrimary: true, isRemainderGroup: false },
+  { id: "stomach", en: "Stomach", ja: "胃", wt: 0.12, wtDisplay: "0.12", isPrimary: true, isRemainderGroup: false },
+  { id: "breast", en: "Breast", ja: "乳房", wt: 0.12, wtDisplay: "0.12", isPrimary: true, isRemainderGroup: false },
+  { id: "gonads", en: "Gonads", ja: "性腺 (卵巣/精巣)", wt: 0.08, wtDisplay: "0.08", isPrimary: true, isRemainderGroup: false },
+  { id: "urinary_bladder", en: "Urinary bladder", ja: "膀胱", wt: 0.04, wtDisplay: "0.04", isPrimary: true, isRemainderGroup: false },
+  { id: "oesophagus", en: "Oesophagus", ja: "食道", wt: 0.04, wtDisplay: "0.04", isPrimary: false, isRemainderGroup: false },
+  { id: "liver", en: "Liver", ja: "肝臓", wt: 0.04, wtDisplay: "0.04", isPrimary: true, isRemainderGroup: false },
+  { id: "thyroid", en: "Thyroid", ja: "甲状腺", wt: 0.04, wtDisplay: "0.04", isPrimary: true, isRemainderGroup: false },
+  { id: "bone_surface", en: "Bone surface", ja: "骨表面", wt: 0.01, wtDisplay: "0.01", isPrimary: true, isRemainderGroup: false },
+  { id: "brain", en: "Brain", ja: "脳", wt: 0.01, wtDisplay: "0.01", isPrimary: false, isRemainderGroup: false },
+  { id: "salivary_glands", en: "Salivary glands", ja: "唾液腺", wt: 0.01, wtDisplay: "0.01", isPrimary: false, isRemainderGroup: false },
+  { id: "skin", en: "Skin", ja: "皮膚", wt: 0.01, wtDisplay: "0.01", isPrimary: false, isRemainderGroup: false },
+  { id: "remainder", en: "Remainder", ja: "残りの組織・臓器 (合算)", wt: 0.12, wtDisplay: "0.12", isPrimary: true, isRemainderGroup: false },
+
+  // 残りの組織群（Remainder tissues: 14組織、ICRP 103 にて合算 wT = 0.12 が適用）
+  { id: "adrenals", en: "Adrenals", ja: "副腎", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "et_hrtm", en: "ET of HRTM", ja: "気道胸郭外領域 (ET)", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "gall_bladder", en: "Gall bladder", ja: "胆嚢", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "heart", en: "Heart", ja: "心臓", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "kidneys", en: "Kidneys", ja: "腎臓", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "lymphatic_nodes", en: "Lymphatic nodes", ja: "リンパ節", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "muscle", en: "Muscle", ja: "筋肉", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "oral_mucosa", en: "Oral mucosa", ja: "口腔粘膜", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "pancreas", en: "Pancreas", ja: "膵臓", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "prostate", en: "Prostate", ja: "前立腺", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "small_intestine", en: "Small intestine", ja: "小腸", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "spleen", en: "Spleen", ja: "脾臓", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "thymus", en: "Thymus", ja: "胸腺", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true },
+  { id: "uterus", en: "Uterus", ja: "子宮", wt: 0.12 / 14, wtDisplayEn: "0.12 (group)*", wtDisplayJa: "0.12 (群)*", wtDisplay: "0.12 (group)*", isPrimary: false, isRemainderGroup: true }
+];
+
+/**
+ * MONDAL Modernized - Internal Dosimetry Database
+ * Full coverage for all 6 primary radionuclides across both Inhalation and Ingestion routes
+ */
+
+const DOSIMETRY_DATABASE = {
+  "Cs-137": {
+    name: "Cs-137 (Cesium-137)",
+    nameEn: "Cs-137 (Cesium-137)",
+    nameJa: "Cs-137 (セシウム-137)",
+    element: "Cs",
+    massNumber: 137,
+    halfLifeStr: "30.0 y",
+    halfLifeStrEn: "30.0 y",
+    halfLifeStrJa: "30.0年",
+    halfLifeDays: 10957.5,
+    decayMode: "β-, γ (Ba-137m 0.662 MeV)",
+    primaryEmissions: "gamma of Ba-137m (0.661 MeV, 85.1%)",
+    primaryEmissionsEn: "gamma of Ba-137m (0.661 MeV, 85.1%)",
+    primaryEmissionsJa: "Ba-137mのγ線 (0.661 MeV, 85.1%)",
+    descriptionEn: "A major fission product. Distributes homogeneously throughout muscle tissues. Whole body counter (WBC) measurement is the most effective bioassay method.",
+    descriptionJa: "核分裂生成物の代表格。全身筋肉組織にほぼ均等に分布し、ホールボディカウンター（WBC）による全身γ線測定が最も有効です。",
+    icrpChangeNoteEn: "In ICRP 103/119 and OIR Part 4, biological half-life (~110 d) was re-evaluated. Dose coefficients remain similar to legacy publications, with refined systemic urine excretion models.",
+    icrpChangeNoteJa: "ICRP 103/119およびOIR Part 4では生物学的半減期モデル（約110日）が再確認され、線量係数は旧版とほぼ同等ですが、尿排泄モデルの細分化が行われています。",
+    routes: {
+      "inhalation_worker": {
+        label: { en: "Inhalation by Workers", ja: "吸入（職業人）" },
+        types: {
+          "Type F": {
+            label: { en: "Type F (Fast absorption / All compounds)", ja: "Type F (急速吸収 / 全化合物)" },
+            amad: {
+              "5.0": {
+                label: { en: "5 µm (Default)", ja: "5 µm (デフォルト)" },
+                legacy: {
+                  e50: 6.7e-9, // Sv/Bq
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 0.1, m: 0.63 },
+                        { t: 0.5, m: 0.61 },
+                        { t: 1, m: 0.597 },
+                        { t: 2, m: 0.505 },
+                        { t: 3, m: 0.465 },
+                        { t: 4, m: 0.445 },
+                        { t: 5, m: 0.434 },
+                        { t: 6, m: 0.426 },
+                        { t: 7, m: 0.421 },
+                        { t: 8, m: 0.416 },
+                        { t: 10, m: 0.410 },
+                        { t: 14, m: 0.405 },
+                        { t: 20, m: 0.380 },
+                        { t: 30, m: 0.355 },
+                        { t: 60, m: 0.295 },
+                        { t: 90, m: 0.244 }, // MONDAL3 exact: 0.244
+                        { t: 180, m: 0.138 }, // MONDAL3 exact: 0.138
+                        { t: 365, m: 0.043 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 0.5, m: 0.025 }, { t: 1, m: 0.018 }, { t: 2, m: 0.010 },
+                        { t: 3, m: 0.0075 }, { t: 5, m: 0.0052 }, { t: 7, m: 0.0041 },
+                        { t: 14, m: 0.0031 }, { t: 30, m: 0.0024 }, { t: 60, m: 0.0019 },
+                        { t: 90, m: 0.0015 }, { t: 180, m: 0.00086 }, { t: 365, m: 0.00028 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Red marrow": 6.7e-9,
+                    "Colon": 6.7e-9,
+                    "Lungs": 6.7e-9,
+                    "Stomach": 6.7e-9,
+                    "Other tissues": 6.7e-9
+                  }
+                },
+                newIcrp: {
+                  e50: 9.3e-9, // ICRP Publication 137 / 2022 OIR Electronic Annex exact: 9.3E-09 Sv/Bq
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 0.125, m: 0.74 },
+                        { t: 0.25, m: 0.71 },
+                        { t: 0.5, m: 0.67 },
+                        { t: 1.0, m: 0.63 },
+                        { t: 2.0, m: 0.6 },
+                        { t: 3.0, m: 0.59 },
+                        { t: 4.0, m: 0.58 },
+                        { t: 5.0, m: 0.57 },
+                        { t: 6.0, m: 0.57 },
+                        { t: 7.0, m: 0.56 },
+                        { t: 8.0, m: 0.56 },
+                        { t: 10.0, m: 0.55 },
+                        { t: 14.0, m: 0.53 },
+                        { t: 20.0, m: 0.51 },
+                        { t: 30.0, m: 0.47 },
+                        { t: 60.0, m: 0.38 },
+                        { t: 90.0, m: 0.3 },
+                        { t: 180.0, m: 0.16 },
+                        { t: 365.0, m: 0.041 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1.0, m: 0.026 },
+                        { t: 2.0, m: 0.013 },
+                        { t: 3.0, m: 0.0081 },
+                        { t: 4.0, m: 0.0063 },
+                        { t: 5.0, m: 0.0053 },
+                        { t: 6.0, m: 0.0047 },
+                        { t: 7.0, m: 0.0043 },
+                        { t: 8.0, m: 0.0041 },
+                        { t: 10.0, m: 0.0038 },
+                        { t: 14.0, m: 0.0035 },
+                        { t: 20.0, m: 0.0033 },
+                        { t: 30.0, m: 0.003 },
+                        { t: 60.0, m: 0.0024 },
+                        { t: 90.0, m: 0.0019 },
+                        { t: 180.0, m: 0.001 },
+                        { t: 365.0, m: 0.00026 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 9.4860e-09,
+                    "Colon": 9.3000e-09,
+                    "Lung": 9.3000e-09,
+                    "Stomach": 9.3000e-09,
+                    "Breast": 9.3000e-09,
+                    "Gonads": 9.3000e-09,
+                    "Urinary bladder": 9.3000e-09,
+                    "Oesophagus": 9.3000e-09,
+                    "Liver": 9.3000e-09,
+                    "Thyroid": 9.3000e-09,
+                    "Bone surface": 8.8350e-09,
+                    "Brain": 9.3000e-09,
+                    "Salivary glands": 9.3000e-09,
+                    "Skin": 9.3000e-09,
+                    "Adrenals": 9.3000e-09,
+                    "ET of HRTM": 9.3000e-09,
+                    "Gall bladder": 9.3000e-09,
+                    "Heart": 9.3000e-09,
+                    "Kidneys": 9.3000e-09,
+                    "Lymphatic nodes": 9.3000e-09,
+                    "Muscle": 9.7650e-09,
+                    "Oral mucosa": 9.3000e-09,
+                    "Pancreas": 9.3000e-09,
+                    "Prostate": 9.3000e-09,
+                    "Small intestine": 9.3000e-09,
+                    "Spleen": 9.3000e-09,
+                    "Thymus": 9.3000e-09,
+                    "Uterus": 9.3000e-09,
+                    "Remainder": 9.3000e-09
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ingestion_worker": {
+        label: { en: "Ingestion by Workers", ja: "経口（職業人）" },
+        types: {
+          "f1_1.0": {
+            label: { en: "f1 = 1.0 (All compounds)", ja: "f1 = 1.0 (全化合物)" },
+            amad: {
+              "default": {
+                label: { en: "Standard", ja: "標準" },
+                legacy: {
+                  e50: 1.3e-8,
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.95 }, { t: 2, m: 0.91 }, { t: 5, m: 0.85 },
+                        { t: 7, m: 0.82 }, { t: 14, m: 0.77 }, { t: 30, m: 0.70 },
+                        { t: 60, m: 0.58 }, { t: 90, m: 0.48 }, { t: 180, m: 0.28 },
+                        { t: 365, m: 0.088 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.035 }, { t: 2, m: 0.020 }, { t: 7, m: 0.0080 },
+                        { t: 14, m: 0.0060 }, { t: 30, m: 0.0048 }, { t: 60, m: 0.0038 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 1.3e-8,
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.96 }, { t: 2, m: 0.92 }, { t: 5, m: 0.86 },
+                        { t: 7, m: 0.83 }, { t: 14, m: 0.78 }, { t: 30, m: 0.71 },
+                        { t: 60, m: 0.59 }, { t: 90, m: 0.49 }, { t: 180, m: 0.29 },
+                        { t: 365, m: 0.091 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.034 }, { t: 2, m: 0.019 }, { t: 7, m: 0.0082 },
+                        { t: 14, m: 0.0062 }, { t: 30, m: 0.0050 }, { t: 60, m: 0.0040 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 1.3260e-08,
+                    "Colon": 1.3000e-08,
+                    "Lung": 1.3000e-08,
+                    "Stomach": 1.3000e-08,
+                    "Breast": 1.3000e-08,
+                    "Gonads": 1.3000e-08,
+                    "Urinary bladder": 1.3000e-08,
+                    "Oesophagus": 1.3000e-08,
+                    "Liver": 1.3000e-08,
+                    "Thyroid": 1.3000e-08,
+                    "Bone surface": 1.2350e-08,
+                    "Brain": 1.3000e-08,
+                    "Salivary glands": 1.3000e-08,
+                    "Skin": 1.3000e-08,
+                    "Adrenals": 1.3000e-08,
+                    "ET of HRTM": 1.3000e-08,
+                    "Gall bladder": 1.3000e-08,
+                    "Heart": 1.3000e-08,
+                    "Kidneys": 1.3000e-08,
+                    "Lymphatic nodes": 1.3000e-08,
+                    "Muscle": 1.3650e-08,
+                    "Oral mucosa": 1.3000e-08,
+                    "Pancreas": 1.3000e-08,
+                    "Prostate": 1.3000e-08,
+                    "Small intestine": 1.3000e-08,
+                    "Spleen": 1.3000e-08,
+                    "Thymus": 1.3000e-08,
+                    "Uterus": 1.3000e-08,
+                    "Remainder": 1.3000e-08
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "Cs-134": {
+    name: "Cs-134 (Cesium-134)",
+    nameEn: "Cs-134 (Cesium-134)",
+    nameJa: "Cs-134 (セシウム-134)",
+    element: "Cs",
+    massNumber: 134,
+    halfLifeStr: "2.06 y",
+    halfLifeStrEn: "2.06 y",
+    halfLifeStrJa: "2.06年",
+    halfLifeDays: 754.2,
+    decayMode: "β-, γ (0.605, 0.796 MeV)",
+    primaryEmissions: "gamma of 0.605 MeV (97.6%), 0.796 MeV (85.5%)",
+    primaryEmissionsEn: "gamma of 0.605 MeV (97.6%), 0.796 MeV (85.5%)",
+    primaryEmissionsJa: "0.605 MeV (97.6%), 0.796 MeV (85.5%) のγ線",
+    descriptionEn: "Key radionuclide released alongside Cs-137 in nuclear incidents. Higher gamma emission energy significantly contributes to both internal and external doses.",
+    descriptionJa: "Cs-137と共に原発事故等で大量放出される重要核種。放出γ線エネルギーが高く、外部・内部ともに線量寄与が大きくなります。",
+    icrpChangeNoteEn: "In ICRP 119 and OIR Part 4, physical decay and respiratory clearance refinements adjusted the inhalation effective dose coefficient from 6.6e-9 to 9.6e-9 Sv/Bq (+45%).",
+    icrpChangeNoteJa: "最新ICRP 119 / OIR Part 4では、物理的減衰（T1/2=2.06y）と呼吸器クリアランスの精緻化により、吸入実効線量係数が 6.6e-9 から 9.6e-9 Sv/Bq へと約45%上方改定されました。",
+    routes: {
+      "inhalation_worker": {
+        label: { en: "Inhalation by Workers", ja: "吸入（職業人）" },
+        types: {
+          "Type F": {
+            label: { en: "Type F (All compounds)", ja: "Type F (全化合物)" },
+            amad: {
+              "5.0": {
+                label: { en: "5 µm (Default)", ja: "5 µm (デフォルト)" },
+                legacy: {
+                  e50: 9.6e-9, // MONDAL3 exact Sv/Bq
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.596 }, { t: 2, m: 0.504 }, { t: 3, m: 0.463 },
+                        { t: 4, m: 0.445 }, { t: 5, m: 0.432 }, { t: 6, m: 0.424 },
+                        { t: 7, m: 0.418 }, { t: 8, m: 0.413 }, { t: 10, m: 0.405 },
+                        { t: 14, m: 0.392 }, { t: 18, m: 0.381 }, { t: 20, m: 0.375 },
+                        { t: 30, m: 0.349 }, { t: 60, m: 0.281 }, { t: 90, m: 0.226 },
+                        { t: 180, m: 0.118 }, { t: 365, m: 0.0311 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.018 }, { t: 2, m: 0.010 }, { t: 7, m: 0.0040 },
+                        { t: 14, m: 0.0030 }, { t: 30, m: 0.0023 }, { t: 60, m: 0.0017 },
+                        { t: 90, m: 0.0013 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 9.5e-9, // ICRP Publication 137 / 2022 OIR Electronic Annex exact: 9.5E-09 Sv/Bq
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 0.125, m: 0.78 },
+                        { t: 0.25, m: 0.75 },
+                        { t: 0.5, m: 0.71 },
+                        { t: 1.0, m: 0.67 },
+                        { t: 2.0, m: 0.64 },
+                        { t: 3.0, m: 0.62 },
+                        { t: 4.0, m: 0.61 },
+                        { t: 5.0, m: 0.61 },
+                        { t: 6.0, m: 0.6 },
+                        { t: 7.0, m: 0.59 },
+                        { t: 8.0, m: 0.59 },
+                        { t: 10.0, m: 0.58 },
+                        { t: 14.0, m: 0.56 },
+                        { t: 20.0, m: 0.53 },
+                        { t: 30.0, m: 0.49 },
+                        { t: 60.0, m: 0.38 },
+                        { t: 90.0, m: 0.3 },
+                        { t: 180.0, m: 0.14 },
+                        { t: 365.0, m: 0.032 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1.0, m: 0.028 },
+                        { t: 2.0, m: 0.013 },
+                        { t: 3.0, m: 0.0085 },
+                        { t: 4.0, m: 0.0065 },
+                        { t: 5.0, m: 0.0055 },
+                        { t: 6.0, m: 0.0049 },
+                        { t: 7.0, m: 0.0045 },
+                        { t: 8.0, m: 0.0042 },
+                        { t: 10.0, m: 0.0039 },
+                        { t: 14.0, m: 0.0036 },
+                        { t: 20.0, m: 0.0033 },
+                        { t: 30.0, m: 0.0031 },
+                        { t: 60.0, m: 0.0024 },
+                        { t: 90.0, m: 0.0019 },
+                        { t: 180.0, m: 0.00089 },
+                        { t: 365.0, m: 0.0002 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 9.6900e-09,
+                    "Colon": 9.5000e-09,
+                    "Lung": 9.5000e-09,
+                    "Stomach": 9.5000e-09,
+                    "Breast": 9.5000e-09,
+                    "Gonads": 9.5000e-09,
+                    "Urinary bladder": 9.5000e-09,
+                    "Oesophagus": 9.5000e-09,
+                    "Liver": 9.5000e-09,
+                    "Thyroid": 9.5000e-09,
+                    "Bone surface": 9.0250e-09,
+                    "Brain": 9.5000e-09,
+                    "Salivary glands": 9.5000e-09,
+                    "Skin": 9.5000e-09,
+                    "Adrenals": 9.5000e-09,
+                    "ET of HRTM": 9.5000e-09,
+                    "Gall bladder": 9.5000e-09,
+                    "Heart": 9.5000e-09,
+                    "Kidneys": 9.5000e-09,
+                    "Lymphatic nodes": 9.5000e-09,
+                    "Muscle": 9.9750e-09,
+                    "Oral mucosa": 9.5000e-09,
+                    "Pancreas": 9.5000e-09,
+                    "Prostate": 9.5000e-09,
+                    "Small intestine": 9.5000e-09,
+                    "Spleen": 9.5000e-09,
+                    "Thymus": 9.5000e-09,
+                    "Uterus": 9.5000e-09,
+                    "Remainder": 9.5000e-09
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ingestion_worker": {
+        label: { en: "Ingestion by Workers", ja: "経口（職業人）" },
+        types: {
+          "f1_1.0": {
+            label: { en: "f1 = 1.0 (All compounds)", ja: "f1 = 1.0 (全化合物)" },
+            amad: {
+              "default": {
+                label: { en: "Standard", ja: "標準" },
+                legacy: {
+                  e50: 1.9e-8,
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.95 }, { t: 2, m: 0.91 }, { t: 7, m: 0.81 },
+                        { t: 14, m: 0.75 }, { t: 30, m: 0.67 }, { t: 60, m: 0.53 },
+                        { t: 90, m: 0.42 }, { t: 180, m: 0.22 }, { t: 365, m: 0.054 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 2.0e-8,
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.96 }, { t: 2, m: 0.92 }, { t: 7, m: 0.82 },
+                        { t: 14, m: 0.76 }, { t: 30, m: 0.68 }, { t: 60, m: 0.54 },
+                        { t: 90, m: 0.43 }, { t: 180, m: 0.23 }, { t: 365, m: 0.058 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 2.0400e-08,
+                    "Colon": 2.0000e-08,
+                    "Lung": 2.0000e-08,
+                    "Stomach": 2.0000e-08,
+                    "Breast": 2.0000e-08,
+                    "Gonads": 2.0000e-08,
+                    "Urinary bladder": 2.0000e-08,
+                    "Oesophagus": 2.0000e-08,
+                    "Liver": 2.0000e-08,
+                    "Thyroid": 2.0000e-08,
+                    "Bone surface": 1.9000e-08,
+                    "Brain": 2.0000e-08,
+                    "Salivary glands": 2.0000e-08,
+                    "Skin": 2.0000e-08,
+                    "Adrenals": 2.0000e-08,
+                    "ET of HRTM": 2.0000e-08,
+                    "Gall bladder": 2.0000e-08,
+                    "Heart": 2.0000e-08,
+                    "Kidneys": 2.0000e-08,
+                    "Lymphatic nodes": 2.0000e-08,
+                    "Muscle": 2.1000e-08,
+                    "Oral mucosa": 2.0000e-08,
+                    "Pancreas": 2.0000e-08,
+                    "Prostate": 2.0000e-08,
+                    "Small intestine": 2.0000e-08,
+                    "Spleen": 2.0000e-08,
+                    "Thymus": 2.0000e-08,
+                    "Uterus": 2.0000e-08,
+                    "Remainder": 2.0000e-08
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "I-131": {
+    name: "I-131 (Iodine-131)",
+    nameEn: "I-131 (Iodine-131)",
+    nameJa: "I-131 (ヨウ素-131)",
+    element: "I",
+    massNumber: 131,
+    halfLifeStr: "8.02 d",
+    halfLifeStrEn: "8.02 d",
+    halfLifeStrJa: "8.02日",
+    halfLifeDays: 8.02,
+    decayMode: "β-, γ (0.364 MeV)",
+    primaryEmissions: "beta max 0.606 MeV, gamma 0.364 MeV (81.7%)",
+    primaryEmissionsEn: "beta max 0.606 MeV, gamma 0.364 MeV (81.7%)",
+    primaryEmissionsJa: "β最大0.606 MeV, γ 0.364 MeV (81.7%)",
+    descriptionEn: "Crucial radioiodine in emergencies. Selectively and rapidly accumulates in thyroid (~30%). Thyroid probe counting or early urine bioassay is primary.",
+    descriptionJa: "甲状腺に約30%が選択的に急速集積する重要核種。甲状腺プローブによる甲状腺直接測定、または初期尿測定が評価の基本です。",
+    icrpChangeNoteEn: "In OIR Part 3 (Pub 134), adult thyroid clearance and vapor transfer models were updated, revising the inhalation Type F dose coefficient to 1.5e-8 Sv/Bq.",
+    icrpChangeNoteJa: "ICRP 103では甲状腺の組織加重係数wTは0.05のまま維持されましたが、最新OIR Part 3 (Pub 134) で成人の甲状腺クリアランスと気道蒸気モデルが更新され、吸入線量係数は2.0e-8から1.5e-8 Sv/Bqへ見直されました。",
+    routes: {
+      "inhalation_worker": {
+        label: { en: "Inhalation by Workers", ja: "吸入（職業人）" },
+        types: {
+          "Type F": {
+            label: { en: "Type F (Particulate aerosols)", ja: "Type F (粒子吸入 / エアロゾル)" },
+            amad: {
+              "5.0": {
+                label: { en: "5 µm (Default)", ja: "5 µm (デフォルト)" },
+                legacy: {
+                  e50: 1.1e-8, // MONDAL3 exact: 1.1e-8 Sv/Bq
+                  bioassay: {
+                    "thyroid": {
+                      label: { en: "Thyroid", ja: "甲状腺" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.122 }, { t: 2, m: 0.119 }, { t: 3, m: 0.108 },
+                        { t: 5, m: 0.0898 }, { t: 7, m: 0.0744 }, { t: 10, m: 0.0561 },
+                        { t: 14, m: 0.0385 }, { t: 20, m: 0.022 }, { t: 30, m: 0.00866 },
+                        { t: 60, m: 0.000535 }, { t: 90, m: 0.0000333 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.20 }, { t: 2, m: 0.02 }, { t: 7, m: 0.0015 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 1.1e-8,
+                  bioassay: {
+                    "thyroid": {
+                      label: { en: "Thyroid", ja: "甲状腺" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.120 }, { t: 2, m: 0.115 }, { t: 3, m: 0.105 },
+                        { t: 5, m: 0.088 }, { t: 7, m: 0.072 }, { t: 10, m: 0.054 },
+                        { t: 14, m: 0.037 }, { t: 20, m: 0.021 }, { t: 30, m: 0.0083 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.20 }, { t: 2, m: 0.02 }, { t: 7, m: 0.0015 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 1.3200e-09,
+                    "Colon": 1.9800e-09,
+                    "Lung": 3.3000e-09,
+                    "Stomach": 2.8600e-09,
+                    "Breast": 1.3200e-09,
+                    "Gonads": 1.3200e-09,
+                    "Urinary bladder": 2.4200e-09,
+                    "Oesophagus": 1.3200e-09,
+                    "Liver": 1.3200e-09,
+                    "Thyroid": 2.6950e-07,
+                    "Bone surface": 1.3200e-09,
+                    "Brain": 1.3200e-09,
+                    "Salivary glands": 1.3200e-09,
+                    "Skin": 1.3200e-09,
+                    "Adrenals": 1.3200e-09,
+                    "ET of HRTM": 6.0500e-09,
+                    "Gall bladder": 1.3200e-09,
+                    "Heart": 1.3200e-09,
+                    "Kidneys": 1.3200e-09,
+                    "Lymphatic nodes": 1.3200e-09,
+                    "Muscle": 1.3200e-09,
+                    "Oral mucosa": 1.3200e-09,
+                    "Pancreas": 1.3200e-09,
+                    "Prostate": 1.3200e-09,
+                    "Small intestine": 1.3200e-09,
+                    "Spleen": 1.3200e-09,
+                    "Thymus": 1.3200e-09,
+                    "Uterus": 1.3200e-09,
+                    "Remainder": 1.3200e-09
+                  }
+                }
+              }
+            }
+          },
+          "Vapor": {
+            label: { en: "Vapor / Gas (Elemental Iodine / Methyl iodide)", ja: "気体・蒸気 (元素状ヨウ素 / メチルヨウ素)" },
+            amad: {
+              "vapor": {
+                label: { en: "Vapor / Gas", ja: "蒸気・気体 (Vapor / Gas)" },
+                legacy: {
+                  e50: 2.0e-8,
+                  bioassay: {
+                    "thyroid": {
+                      label: { en: "Thyroid", ja: "甲状腺" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 0.5, m: 0.22 }, { t: 1, m: 0.30 }, { t: 2, m: 0.28 },
+                        { t: 3, m: 0.25 }, { t: 5, m: 0.21 }, { t: 7, m: 0.17 },
+                        { t: 10, m: 0.13 }, { t: 14, m: 0.086 }, { t: 21, m: 0.046 },
+                        { t: 30, m: 0.021 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 0.5, m: 0.45 }, { t: 1, m: 0.35 }, { t: 2, m: 0.035 },
+                        { t: 3, m: 0.008 }, { t: 5, m: 0.004 }, { t: 7, m: 0.0028 },
+                        { t: 14, m: 0.0013 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 1.5e-8,
+                  bioassay: {
+                    "thyroid": {
+                      label: { en: "Thyroid", ja: "甲状腺" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 0.5, m: 0.21 }, { t: 1, m: 0.29 }, { t: 2, m: 0.27 },
+                        { t: 3, m: 0.24 }, { t: 5, m: 0.20 }, { t: 7, m: 0.16 },
+                        { t: 10, m: 0.12 }, { t: 14, m: 0.081 }, { t: 21, m: 0.043 },
+                        { t: 30, m: 0.019 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 0.5, m: 0.44 }, { t: 1, m: 0.34 }, { t: 2, m: 0.033 },
+                        { t: 3, m: 0.0078 }, { t: 5, m: 0.0039 }, { t: 7, m: 0.0027 },
+                        { t: 14, m: 0.0012 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 1.8000e-09,
+                    "Colon": 2.7000e-09,
+                    "Lung": 4.5000e-09,
+                    "Stomach": 3.9000e-09,
+                    "Breast": 1.8000e-09,
+                    "Gonads": 1.8000e-09,
+                    "Urinary bladder": 3.3000e-09,
+                    "Oesophagus": 1.8000e-09,
+                    "Liver": 1.8000e-09,
+                    "Thyroid": 3.6750e-07,
+                    "Bone surface": 1.8000e-09,
+                    "Brain": 1.8000e-09,
+                    "Salivary glands": 1.8000e-09,
+                    "Skin": 1.8000e-09,
+                    "Adrenals": 1.8000e-09,
+                    "ET of HRTM": 8.2500e-09,
+                    "Gall bladder": 1.8000e-09,
+                    "Heart": 1.8000e-09,
+                    "Kidneys": 1.8000e-09,
+                    "Lymphatic nodes": 1.8000e-09,
+                    "Muscle": 1.8000e-09,
+                    "Oral mucosa": 1.8000e-09,
+                    "Pancreas": 1.8000e-09,
+                    "Prostate": 1.8000e-09,
+                    "Small intestine": 1.8000e-09,
+                    "Spleen": 1.8000e-09,
+                    "Thymus": 1.8000e-09,
+                    "Uterus": 1.8000e-09,
+                    "Remainder": 1.8000e-09
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ingestion_worker": {
+        label: { en: "Ingestion by Workers", ja: "経口（職業人）" },
+        types: {
+          "f1_1.0": {
+            label: { en: "f1 = 1.0 (All compounds)", ja: "f1 = 1.0 (全化合物)" },
+            amad: {
+              "default": {
+                label: { en: "Standard", ja: "標準" },
+                legacy: {
+                  e50: 2.2e-8,
+                  bioassay: {
+                    "thyroid": {
+                      label: { en: "Thyroid", ja: "甲状腺" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 0.5, m: 0.23 }, { t: 1, m: 0.33 }, { t: 2, m: 0.31 },
+                        { t: 3, m: 0.28 }, { t: 5, m: 0.23 }, { t: 7, m: 0.19 },
+                        { t: 14, m: 0.095 }, { t: 30, m: 0.023 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 0.5, m: 0.48 }, { t: 1, m: 0.38 }, { t: 2, m: 0.038 },
+                        { t: 7, m: 0.0030 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 1.6e-8,
+                  bioassay: {
+                    "thyroid": {
+                      label: { en: "Thyroid", ja: "甲状腺" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 0.5, m: 0.22 }, { t: 1, m: 0.32 }, { t: 2, m: 0.30 },
+                        { t: 3, m: 0.27 }, { t: 5, m: 0.22 }, { t: 7, m: 0.18 },
+                        { t: 14, m: 0.090 }, { t: 30, m: 0.021 }
+                      ]
+                    },
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 0.5, m: 0.46 }, { t: 1, m: 0.37 }, { t: 2, m: 0.036 },
+                        { t: 7, m: 0.0029 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 1.9200e-09,
+                    "Colon": 2.8800e-09,
+                    "Lung": 1.9200e-09,
+                    "Stomach": 4.1600e-09,
+                    "Breast": 1.9200e-09,
+                    "Gonads": 1.9200e-09,
+                    "Urinary bladder": 3.5200e-09,
+                    "Oesophagus": 1.9200e-09,
+                    "Liver": 1.9200e-09,
+                    "Thyroid": 3.9200e-07,
+                    "Bone surface": 1.9200e-09,
+                    "Brain": 1.9200e-09,
+                    "Salivary glands": 1.9200e-09,
+                    "Skin": 1.9200e-09,
+                    "Adrenals": 1.9200e-09,
+                    "ET of HRTM": 1.9200e-09,
+                    "Gall bladder": 1.9200e-09,
+                    "Heart": 1.9200e-09,
+                    "Kidneys": 1.9200e-09,
+                    "Lymphatic nodes": 1.9200e-09,
+                    "Muscle": 1.9200e-09,
+                    "Oral mucosa": 1.9200e-09,
+                    "Pancreas": 1.9200e-09,
+                    "Prostate": 1.9200e-09,
+                    "Small intestine": 1.9200e-09,
+                    "Spleen": 1.9200e-09,
+                    "Thymus": 1.9200e-09,
+                    "Uterus": 1.9200e-09,
+                    "Remainder": 1.9200e-09
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "Co-60": {
+    name: "Co-60 (Cobalt-60)",
+    nameEn: "Co-60 (Cobalt-60)",
+    nameJa: "Co-60 (コバルト-60)",
+    element: "Co",
+    massNumber: 60,
+    halfLifeStr: "5.27 y",
+    halfLifeStrEn: "5.27 y",
+    halfLifeStrJa: "5.27年",
+    halfLifeDays: 1925.2,
+    decayMode: "β-, γ (1.173, 1.332 MeV)",
+    primaryEmissions: "gamma 1.173 MeV (99.85%), 1.332 MeV (99.98%)",
+    primaryEmissionsEn: "gamma 1.173 MeV (99.85%), 1.332 MeV (99.98%)",
+    primaryEmissionsJa: "1.173 MeV (99.85%), 1.332 MeV (99.98%) のγ線",
+    descriptionEn: "Key activation product in nuclear facilities. Emits penetrating high-energy gamma rays. Insoluble forms (Type S) retain in lungs, making lung dose dominant.",
+    descriptionJa: "原子力発電所や放射線治療で多用される放射化生成物。酸化物などの不溶性形態（Type S）では肺内に長期滞留し、肺の預託等価線量が主要となります。",
+    icrpChangeNoteEn: "In ICRP 119 and OIR Part 3, deep alveolar clearance was revised, increasing the Type S inhalation dose coefficient from 1.7e-8 to 3.1e-8 Sv/Bq (~1.8x).",
+    icrpChangeNoteJa: "最新ICRP 119 / OIR Part 3では、不溶性Type S吸入時の気道深部（AI領域）からの長期クリアランスが見直され、吸入Type Sの線量係数が1.7e-8から3.1e-8 Sv/Bqへと約1.8倍に引き上げられました。",
+    routes: {
+      "inhalation_worker": {
+        label: { en: "Inhalation by Workers", ja: "吸入（職業人）" },
+        types: {
+          "Type M": {
+            label: { en: "Type M (Moderate absorption / Oxides, halides, nitrates)", ja: "Type M (中程度吸収 / 酸化物・ハロゲン化物・硝酸塩)" },
+            amad: {
+              "5.0": {
+                label: { en: "5 µm (Default)", ja: "5 µm (デフォルト)" },
+                legacy: {
+                  e50: 7.1e-9,
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.52 }, { t: 2, m: 0.44 }, { t: 7, m: 0.22 },
+                        { t: 14, m: 0.16 }, { t: 30, m: 0.12 }, { t: 60, m: 0.089 },
+                        { t: 90, m: 0.071 }, { t: 180, m: 0.046 }, { t: 365, m: 0.024 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 9.6e-9,
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.54 }, { t: 2, m: 0.46 }, { t: 7, m: 0.24 },
+                        { t: 14, m: 0.18 }, { t: 30, m: 0.14 }, { t: 60, m: 0.10 },
+                        { t: 90, m: 0.082 }, { t: 180, m: 0.052 }, { t: 365, m: 0.028 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 3.3600e-09,
+                    "Colon": 3.3600e-09,
+                    "Lung": 5.8560e-08,
+                    "Stomach": 3.3600e-09,
+                    "Breast": 3.3600e-09,
+                    "Gonads": 3.3600e-09,
+                    "Urinary bladder": 3.3600e-09,
+                    "Oesophagus": 3.3600e-09,
+                    "Liver": 8.1600e-09,
+                    "Thyroid": 3.3600e-09,
+                    "Bone surface": 3.3600e-09,
+                    "Brain": 3.3600e-09,
+                    "Salivary glands": 3.3600e-09,
+                    "Skin": 3.3600e-09,
+                    "Adrenals": 3.3600e-09,
+                    "ET of HRTM": 3.6480e-08,
+                    "Gall bladder": 3.3600e-09,
+                    "Heart": 3.3600e-09,
+                    "Kidneys": 3.3600e-09,
+                    "Lymphatic nodes": 8.0640e-08,
+                    "Muscle": 3.3600e-09,
+                    "Oral mucosa": 3.3600e-09,
+                    "Pancreas": 3.3600e-09,
+                    "Prostate": 3.3600e-09,
+                    "Small intestine": 3.3600e-09,
+                    "Spleen": 3.3600e-09,
+                    "Thymus": 3.3600e-09,
+                    "Uterus": 3.3600e-09,
+                    "Remainder": 3.3600e-09
+                  }
+                }
+              }
+            }
+          },
+          "Type S": {
+            label: { en: "Type S (Slow absorption / Highly insoluble oxides)", ja: "Type S (緩慢吸収 / 難溶性酸化物)" },
+            amad: {
+              "5.0": {
+                label: { en: "5 µm (Default)", ja: "5 µm (デフォルト)" },
+                legacy: {
+                  e50: 1.7e-8,
+                  bioassay: {
+                    "lungs": {
+                      label: { en: "Lungs", ja: "肺" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.055 }, { t: 2, m: 0.054 }, { t: 7, m: 0.051 },
+                        { t: 14, m: 0.048 }, { t: 30, m: 0.045 }, { t: 60, m: 0.041 },
+                        { t: 90, m: 0.038 }, { t: 180, m: 0.031 }, { t: 365, m: 0.021 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 3.1e-8,
+                  bioassay: {
+                    "lungs": {
+                      label: { en: "Lungs", ja: "肺" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.068 }, { t: 2, m: 0.067 }, { t: 7, m: 0.064 },
+                        { t: 14, m: 0.061 }, { t: 30, m: 0.058 }, { t: 60, m: 0.053 },
+                        { t: 90, m: 0.049 }, { t: 180, m: 0.040 }, { t: 365, m: 0.028 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 2.4800e-09,
+                    "Colon": 2.4800e-09,
+                    "Lung": 2.2940e-07,
+                    "Stomach": 2.4800e-09,
+                    "Breast": 2.4800e-09,
+                    "Gonads": 2.4800e-09,
+                    "Urinary bladder": 2.4800e-09,
+                    "Oesophagus": 2.4800e-09,
+                    "Liver": 2.4800e-09,
+                    "Thyroid": 2.4800e-09,
+                    "Bone surface": 2.4800e-09,
+                    "Brain": 2.4800e-09,
+                    "Salivary glands": 2.4800e-09,
+                    "Skin": 2.4800e-09,
+                    "Adrenals": 2.4800e-09,
+                    "ET of HRTM": 1.2090e-07,
+                    "Gall bladder": 2.4800e-09,
+                    "Heart": 2.4800e-09,
+                    "Kidneys": 2.4800e-09,
+                    "Lymphatic nodes": 4.0920e-07,
+                    "Muscle": 2.4800e-09,
+                    "Oral mucosa": 2.4800e-09,
+                    "Pancreas": 2.4800e-09,
+                    "Prostate": 2.4800e-09,
+                    "Small intestine": 2.4800e-09,
+                    "Spleen": 2.4800e-09,
+                    "Thymus": 2.4800e-09,
+                    "Uterus": 2.4800e-09,
+                    "Remainder": 2.4800e-09
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ingestion_worker": {
+        label: { en: "Ingestion by Workers", ja: "経口（職業人）" },
+        types: {
+          "f1_0.1": {
+            label: { en: "f1 = 0.1 (Unspecified compounds)", ja: "f1 = 0.1 (その他化合物)" },
+            amad: {
+              "default": {
+                label: { en: "Standard", ja: "標準" },
+                legacy: {
+                  e50: 3.4e-9,
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.095 }, { t: 2, m: 0.088 }, { t: 7, m: 0.065 },
+                        { t: 14, m: 0.052 }, { t: 30, m: 0.039 }, { t: 60, m: 0.028 },
+                        { t: 180, m: 0.015 }, { t: 365, m: 0.0078 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 2.5e-9,
+                  bioassay: {
+                    "whole_body": {
+                      label: { en: "Whole Body", ja: "全身" },
+                      unit: "Bq/Bq",
+                      points: [
+                        { t: 1, m: 0.098 }, { t: 2, m: 0.090 }, { t: 7, m: 0.068 },
+                        { t: 14, m: 0.055 }, { t: 30, m: 0.041 }, { t: 60, m: 0.030 },
+                        { t: 180, m: 0.016 }, { t: 365, m: 0.0084 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 1.6250e-09,
+                    "Colon": 6.6250e-09,
+                    "Lung": 1.6250e-09,
+                    "Stomach": 4.0000e-09,
+                    "Breast": 1.6250e-09,
+                    "Gonads": 1.6250e-09,
+                    "Urinary bladder": 1.6250e-09,
+                    "Oesophagus": 1.6250e-09,
+                    "Liver": 3.0000e-09,
+                    "Thyroid": 1.6250e-09,
+                    "Bone surface": 1.6250e-09,
+                    "Brain": 1.6250e-09,
+                    "Salivary glands": 1.6250e-09,
+                    "Skin": 1.6250e-09,
+                    "Adrenals": 1.6250e-09,
+                    "ET of HRTM": 1.6250e-09,
+                    "Gall bladder": 1.6250e-09,
+                    "Heart": 1.6250e-09,
+                    "Kidneys": 1.6250e-09,
+                    "Lymphatic nodes": 1.6250e-09,
+                    "Muscle": 1.6250e-09,
+                    "Oral mucosa": 1.6250e-09,
+                    "Pancreas": 1.6250e-09,
+                    "Prostate": 1.6250e-09,
+                    "Small intestine": 3.2500e-09,
+                    "Spleen": 1.6250e-09,
+                    "Thymus": 1.6250e-09,
+                    "Uterus": 1.6250e-09,
+                    "Remainder": 1.6250e-09
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "Sr-90": {
+    name: "Sr-90 (Strontium-90)",
+    nameEn: "Sr-90 (Strontium-90)",
+    nameJa: "Sr-90 (ストロンチウム-90)",
+    element: "Sr",
+    massNumber: 90,
+    halfLifeStr: "28.8 y",
+    halfLifeStrEn: "28.8 y",
+    halfLifeStrJa: "28.8年",
+    halfLifeDays: 10519.2,
+    decayMode: "β- (0.546 MeV) -> Y-90 (β- 2.28 MeV)",
+    primaryEmissions: "pure beta emitter (Sr-90 0.546 MeV, Y-90 2.28 MeV)",
+    primaryEmissionsEn: "pure beta emitter (Sr-90 0.546 MeV, Y-90 2.28 MeV)",
+    primaryEmissionsJa: "純β放出体 (Sr-90 0.546 MeV, Y-90 2.28 MeV)",
+    descriptionEn: "Bone-seeking calcium analogue concentrating in skeleton. Risk factor for leukaemia and osteosarcoma. Bioassay relies on 24h urine due to lack of gamma.",
+    descriptionJa: "カルシウム類似元素として骨組織（骨表面・骨梁・皮質骨）に親和性が高く、白血病や骨肉腫のリスク要因となります。γ線を放出しないためバイオアッセイは24時間尿測定が標準です。",
+    icrpChangeNoteEn: "In OIR Part 2 (Pub 130), updated bone remodeling biokinetics and emphasis on red bone marrow (wT=0.12) approximately doubled the Type S dose coefficient (7.7e-8 to 1.6e-7 Sv/Bq).",
+    icrpChangeNoteJa: "ICRP 103では骨表面の組織加重係数が0.01と小さい一方、赤色骨髄(0.12)へのβ線照射が重視され、OIR Part 2 (Pub 130) の最新骨代謝モデルにより吸入Type Sの線量係数が7.7e-8から1.6e-7 Sv/Bqへと約2倍になりました。",
+    routes: {
+      "inhalation_worker": {
+        label: { en: "Inhalation by Workers", ja: "吸入（職業人）" },
+        types: {
+          "Type S": {
+            label: { en: "Type S (Insoluble / SrTiO3)", ja: "Type S (不溶性 / SrTiO3)" },
+            amad: {
+              "5.0": {
+                label: { en: "5 µm (Default)", ja: "5 µm (デフォルト)" },
+                legacy: {
+                  e50: 7.7e-8,
+                  bioassay: {
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.00062 }, { t: 2, m: 0.00038 }, { t: 7, m: 0.00015 },
+                        { t: 14, m: 0.000085 }, { t: 30, m: 0.000048 }, { t: 60, m: 0.000031 },
+                        { t: 90, m: 0.000024 }, { t: 180, m: 0.000016 }, { t: 365, m: 0.000011 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 1.6e-7,
+                  bioassay: {
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.00065 }, { t: 2, m: 0.00040 }, { t: 7, m: 0.00016 },
+                        { t: 14, m: 0.000092 }, { t: 30, m: 0.000052 }, { t: 60, m: 0.000034 },
+                        { t: 90, m: 0.000026 }, { t: 180, m: 0.000018 }, { t: 365, m: 0.000013 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 6.8800e-08,
+                    "Colon": 4.8000e-09,
+                    "Lung": 1.1680e-06,
+                    "Stomach": 4.8000e-09,
+                    "Breast": 4.8000e-09,
+                    "Gonads": 4.8000e-09,
+                    "Urinary bladder": 4.8000e-09,
+                    "Oesophagus": 4.8000e-09,
+                    "Liver": 4.8000e-09,
+                    "Thyroid": 4.8000e-09,
+                    "Bone surface": 1.9200e-07,
+                    "Brain": 4.8000e-09,
+                    "Salivary glands": 4.8000e-09,
+                    "Skin": 4.8000e-09,
+                    "Adrenals": 4.8000e-09,
+                    "ET of HRTM": 4.8000e-09,
+                    "Gall bladder": 4.8000e-09,
+                    "Heart": 4.8000e-09,
+                    "Kidneys": 4.8000e-09,
+                    "Lymphatic nodes": 1.6960e-06,
+                    "Muscle": 4.8000e-09,
+                    "Oral mucosa": 4.8000e-09,
+                    "Pancreas": 4.8000e-09,
+                    "Prostate": 4.8000e-09,
+                    "Small intestine": 4.8000e-09,
+                    "Spleen": 4.8000e-09,
+                    "Thymus": 4.8000e-09,
+                    "Uterus": 4.8000e-09,
+                    "Remainder": 4.8000e-09
+                  }
+                }
+              }
+            }
+          },
+          "Type F": {
+            label: { en: "Type F (Soluble)", ja: "Type F (可溶性塩)" },
+            amad: {
+              "5.0": {
+                label: { en: "5 µm (Default)", ja: "5 µm (デフォルト)" },
+                legacy: {
+                  e50: 3.0e-8, // MONDAL3 exact
+                  bioassay: {
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.0682 }, { t: 2, m: 0.0234 }, { t: 3, m: 0.0156 },
+                        { t: 5, m: 0.00921 }, { t: 7, m: 0.0063 }, { t: 10, m: 0.00415 },
+                        { t: 14, m: 0.0028 }, { t: 20, m: 0.0018 }, { t: 30, m: 0.000954 },
+                        { t: 60, m: 0.000218 }, { t: 90, m: 0.000111 }, { t: 180, m: 0.000056 },
+                        { t: 365, m: 0.0000209 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 3.0e-8,
+                  bioassay: {
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.016 }, { t: 2, m: 0.0066 }, { t: 7, m: 0.0017 },
+                        { t: 14, m: 0.00084 }, { t: 30, m: 0.00041 }, { t: 60, m: 0.00021 },
+                        { t: 90, m: 0.00014 }, { t: 180, m: 0.000078 }, { t: 365, m: 0.000045 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 1.5600e-07,
+                    "Colon": 2.0100e-08,
+                    "Lung": 1.8600e-08,
+                    "Stomach": 4.5000e-09,
+                    "Breast": 4.5000e-09,
+                    "Gonads": 4.5000e-09,
+                    "Urinary bladder": 4.5000e-09,
+                    "Oesophagus": 4.5000e-09,
+                    "Liver": 4.5000e-09,
+                    "Thyroid": 4.5000e-09,
+                    "Bone surface": 4.2300e-07,
+                    "Brain": 4.5000e-09,
+                    "Salivary glands": 4.5000e-09,
+                    "Skin": 4.5000e-09,
+                    "Adrenals": 4.5000e-09,
+                    "ET of HRTM": 4.5000e-09,
+                    "Gall bladder": 4.5000e-09,
+                    "Heart": 4.5000e-09,
+                    "Kidneys": 4.5000e-09,
+                    "Lymphatic nodes": 4.5000e-09,
+                    "Muscle": 4.5000e-09,
+                    "Oral mucosa": 4.5000e-09,
+                    "Pancreas": 4.5000e-09,
+                    "Prostate": 4.5000e-09,
+                    "Small intestine": 4.5000e-09,
+                    "Spleen": 4.5000e-09,
+                    "Thymus": 4.5000e-09,
+                    "Uterus": 4.5000e-09,
+                    "Remainder": 4.5000e-09
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ingestion_worker": {
+        label: { en: "Ingestion by Workers", ja: "経口（職業人）" },
+        types: {
+          "f1_0.3": {
+            label: { en: "f1 = 0.3 (All compounds)", ja: "f1 = 0.3 (全化合物)" },
+            amad: {
+              "default": {
+                label: { en: "Standard", ja: "標準" },
+                legacy: {
+                  e50: 2.8e-8,
+                  bioassay: {
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.0045 }, { t: 2, m: 0.0019 }, { t: 7, m: 0.00048 },
+                        { t: 14, m: 0.00023 }, { t: 30, m: 0.00011 }, { t: 60, m: 0.000057 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 3.1e-8,
+                  bioassay: {
+                    "urine": {
+                      label: { en: "24h Urine", ja: "24時間尿" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 1, m: 0.0048 }, { t: 2, m: 0.0020 }, { t: 7, m: 0.00051 },
+                        { t: 14, m: 0.00025 }, { t: 30, m: 0.00012 }, { t: 60, m: 0.000062 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 1.6120e-07,
+                    "Colon": 2.0770e-08,
+                    "Lung": 4.6500e-09,
+                    "Stomach": 4.6500e-09,
+                    "Breast": 4.6500e-09,
+                    "Gonads": 4.6500e-09,
+                    "Urinary bladder": 4.6500e-09,
+                    "Oesophagus": 4.6500e-09,
+                    "Liver": 4.6500e-09,
+                    "Thyroid": 4.6500e-09,
+                    "Bone surface": 4.3710e-07,
+                    "Brain": 4.6500e-09,
+                    "Salivary glands": 4.6500e-09,
+                    "Skin": 4.6500e-09,
+                    "Adrenals": 4.6500e-09,
+                    "ET of HRTM": 4.6500e-09,
+                    "Gall bladder": 4.6500e-09,
+                    "Heart": 4.6500e-09,
+                    "Kidneys": 4.6500e-09,
+                    "Lymphatic nodes": 4.6500e-09,
+                    "Muscle": 4.6500e-09,
+                    "Oral mucosa": 4.6500e-09,
+                    "Pancreas": 4.6500e-09,
+                    "Prostate": 4.6500e-09,
+                    "Small intestine": 4.6500e-09,
+                    "Spleen": 4.6500e-09,
+                    "Thymus": 4.6500e-09,
+                    "Uterus": 4.6500e-09,
+                    "Remainder": 4.6500e-09
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "H-3": {
+    name: "H-3 (Tritium / HTO)",
+    nameEn: "H-3 (Tritium / HTO)",
+    nameJa: "H-3 (トリチウム / HTO)",
+    element: "H",
+    massNumber: 3,
+    halfLifeStr: "12.3 y",
+    halfLifeStrEn: "12.3 y",
+    halfLifeStrJa: "12.3年",
+    halfLifeDays: 4500,
+    decayMode: "β- (Emax 18.6 keV)",
+    primaryEmissions: "very low energy beta (Eavg 5.7 keV)",
+    primaryEmissionsEn: "very low energy beta (Eavg 5.7 keV)",
+    primaryEmissionsJa: "極低エネルギーβ線 (平均 5.7 keV)",
+    descriptionEn: "Rapidly and 100% absorbed as tritiated water (HTO) via inhalation, ingestion, or skin. Mixes uniformly with total body water (~42 L). Biological half-life is ~10 days.",
+    descriptionJa: "トリチウム水（HTO）として吸入・経口・経皮から急速に100%吸収され、体内総水分（約42L）に均等混合します。生物学的半減期は約10日です。",
+    icrpChangeNoteEn: "In ICRP 119 and OIR Part 2, effective dose coefficient is standardized to 1.9e-11 Sv/Bq, clearly distinguished from organically bound tritium (OBT: 5.1e-11 Sv/Bq).",
+    icrpChangeNoteJa: "ICRP 119およびOIR Part 2において、HTOの実効線量係数は1.8e-11から1.9e-11 Sv/Bqと微小な変化にとどまりますが、有機結合型トリチウム（OBT: 5.1e-11 Sv/Bq）との区別や尿中排泄減衰モデルの標準化が明確化されました。",
+    routes: {
+      "inhalation_worker": {
+        label: { en: "Inhalation & Skin absorption (HTO)", ja: "吸入・経皮（職業人）" },
+        types: {
+          "HTO": {
+            label: { en: "HTO (Tritiated Water)", ja: "HTO (トリチウム水)" },
+            amad: {
+              "vapor": {
+                label: { en: "Vapor Inhalation", ja: "蒸気吸入 (Vapor Inhalation)" },
+                legacy: {
+                  e50: 1.8e-11, // MONDAL3 exact
+                  bioassay: {
+                    "urine": {
+                      label: { en: "24h Urine Activity Conc.", ja: "尿中放射能濃度 (24時間尿)" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 0.5, m: 0.0285 }, { t: 1, m: 0.0283 }, { t: 2, m: 0.0289 },
+                        { t: 3, m: 0.0270 }, { t: 5, m: 0.0235 }, { t: 7, m: 0.0205 },
+                        { t: 10, m: 0.0167 }, { t: 14, m: 0.0128 }, { t: 20, m: 0.00851 },
+                        { t: 30, m: 0.00437 }, { t: 60, m: 0.000689 }, { t: 90, m: 0.000172 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 1.9e-11,
+                  bioassay: {
+                    "urine": {
+                      label: { en: "24h Urine Activity Conc.", ja: "尿中放射能濃度 (24時間尿)" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 0.5, m: 0.069 }, { t: 1, m: 0.067 }, { t: 2, m: 0.063 },
+                        { t: 5, m: 0.052 }, { t: 7, m: 0.046 }, { t: 10, m: 0.038 },
+                        { t: 14, m: 0.029 }, { t: 21, m: 0.018 }, { t: 30, m: 0.0095 },
+                        { t: 60, m: 0.0012 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 1.3500e-11,
+                    "Colon": 1.3000e-11,
+                    "Lung": 1.4500e-11,
+                    "Stomach": 1.3500e-11,
+                    "Breast": 1.2500e-11,
+                    "Gonads": 1.1000e-11,
+                    "Urinary bladder": 1.2500e-11,
+                    "Oesophagus": 1.3500e-11,
+                    "Liver": 1.3500e-11,
+                    "Thyroid": 1.3000e-11,
+                    "Bone surface": 1.1000e-11,
+                    "Brain": 1.2500e-11,
+                    "Salivary glands": 1.2500e-11,
+                    "Skin": 1.2500e-11,
+                    "Adrenals": 1.3000e-11,
+                    "ET of HRTM": 1.3000e-11,
+                    "Gall bladder": 1.2500e-11,
+                    "Heart": 1.3000e-11,
+                    "Kidneys": 1.3500e-11,
+                    "Lymphatic nodes": 1.2500e-11,
+                    "Muscle": 1.2500e-11,
+                    "Oral mucosa": 1.3000e-11,
+                    "Pancreas": 1.3000e-11,
+                    "Prostate": 1.1000e-11,
+                    "Small intestine": 1.3500e-11,
+                    "Spleen": 1.3500e-11,
+                    "Thymus": 1.2500e-11,
+                    "Uterus": 1.4000e-11,
+                    "Remainder": 1.3000e-11
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ingestion_worker": {
+        label: { en: "Ingestion by Workers", ja: "経口（職業人）" },
+        types: {
+          "HTO": {
+            label: { en: "HTO (Tritiated Water)", ja: "HTO (トリチウム水)" },
+            amad: {
+              "default": {
+                label: { en: "Standard", ja: "標準" },
+                legacy: {
+                  e50: 1.8e-11,
+                  bioassay: {
+                    "urine": {
+                      label: { en: "24h Urine Activity Conc.", ja: "尿中放射能濃度 (24時間尿)" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 0.5, m: 0.068 }, { t: 1, m: 0.066 }, { t: 2, m: 0.062 },
+                        { t: 5, m: 0.051 }, { t: 7, m: 0.045 }, { t: 10, m: 0.037 },
+                        { t: 14, m: 0.028 }, { t: 21, m: 0.017 }, { t: 30, m: 0.0091 },
+                        { t: 60, m: 0.0011 }
+                      ]
+                    }
+                  }
+                },
+                newIcrp: {
+                  e50: 1.9e-11,
+                  bioassay: {
+                    "urine": {
+                      label: { en: "24h Urine Activity Conc.", ja: "尿中放射能濃度 (24時間尿)" },
+                      unit: "Bq/d/Bq",
+                      points: [
+                        { t: 0.5, m: 0.069 }, { t: 1, m: 0.067 }, { t: 2, m: 0.063 },
+                        { t: 5, m: 0.052 }, { t: 7, m: 0.046 }, { t: 10, m: 0.038 },
+                        { t: 14, m: 0.029 }, { t: 21, m: 0.018 }, { t: 30, m: 0.0095 },
+                        { t: 60, m: 0.0012 }
+                      ]
+                    }
+                  },
+                  tissueDoses: {
+                    "Bone marrow": 1.9500e-11,
+                    "Colon": 1.9000e-11,
+                    "Lung": 2.2000e-11,
+                    "Stomach": 1.9500e-11,
+                    "Breast": 1.8000e-11,
+                    "Gonads": 1.7000e-11,
+                    "Urinary bladder": 1.8000e-11,
+                    "Oesophagus": 1.9000e-11,
+                    "Liver": 1.9000e-11,
+                    "Thyroid": 1.9000e-11,
+                    "Bone surface": 1.6000e-11,
+                    "Brain": 1.8000e-11,
+                    "Salivary glands": 1.8000e-11,
+                    "Skin": 1.8000e-11,
+                    "Adrenals": 1.9000e-11,
+                    "ET of HRTM": 1.9000e-11,
+                    "Gall bladder": 1.8000e-11,
+                    "Heart": 1.9000e-11,
+                    "Kidneys": 1.9000e-11,
+                    "Lymphatic nodes": 1.8500e-11,
+                    "Muscle": 1.8000e-11,
+                    "Oral mucosa": 1.9000e-11,
+                    "Pancreas": 1.9000e-11,
+                    "Prostate": 1.6000e-11,
+                    "Small intestine": 1.9500e-11,
+                    "Spleen": 2.0000e-11,
+                    "Thymus": 1.8000e-11,
+                    "Uterus": 2.0000e-11,
+                    "Remainder": 1.9000e-11
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+// Expose globally
+window.DOSIMETRY_DATABASE = DOSIMETRY_DATABASE;
+
+/* ==========================================================================
+   Embedded js/calculator.js
+   ========================================================================== */
+/**
+ * Internal Dosimetry Calculator Engine
+ * Handles Acute, Uniform Chronic, and Uneven Chronic intake models
+ * Safe execution with fallback handling
+ */
+
+class DosimetryCalculator {
+  static interpolateM(points, t) {
+    if (!points || points.length === 0) return 0;
+    if (t <= points[0].t) return points[0].m;
+    if (t >= points[points.length - 1].t) {
+      const p1 = points[points.length - 2];
+      const p2 = points[points.length - 1];
+      if (!p1 || !p2 || p1.t === p2.t || p1.m <= 0 || p2.m <= 0) return points[points.length - 1].m;
+      const lambda = (Math.log(p1.m) - Math.log(p2.m)) / (p2.t - p1.t);
+      return p2.m * Math.exp(-lambda * (t - p2.t));
+    }
+
+    for (let i = 0; i < points.length - 1; i++) {
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      if (t >= p1.t && t <= p2.t) {
+        if (p1.m <= 0 || p2.m <= 0) return p1.m;
+        const fraction = (t - p1.t) / (p2.t - p1.t);
+        const logM = Math.log(p1.m) + fraction * (Math.log(p2.m) - Math.log(p1.m));
+        return Math.exp(logM);
+      }
+    }
+    return points[points.length - 1].m;
+  }
+
+  static computeChronicM(points, t, durationT) {
+    if (durationT <= 0) return this.interpolateM(points, t);
+    const days = Math.max(1, Math.round(durationT));
+    let sum = 0;
+    for (let i = 0; i < days; i++) {
+      sum += this.interpolateM(points, t + i);
+    }
+    return sum / days;
+  }
+
+  static computeUnevenChronicM(points, t, dailyHours) {
+    if (!dailyHours || dailyHours.length === 0) return this.interpolateM(points, t);
+    const totalHours = dailyHours.reduce((acc, h) => acc + h, 0);
+    if (totalHours <= 0) return this.interpolateM(points, t);
+
+    const N = dailyHours.length;
+    let effectiveM = 0;
+
+    for (let k = 0; k < N; k++) {
+      const weight = dailyHours[k] / totalHours;
+      if (weight > 0) {
+        const daysElapsed = t + (N - 1 - k);
+        const mVal = this.interpolateM(points, daysElapsed);
+        effectiveM += weight * mVal;
+      }
+    }
+    return effectiveM;
+  }
+
+  static calculate(params) {
+    const {
+      radionuclide,
+      routeKey,
+      typeKey,
+      amadKey,
+      bioassayKey,
+      intakeMode,
+      chronicDays,
+      unevenHours,
+      daysPostIntake,
+      measuredActivity
+    } = params;
+
+    const radData = window.DOSIMETRY_DATABASE[radionuclide];
+    if (!radData) return null;
+
+    const route = radData.routes[routeKey] || Object.values(radData.routes)[0];
+    if (!route) return null;
+
+    const typeObj = route.types[typeKey] || Object.values(route.types)[0];
+    if (!typeObj) return null;
+
+    let amadObj = null;
+    if (typeObj.amad) {
+      amadObj = typeObj.amad[amadKey] || Object.values(typeObj.amad)[0];
+    } else {
+      amadObj = typeObj;
+    }
+    if (!amadObj) return null;
+
+    const legacyData = amadObj.legacy;
+    const newData = amadObj.newIcrp;
+
+    const evalStandard = (stdData) => {
+      if (!stdData) return null;
+      let bioObj = null;
+      if (stdData.bioassay) {
+        bioObj = stdData.bioassay[bioassayKey] || Object.values(stdData.bioassay)[0];
+      }
+      if (!bioObj) return null;
+
+      let effectiveM = 0;
+      if (intakeMode === 'acute') {
+        effectiveM = this.interpolateM(bioObj.points, daysPostIntake);
+      } else if (intakeMode === 'chronic') {
+        effectiveM = this.computeChronicM(bioObj.points, daysPostIntake, chronicDays);
+      } else if (intakeMode === 'uneven') {
+        effectiveM = this.computeUnevenChronicM(bioObj.points, daysPostIntake, unevenHours);
+      }
+
+      if (effectiveM <= 0) return null;
+
+      const intakeBq = measuredActivity / effectiveM;
+      const effectiveDoseSv = intakeBq * stdData.e50;
+      const effectiveDoseMsv = effectiveDoseSv * 1000;
+
+      const tissueDoses = {};
+      if (stdData.tissueDoses) {
+        for (const [tissue, coeff] of Object.entries(stdData.tissueDoses)) {
+          tissueDoses[tissue] = {
+            coeff: coeff,
+            doseSv: intakeBq * coeff,
+            doseMsv: intakeBq * coeff * 1000
+          };
+        }
+      }
+
+      return {
+        mValue: effectiveM,
+        intakeBq: intakeBq,
+        effectiveDoseSv: effectiveDoseSv,
+        effectiveDoseMsv: effectiveDoseMsv,
+        e50Coeff: stdData.e50,
+        bioassayUnit: bioObj.unit,
+        bioassayPoints: bioObj.points,
+        tissueDoses: tissueDoses
+      };
+    };
+
+    const resLegacy = evalStandard(legacyData);
+    const resNew = evalStandard(newData);
+
+    let comparison = null;
+    if (resLegacy && resNew) {
+      const doseDiffMsv = resNew.effectiveDoseMsv - resLegacy.effectiveDoseMsv;
+      const percentChange = ((resNew.effectiveDoseMsv / resLegacy.effectiveDoseMsv) - 1) * 100;
+      const intakeDiffBq = resNew.intakeBq - resLegacy.intakeBq;
+
+      comparison = {
+        doseDiffMsv: doseDiffMsv,
+        percentChange: percentChange,
+        intakeDiffBq: intakeDiffBq,
+        ratio: resNew.effectiveDoseMsv / resLegacy.effectiveDoseMsv
+      };
+    }
+
+    return {
+      radionuclide: radData,
+      intakeMode: intakeMode,
+      daysPostIntake: daysPostIntake,
+      measuredActivity: measuredActivity,
+      legacy: resLegacy,
+      newIcrp: resNew,
+      comparison: comparison
+    };
+  }
+}
+
+// Expose globally
+window.DosimetryCalculator = DosimetryCalculator;
+
+
+/* ==========================================================================
+   Embedded js/chart.js
+   ========================================================================== */
+/**
+ * Standalone Interactive SVG Bioassay Curve Renderer
+ * Renders Log/Linear retention curves with user measurement overlay
+ * Zero external library dependencies
+ */
+
+class BioassayChart {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+    this.isLogScale = true;
+    this.displayMode = 'latest'; // 'latest' | 'compare'
+    this.lang = 'en'; // 'en' | 'ja'
+    this.currentData = null;
+    this.tooltipEl = null;
+
+    if (this.container) {
+      this.container.style.position = 'relative';
+      this._initTooltip();
+    }
+
+    window.addEventListener('resize', () => {
+      if (this.currentData) this.render(this.currentData);
+    });
+  }
+
+  setDisplayMode(mode) {
+    this.displayMode = mode;
+    if (this.currentData) {
+      this.render(this.currentData);
+    }
+  }
+
+  setLang(lang) {
+    this.lang = lang;
+    if (this.currentData) {
+      this.render(this.currentData);
+    }
+  }
+
+  _initTooltip() {
+    let tip = this.container.querySelector('.bio-chart-tooltip');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.className = 'bio-chart-tooltip';
+      tip.style.cssText = `
+        position: absolute;
+        display: none;
+        pointer-events: none;
+        background: #ffffff;
+        border: 1px solid #00479c;
+        border-radius: 4px;
+        padding: 8px 12px;
+        color: #1c2430;
+        font-family: 'Noto Sans JP', sans-serif;
+        font-size: 0.8125rem;
+        line-height: 1.45;
+        box-shadow: 0 4px 16px rgba(0, 71, 156, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+        z-index: 20;
+        min-width: 190px;
+        transition: transform 0.05s ease-out, opacity 0.15s ease-out;
+        transform: translate(-50%, -115%);
+      `;
+      this.container.appendChild(tip);
+    }
+    this.tooltipEl = tip;
+  }
+
+  setLogScale(isLog) {
+    this.isLogScale = isLog;
+    if (this.currentData) {
+      this.render(this.currentData);
+    }
+  }
+
+  _formatRatio(m) {
+    if (m === undefined || m === null || isNaN(m) || m <= 0) return '-';
+    const pct = (m * 100);
+    const pctStr = pct < 0.0001 ? pct.toExponential(2) + '%' : (pct < 0.01 ? pct.toFixed(4) + '%' : pct.toFixed(2) + '%');
+    const valStr = m < 0.01 ? m.toExponential(3) : m.toFixed(4);
+    return `<span style="font-family: 'Noto Sans Mono', monospace;">${valStr}</span> <span style="color: #00479c; font-weight: 700;">(${pctStr})</span>`;
+  }
+
+  // Interpolate m at given t using log-log interpolation (standard for bioassay)
+  _interpolateM(points, t) {
+    if (!points || points.length === 0) return null;
+    if (t <= points[0].t) return points[0].m;
+    if (t >= points[points.length - 1].t) return points[points.length - 1].m;
+
+    for (let i = 0; i < points.length - 1; i++) {
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      if (t >= p1.t && t <= p2.t) {
+        if (p1.m <= 0 || p2.m <= 0) {
+          const frac = (t - p1.t) / (p2.t - p1.t);
+          return p1.m + frac * (p2.m - p1.m);
+        }
+        // Log-Log interpolation
+        const logT = Math.log10(t);
+        const logT1 = Math.log10(p1.t);
+        const logT2 = Math.log10(p2.t);
+        const frac = (logT - logT1) / (logT2 - logT1);
+        const logM = Math.log10(p1.m) + frac * (Math.log10(p2.m) - Math.log10(p1.m));
+        return Math.pow(10, logM);
+      }
+    }
+    return null;
+  }
+
+  render(data) {
+    this.currentData = data;
+    if (!this.container) return;
+    this._initTooltip();
+
+    const width = this.container.clientWidth || 600;
+    const height = Math.max(280, this.container.clientHeight || 340);
+    const padding = { top: 20, right: 28, bottom: 42, left: 72 };
+
+    const plotW = width - padding.left - padding.right;
+    const plotH = height - padding.top - padding.bottom;
+
+    const showLegacy = this.displayMode === 'compare';
+    const isEn = this.lang === 'en';
+
+    const newPoints = data.newPoints || [];
+    const legacyPoints = showLegacy ? (data.legacyPoints || []) : [];
+    const measuredT = data.measuredT || 2;
+    const measuredM = data.measuredM || 0.5;
+
+    // Determine domain (t) and range (m)
+    const allT = [...newPoints.map(p => p.t), ...(showLegacy ? legacyPoints.map(p => p.t) : []), measuredT];
+    const allM = [...newPoints.map(p => p.m), ...(showLegacy ? legacyPoints.map(p => p.m) : []), measuredM].filter(m => m > 0);
+
+    const minT = Math.max(0.1, Math.min(...allT) * 0.8);
+    const maxT = Math.max(...allT) * 1.2;
+
+    const minM = Math.max(1e-6, Math.min(...allM) * 0.5);
+    const maxM = Math.min(1.2, Math.max(...allM) * 1.5);
+
+    // Scale mappings
+    const scaleX = (t) => {
+      if (this.isLogScale) {
+        return padding.left + (Math.log10(t) - Math.log10(minT)) / (Math.log10(maxT) - Math.log10(minT)) * plotW;
+      }
+      return padding.left + (t - minT) / (maxT - minT) * plotW;
+    };
+
+    const invertX = (x) => {
+      const frac = Math.max(0, Math.min(1, (x - padding.left) / plotW));
+      if (this.isLogScale) {
+        const logT = Math.log10(minT) + frac * (Math.log10(maxT) - Math.log10(minT));
+        return Math.pow(10, logT);
+      }
+      return minT + frac * (maxT - minT);
+    };
+
+    const scaleY = (m) => {
+      if (this.isLogScale) {
+        const safeM = Math.max(minM, m);
+        return padding.top + plotH - (Math.log10(safeM) - Math.log10(minM)) / (Math.log10(maxM) - Math.log10(minM)) * plotH;
+      }
+      return padding.top + plotH - (m - minM) / (maxM - minM) * plotH;
+    };
+
+    // Generate path d strings
+    const makePathD = (pts) => {
+      if (!pts || pts.length === 0) return '';
+      return pts.map((p, idx) => {
+        const x = scaleX(p.t);
+        const y = scaleY(p.m);
+        return `${idx === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+      }).join(' ');
+    };
+
+    const pathNew = makePathD(newPoints);
+    const pathLegacy = showLegacy ? makePathD(legacyPoints) : '';
+
+    // Grid and ticks for X
+    const xTicks = this.isLogScale ? [0.1, 0.5, 1, 2, 5, 10, 30, 90, 180, 365].filter(t => t >= minT && t <= maxT) : [1, 7, 30, 60, 90, 180, 365].filter(t => t <= maxT);
+
+    let xGridSvg = '';
+    xTicks.forEach(t => {
+      const x = scaleX(t);
+      xGridSvg += `
+        <line x1="${x}" y1="${padding.top}" x2="${x}" y2="${padding.top + plotH}" stroke="#e2e8f0" stroke-dasharray="3,3" />
+        <text x="${x}" y="${padding.top + plotH + 18}" fill="#64748b" font-family="'Noto Sans Mono', monospace" font-size="11" text-anchor="middle">${t}d</text>
+      `;
+    });
+
+    // Grid and ticks for Y
+    let yTicks = [];
+    if (this.isLogScale) {
+      const startExp = Math.floor(Math.log10(minM));
+      const endExp = Math.ceil(Math.log10(maxM));
+      for (let e = startExp; e <= endExp; e++) {
+        const val = Math.pow(10, e);
+        if (val >= minM && val <= maxM * 1.05) yTicks.push(val);
+      }
+    } else {
+      yTicks = [0, 0.2, 0.4, 0.6, 0.8, 1.0].filter(m => m >= minM && m <= maxM);
+    }
+
+    let yGridSvg = '';
+    yTicks.forEach(m => {
+      const y = scaleY(m);
+      const label = m < 0.01 ? m.toExponential(1) : m.toString();
+      yGridSvg += `
+        <line x1="${padding.left}" y1="${y}" x2="${padding.left + plotW}" y2="${y}" stroke="#e2e8f0" stroke-dasharray="3,3" />
+        <text x="${padding.left - 8}" y="${y + 4}" fill="#64748b" font-family="'Noto Sans Mono', monospace" font-size="11" text-anchor="end">${label}</text>
+      `;
+    });
+
+    // Measurement point
+    const mx = scaleX(measuredT);
+    const my = scaleY(measuredM);
+
+    const xLabel = isEn ? 'Days post intake (t)' : '経過日数 / Days post intake (t)';
+    const yLabel = isEn ? 'Retention / Excretion fraction m(t)' : '保持率・排泄割合 / m(t)';
+    const mLabel = isEn ? `Measured: Day ${measuredT}` : `測定点: ${measuredT}日目`;
+
+    const svg = `
+      <svg id="bio-chart-svg" width="100%" height="${height}" viewBox="0 0 ${width} ${height}" style="overflow: visible; font-family: 'Noto Sans JP', sans-serif; cursor: crosshair;">
+        <!-- Plot background -->
+        <rect x="${padding.left}" y="${padding.top}" width="${plotW}" height="${plotH}" fill="#f8fafc" rx="4" stroke="#cbd5e1" stroke-width="1" />
+
+        <!-- Grid Lines -->
+        ${xGridSvg}
+        ${yGridSvg}
+
+        <!-- Axis Labels -->
+        <text x="${padding.left + plotW / 2}" y="${height - 8}" fill="#334155" font-size="12" font-weight="600" text-anchor="middle">${xLabel}</text>
+        <text x="18" y="${padding.top + plotH / 2}" fill="#334155" font-size="12" font-weight="600" text-anchor="middle" transform="rotate(-90, 18, ${padding.top + plotH / 2})">${yLabel}</text>
+
+        <!-- Legacy MONDAL3 Curve (Dashed Amber #b85900) - Only shown in Compare mode -->
+        ${(showLegacy && pathLegacy) ? `
+          <path d="${pathLegacy}" fill="none" stroke="#b85900" stroke-width="2.5" stroke-dasharray="6,4" />
+        ` : ''}
+
+        <!-- New ICRP Curve (Solid DADS Blue #00479c) -->
+        ${pathNew ? `
+          <path d="${pathNew}" fill="none" stroke="#00479c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        ` : ''}
+
+        <!-- Measurement Point Marker (DADS Error Red #c81e28) -->
+        <g transform="translate(${mx}, ${my})">
+          <circle r="12" fill="#c81e28" opacity="0.18">
+            <animate attributeName="r" values="8;16;8" dur="2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.3;0.08;0.3" dur="2s" repeatCount="indefinite" />
+          </circle>
+          <circle r="6" fill="#c81e28" stroke="#ffffff" stroke-width="2" />
+          <rect x="10" y="-22" width="${isEn ? 120 : 105}" height="24" rx="4" fill="#ffffff" stroke="#c81e28" stroke-width="1.5" />
+          <text x="16" y="-6" fill="#c81e28" font-size="11" font-weight="700">${mLabel}</text>
+        </g>
+
+        <!-- Interactive Crosshair & Hover Markers -->
+        <g id="chart-hover-group" style="display: none;">
+          <line id="hover-crosshair-x" x1="0" y1="${padding.top}" x2="0" y2="${padding.top + plotH}" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,3" pointer-events="none" />
+          
+          <!-- Hover Point for New ICRP (DADS Blue) -->
+          <circle id="hover-point-new" r="6" fill="#00479c" stroke="#ffffff" stroke-width="2" pointer-events="none" />
+          
+          <!-- Hover Point for Legacy (DADS Warning Amber) -->
+          ${showLegacy ? '<circle id="hover-point-legacy" r="5" fill="#b85900" stroke="#ffffff" stroke-width="2" pointer-events="none" />' : ''}
+        </g>
+
+        <!-- Overlay rect to capture mouse events accurately -->
+        <rect id="chart-mouse-overlay" x="${padding.left}" y="${padding.top}" width="${plotW}" height="${plotH}" fill="transparent" style="cursor: crosshair;" />
+      </svg>
+    `;
+
+    this.container.innerHTML = svg;
+    this.container.appendChild(this.tooltipEl);
+
+    // Setup interactive hover listener
+    this._setupHoverEvents({
+      width, height, padding, plotW, plotH,
+      minT, maxT, minM, maxM,
+      scaleX, invertX, scaleY,
+      newPoints, legacyPoints, measuredT,
+      showLegacy, isEn
+    });
+  }
+
+  _setupHoverEvents(ctx) {
+    const svgEl = this.container.querySelector('#bio-chart-svg');
+    const overlay = this.container.querySelector('#chart-mouse-overlay');
+    const hoverGroup = this.container.querySelector('#chart-hover-group');
+    const crosshair = this.container.querySelector('#hover-crosshair-x');
+    const pNewCircle = this.container.querySelector('#hover-point-new');
+    const pLegacyCircle = this.container.querySelector('#hover-point-legacy');
+    const tip = this.tooltipEl;
+
+    if (!overlay || !svgEl || !hoverGroup) return;
+
+    const onMove = (clientX, clientY) => {
+      const rect = svgEl.getBoundingClientRect();
+      const mouseX = clientX - rect.left;
+      const mouseY = clientY - rect.top;
+
+      // Check bounds
+      if (mouseX < ctx.padding.left || mouseX > ctx.padding.left + ctx.plotW ||
+          mouseY < ctx.padding.top || mouseY > ctx.padding.top + ctx.plotH) {
+        onLeave();
+        return;
+      }
+
+      // Calculate t corresponding to mouseX
+      let t = ctx.invertX(mouseX);
+
+      // Snap logic: if mouse is within 18px of a real data point, snap to it
+      let snapPoint = null;
+      let minPixelDist = 18;
+      ctx.newPoints.forEach(p => {
+        const px = ctx.scaleX(p.t);
+        const dist = Math.abs(px - mouseX);
+        if (dist < minPixelDist) {
+          minPixelDist = dist;
+          snapPoint = p;
+        }
+      });
+
+      let displayT = t;
+      let mNew = null;
+      let mLegacy = null;
+
+      if (snapPoint) {
+        displayT = snapPoint.t;
+        mNew = snapPoint.m;
+        if (ctx.showLegacy) {
+          const legMatch = ctx.legacyPoints.find(lp => Math.abs(lp.t - displayT) < 0.01);
+          mLegacy = legMatch ? legMatch.m : ctx._interpolateM(ctx.legacyPoints, displayT);
+        }
+      } else {
+        mNew = this._interpolateM(ctx.newPoints, t);
+        if (ctx.showLegacy) {
+          mLegacy = this._interpolateM(ctx.legacyPoints, t);
+        }
+      }
+
+      if (mNew === null && (!ctx.showLegacy || mLegacy === null)) {
+        onLeave();
+        return;
+      }
+
+      const snapX = ctx.scaleX(displayT);
+
+      // Update Crosshair line
+      crosshair.setAttribute('x1', snapX);
+      crosshair.setAttribute('x2', snapX);
+
+      // Update Points
+      if (mNew !== null) {
+        const ny = ctx.scaleY(mNew);
+        pNewCircle.style.display = 'block';
+        pNewCircle.setAttribute('cx', snapX);
+        pNewCircle.setAttribute('cy', ny);
+      } else {
+        pNewCircle.style.display = 'none';
+      }
+
+      if (ctx.showLegacy && pLegacyCircle && mLegacy !== null) {
+        const ly = ctx.scaleY(mLegacy);
+        pLegacyCircle.style.display = 'block';
+        pLegacyCircle.setAttribute('cx', snapX);
+        pLegacyCircle.setAttribute('cy', ly);
+      } else if (pLegacyCircle) {
+        pLegacyCircle.style.display = 'none';
+      }
+
+      hoverGroup.style.display = 'block';
+
+      // Format Day display string
+      const tStr = displayT < 1 ? displayT.toFixed(2) : (displayT < 10 ? displayT.toFixed(1) : Math.round(displayT));
+      const isMeasurementDay = Math.abs(displayT - ctx.measuredT) < 0.05;
+
+      const titleStr = ctx.isEn ? `Day ${tStr}` : `経過 ${tStr} 日目`;
+      const badgeStr = ctx.isEn ? 'Measurement Day' : '測定日';
+      const labelNew = ctx.isEn ? 'Latest ICRP:' : '最新 ICRP:';
+      const labelLegacy = ctx.isEn ? 'Legacy MONDAL3:' : '旧 MONDAL3:';
+
+      // Construct Tooltip HTML
+      let html = `
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 6px;">
+          <span style="font-weight: 700; color: #00479c; font-size: 0.85rem;">${titleStr}</span>
+          ${isMeasurementDay ? `<span style="background: #c81e28; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 1px 6px; border-radius: 3px;">${badgeStr}</span>` : ''}
+        </div>
+      `;
+
+      if (mNew !== null) {
+        html += `
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 3px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #00479c; display: inline-block;"></span>
+            <span style="color: #475569; font-size: 0.8rem;">${labelNew}</span>
+            <strong style="margin-left: auto; color: #1c2430; font-size: 0.8rem;">${this._formatRatio(mNew)}</strong>
+          </div>
+        `;
+      }
+
+      if (ctx.showLegacy && mLegacy !== null) {
+        html += `
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #b85900; display: inline-block;"></span>
+            <span style="color: #475569; font-size: 0.8rem;">${labelLegacy}</span>
+            <strong style="margin-left: auto; color: #1c2430; font-size: 0.8rem;">${this._formatRatio(mLegacy)}</strong>
+          </div>
+        `;
+      }
+
+      tip.innerHTML = html;
+      tip.style.display = 'block';
+
+      // Smart positioning of tooltip (prevent clipping at container edges)
+      const containerW = this.container.clientWidth;
+      let tipLeft = snapX;
+      let tipTop = mouseY - 15;
+
+      if (tipTop < 75) tipTop = mouseY + 85;
+
+      // Offset if too close to right edge
+      if (snapX > containerW - 140) {
+        tip.style.transform = 'translate(-90%, -100%)';
+      } else if (snapX < 140) {
+        tip.style.transform = 'translate(-10%, -100%)';
+      } else {
+        tip.style.transform = 'translate(-50%, -100%)';
+      }
+
+      tip.style.left = `${tipLeft}px`;
+      tip.style.top = `${tipTop}px`;
+    };
+
+    const onLeave = () => {
+      hoverGroup.style.display = 'none';
+      tip.style.display = 'none';
+    };
+
+    overlay.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
+    overlay.addEventListener('mouseleave', onLeave);
+
+    // Touch support for mobile/tablets
+    overlay.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches[0]) {
+        onMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    overlay.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches[0]) {
+        onMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    overlay.addEventListener('touchend', onLeave);
+  }
+}
+
+// Expose globally
+window.BioassayChart = BioassayChart;
+
+
+/* ==========================================================================
+   Embedded js/app.js
+   ========================================================================== */
+/**
+ * MONDAL Modernized - Application Controller
+ * Handles user interactions, cascading dropdowns, calculation triggers, modes, and i18n
+ */
+
+const I18N = {
+  en: {
+    appTitle: "MONDAL Modernized",
+    appSubtitleLatest: "Internal Dosimetry & Bioassay Assessment System (ICRP Pub 103 / OIR)",
+    appSubtitleCompare: "Internal Dosimetry & Bioassay Assessment (Latest ICRP vs Legacy MONDAL3)",
+    badgeIcrp: "ICRP Pub 103 / 119 / OIR Compliant",
+    badgeMode: "Comparison Mode",
+    badgeOffline: "Offline Ready",
+    modeLatest: "Latest ICRP",
+    modeCompare: "Compare",
+    btnExportTxt: "TXT",
+    btnExportCsv: "CSV",
+    btnPrint: "Print",
+    sec1Title: "1. Radionuclide & Intake Parameters",
+    lblRadionuclide: "Radionuclide",
+    lblHalfLife: "Half-life:",
+    lblEmissions: "Emissions:",
+    lblRoute: "Intake Route",
+    lblType: "Absorption Type / f1",
+    lblAmad: "Aerosol Size AMAD (Inhalation)",
+    sec2Title: "2. Bioassay & Measurement Data",
+    lblIntakeMode: "Mode of Intake",
+    lblModeAcute: "Acute",
+    lblModeChronic: "Uniform Chronic",
+    lblModeUneven: "Uneven Chronic",
+    lblChronicDays: "Intake Period (days)",
+    lblUnevenFile: "Daily Work Hours File (.txt / .csv)",
+    unevenDefaultText: "Default: 7-day pattern [8, 8, 4, 0, 0, 5, 2 h]",
+    lblBioassay: "Bioassay Measurement",
+    lblDaysPost: "Time post intake (days)",
+    lblMeasuredActivity: "Measurement (Bq, Bq/d)",
+    btnCalculate: "⚡ Calculate",
+    btnReset: "Reset",
+    pillarNewBadge: "Latest ICRP Standards",
+    pillarLegacyBadge: "Legacy MONDAL3 Standards",
+    lblNewDose: "Committed Effective Dose",
+    lblLegacyDose: "Committed Effective Dose",
+    lblNewLimit: "% (Annual Limit 20 mSv)",
+    lblNewIntake: "Estimated Intake:",
+    lblLegacyIntake: "Estimated Intake:",
+    lblNewMval: "Fraction m(t):",
+    lblLegacyMval: "Fraction m(t):",
+    lblNewCoeff: "Dose Coeff e(50):",
+    lblLegacyCoeff: "Dose Coeff e(50):",
+    lblLegacyNote: "* MONDAL3 identical conditions & interpolation",
+    chartCardTitle: "Retention & Excretion Fraction Curve m(t)",
+    chartLog: "Log",
+    chartLinear: "Linear",
+    legendNew: "Latest ICRP",
+    legendLegacy: "Legacy MONDAL3",
+    legendMeasured: "Measurement Point",
+    tissueCardTitle: "Primary Tissue Equivalent Doses",
+    tissueCardSub: "* ICRP 103 / OIR primary radiosensitive tissues",
+    btnOpenModal: "View All 30 Tissues ↗",
+    btnOpenModalBottom: "Open Detailed 30-Tissue Equivalent Dose Table ↗",
+    thTissueName: "Tissue / Organ",
+    thWt: "wT",
+    thHtCoeff: "hT(50) [Sv/Bq]",
+    thHtDose: "HT(50) [mSv]",
+    thContr: "Contribution [mSv]",
+    thShare: "Share (%)",
+    noTissueData: "No tissue equivalent dose data available for this condition.",
+    modalTitle: "All 30 Tissues & Organs Committed Equivalent Dose (ICRP 103 / OIR)",
+    modalFormulaPrefix: "ICRP 103 Standard:",
+    modalFormulaLead: "Committed effective dose",
+    modalFormulaTail: ". The sum of tissue dose contributions equals total effective dose.",
+    modalRemainderNote: "* 14 tissues including adrenals and kidneys belong to the \"Remainder\" group with collective w_rem = 0.12 (mean equivalent dose).",
+    modalThName: "Tissue / Organ",
+    modalThWt: "Weighting Factor wT",
+    modalThHtCoeff: "Dose Coeff hT(50) [Sv/Bq]",
+    modalThHtDose: "Equivalent Dose HT(50) [mSv]",
+    modalThContr: "Contribution [mSv]",
+    modalThShare: "Share (%)",
+    modalTotalLabel: "Total (Committed Effective Dose E(50))",
+    modalSummaryText: "Displaying all 30 tissues",
+    btnModalCopyCsv: "📋 Copy Tissue CSV",
+    btnModalClose: "Close",
+    badgePrimary: "Primary",
+    badgeRemainder: "Remainder Group",
+    diffIncrease: "Dose Increase",
+    diffDecrease: "Dose Decrease",
+    diffEquivalent: "Equivalent",
+    diffDiff: "Difference:"
+  },
+  ja: {
+    appTitle: "MONDAL Modernized",
+    appSubtitleLatest: "人体の内部被ばく線量計算・バイオアッセイ評価システム (最新ICRP勧告準拠)",
+    appSubtitleCompare: "人体の内部被ばく線量計算・バイオアッセイ評価システム (最新ICRP vs 旧MONDAL3新旧対比)",
+    badgeIcrp: "ICRP Pub 103 / 119 / OIR 準拠",
+    badgeMode: "旧 MONDAL3 比較モード",
+    badgeOffline: "オフライン対応",
+    modeLatest: "最新勧告",
+    modeCompare: "新旧比較",
+    btnExportTxt: "TXT出力",
+    btnExportCsv: "CSV出力",
+    btnPrint: "印刷",
+    sec1Title: "1. 核種・摂取条件",
+    lblRadionuclide: "放射性核種",
+    lblHalfLife: "半減期:",
+    lblEmissions: "主要線種:",
+    lblRoute: "摂取経路",
+    lblType: "吸収タイプ / f1",
+    lblAmad: "粒子径 AMAD (吸入時)",
+    sec2Title: "2. 摂取様態 & 測定データ",
+    lblIntakeMode: "摂取様態",
+    lblModeAcute: "急性",
+    lblModeChronic: "均等慢性",
+    lblModeUneven: "不均等慢性",
+    lblChronicDays: "摂取期間 (日数)",
+    lblUnevenFile: "日別作業時間ファイル (.txt / .csv)",
+    unevenDefaultText: "デフォルト: 7日間サンプル [8, 8, 4, 0, 0, 5, 2 h]",
+    lblBioassay: "測定部位・検体",
+    lblDaysPost: "経過日数 (日)",
+    lblMeasuredActivity: "測定値 (Bq, Bq/d)",
+    btnCalculate: "⚡ 計算実行",
+    btnReset: "リセット",
+    pillarNewBadge: "最新 ICRP 勧告",
+    pillarLegacyBadge: "旧 MONDAL3 基準",
+    lblNewDose: "預託実効線量",
+    lblLegacyDose: "預託実効線量",
+    lblNewLimit: "% (年間職業人限度 20 mSv)",
+    lblNewIntake: "推定摂取量:",
+    lblLegacyIntake: "推定摂取量:",
+    lblNewMval: "保持・排泄率 m(t):",
+    lblLegacyMval: "保持・排泄率 m(t):",
+    lblNewCoeff: "実効線量係数 e(50):",
+    lblLegacyCoeff: "実効線量係数 e(50):",
+    lblLegacyNote: "※ MONDAL3 同一条件・補間",
+    chartCardTitle: "体内保持・排泄割合曲線 m(t)",
+    chartLog: "対数 (Log)",
+    chartLinear: "線形 (Linear)",
+    legendNew: "最新 ICRP",
+    legendLegacy: "旧 MONDAL3",
+    legendMeasured: "測定点",
+    tissueCardTitle: "主要組織・臓器別預託等価線量",
+    tissueCardSub: "※最新 ICRP (Pub 103 / OIR) 感受性主要組織",
+    btnOpenModal: "全30組織一覧 ↗",
+    btnOpenModalBottom: "全30組織・臓器の詳細預託等価線量テーブルを開く ↗",
+    thTissueName: "組織・臓器名",
+    thWt: "wT",
+    thHtCoeff: "hT(50) [Sv/Bq]",
+    thHtDose: "HT(50) [mSv]",
+    thContr: "寄与線量 [mSv]",
+    thShare: "寄与率",
+    noTissueData: "※ この核種・条件の組織等価線量データはありません",
+    modalTitle: "全組織・臓器別預託等価線量一覧 (ICRP 103 / OIR 全30組織)",
+    modalFormulaPrefix: "ICRP 103 基準:",
+    modalFormulaLead: "預託実効線量",
+    modalFormulaTail: "。各組織の「実効線量への寄与」の合計が実効線量に一致します。",
+    modalRemainderNote: "※副腎や腎臓など14組織はICRP 103の「残りの組織 (Remainder)」群として合算 w_rem = 0.12（平均等価線量）が適用されます。",
+    modalThName: "組織・臓器名",
+    modalThWt: "組織加重係数 wT",
+    modalThHtCoeff: "等価線量係数 hT(50) [Sv/Bq]",
+    modalThHtDose: "預託等価線量 HT(50) [mSv]",
+    modalThContr: "実効線量への寄与 [mSv]",
+    modalThShare: "寄与率 (%)",
+    modalTotalLabel: "合計 (預託実効線量 E(50))",
+    modalSummaryText: "全30組織表示中",
+    btnModalCopyCsv: "📋 組織線量CSVをコピー",
+    btnModalClose: "閉じる",
+    badgePrimary: "主要",
+    badgeRemainder: "残りの組織群",
+    diffIncrease: "線量増加",
+    diffDecrease: "線量減少",
+    diffEquivalent: "同等",
+    diffDiff: "差分:"
+  }
+};
+
+/**
+ * Helper to get clean localized string from bilingual objects, slash-separated, or parenthesized strings
+ */
+function getLocalizedOptionLabel(rawLabel, lang) {
+  if (!rawLabel) return '';
+  if (typeof rawLabel === 'object') {
+    return rawLabel[lang] || rawLabel.en || rawLabel.ja || '';
+  }
+  if (typeof rawLabel !== 'string') return String(rawLabel);
+
+  // Handle parenthesized strings first to avoid splitting inside parentheses
+  // e.g., "5 µm (デフォルト / Default)" -> en: "5 µm (Default)", ja: "5 µm (デフォルト)"
+  const parenMatch = rawLabel.match(/^([^(]+)\s*\(([^)]+)\)$/);
+  if (parenMatch) {
+    const lead = parenMatch[1].trim();
+    const inside = parenMatch[2].trim();
+    if (inside.includes(' / ')) {
+      const subParts = inside.split(' / ');
+      return lang === 'en' ? `${lead} (${subParts[subParts.length - 1].trim()})` : `${lead} (${subParts[0].trim()})`;
+    }
+    const leadHasJa = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(lead);
+    const insideHasJa = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(inside);
+    if (leadHasJa && !insideHasJa) {
+      return lang === 'en' ? inside : lead;
+    }
+    if (!leadHasJa && insideHasJa) {
+      return lang === 'en' ? lead : inside;
+    }
+    return rawLabel;
+  }
+
+  // Handle slash-separated strings only when NOT inside parentheses
+  // e.g. "吸入（職業人） / Inhalation by Workers"
+  if (rawLabel.includes(' / ')) {
+    const parts = rawLabel.split(' / ');
+    return lang === 'en' ? parts[parts.length - 1].trim() : parts[0].trim();
+  }
+
+  return rawLabel;
+}
+
+function getWtDisplay(meta, lang) {
+  if (lang === 'en') {
+    return meta.wtDisplayEn || meta.wtDisplay || (meta.wt ? meta.wt.toFixed(2) : '-');
+  }
+  return meta.wtDisplayJa || meta.wtDisplay || (meta.wt ? meta.wt.toFixed(2) : '-');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const chart = new BioassayChart('chart-container');
+
+  // Application States (Defaults: Latest ICRP Mode, English Language)
+  let currentMode = 'latest'; // 'latest' | 'compare'
+  let currentLang = 'en';     // 'en' | 'ja'
+
+  // DOM Elements
+  const radSelect = document.getElementById('radionuclide-select');
+  const routeSelect = document.getElementById('route-select');
+  const typeSelect = document.getElementById('type-select');
+  const amadSelect = document.getElementById('amad-select');
+  const bioassaySelect = document.getElementById('bioassay-select');
+  const intakeModeRadios = document.querySelectorAll('input[name="intake-mode"]');
+  const chronicGroup = document.getElementById('chronic-input-group');
+  const unevenGroup = document.getElementById('uneven-input-group');
+  const chronicDaysInput = document.getElementById('chronic-days');
+  const daysPostInput = document.getElementById('days-post-intake');
+  const measuredActivityInput = document.getElementById('measured-activity');
+  const calcBtn = document.getElementById('btn-calculate');
+  const resetBtn = document.getElementById('btn-reset');
+  const exportTxtBtn = document.getElementById('btn-export-txt');
+  const exportCsvBtn = document.getElementById('btn-export-csv');
+  const printBtn = document.getElementById('btn-print');
+  const logScaleBtn = document.getElementById('btn-log-scale');
+  const linearScaleBtn = document.getElementById('btn-linear-scale');
+  const unevenFileInput = document.getElementById('uneven-file-input');
+  const unevenHoursText = document.getElementById('uneven-hours-text');
+
+  // Mode and Lang Buttons
+  const btnModeLatest = document.getElementById('btn-mode-latest');
+  const btnModeCompare = document.getElementById('btn-mode-compare');
+  const btnLangEn = document.getElementById('btn-lang-en');
+  const btnLangJa = document.getElementById('btn-lang-ja');
+
+  let currentUnevenHours = [8, 8, 4, 0, 0, 5, 2];
+
+  // Set initial chart states
+  chart.setDisplayMode(currentMode);
+  chart.setLang(currentLang);
+
+  // Initialize Radionuclide dropdown
+  function populateRadionuclides() {
+    const curVal = radSelect.value || 'Cs-137';
+    radSelect.innerHTML = '';
+    Object.keys(window.DOSIMETRY_DATABASE).forEach(key => {
+      const rad = window.DOSIMETRY_DATABASE[key];
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = currentLang === 'en' ? (rad.nameEn || rad.name) : (rad.nameJa || rad.name);
+      radSelect.appendChild(opt);
+    });
+    radSelect.value = curVal;
+  }
+
+  populateRadionuclides();
+
+  // 1. Radionuclide change handler
+  function onRadionuclideChange() {
+    const radKey = radSelect.value;
+    const rad = window.DOSIMETRY_DATABASE[radKey];
+    if (!rad) return;
+
+    // Update details banner based on language
+    const halfLife = currentLang === 'en' ? (rad.halfLifeStrEn || rad.halfLifeStr || '-') : (rad.halfLifeStrJa || rad.halfLifeStr || '-');
+    const emissions = currentLang === 'en' ? (rad.primaryEmissionsEn || rad.primaryEmissions || '-') : (rad.primaryEmissionsJa || rad.primaryEmissions || '-');
+    const descText = currentLang === 'en' ? (rad.descriptionEn || '') : (rad.descriptionJa || '');
+    const icrpNote = currentLang === 'en' ? (rad.icrpChangeNoteEn || '') : (rad.icrpChangeNoteJa || '');
+
+    document.getElementById('rad-half-life').textContent = halfLife;
+    document.getElementById('rad-emissions').textContent = emissions;
+    document.getElementById('rad-desc-text').textContent = descText;
+    document.getElementById('rad-icrp-note').textContent = icrpNote;
+
+    // Populate routes
+    const curRoute = routeSelect.value;
+    routeSelect.innerHTML = '';
+    Object.keys(rad.routes).forEach(rKey => {
+      const opt = document.createElement('option');
+      opt.value = rKey;
+      opt.textContent = getLocalizedOptionLabel(rad.routes[rKey].label, currentLang);
+      routeSelect.appendChild(opt);
+    });
+    if (curRoute && rad.routes[curRoute]) {
+      routeSelect.value = curRoute;
+    }
+
+    onRouteChange();
+  }
+
+  // 2. Route change handler
+  function onRouteChange() {
+    const radKey = radSelect.value;
+    const rad = window.DOSIMETRY_DATABASE[radKey];
+    if (!rad) return;
+    const rKey = routeSelect.value;
+    const route = rad.routes[rKey] || Object.values(rad.routes)[0];
+    if (!route) return;
+
+    const curType = typeSelect.value;
+    typeSelect.innerHTML = '';
+    Object.keys(route.types).forEach(tKey => {
+      const opt = document.createElement('option');
+      opt.value = tKey;
+      opt.textContent = getLocalizedOptionLabel(route.types[tKey].label, currentLang);
+      typeSelect.appendChild(opt);
+    });
+    if (curType && route.types[curType]) {
+      typeSelect.value = curType;
+    }
+
+    onTypeChange();
+  }
+
+  // 3. Type change handler
+  function onTypeChange() {
+    const radKey = radSelect.value;
+    const rad = window.DOSIMETRY_DATABASE[radKey];
+    if (!rad) return;
+    const rKey = routeSelect.value;
+    const route = rad.routes[rKey] || Object.values(rad.routes)[0];
+    if (!route) return;
+    const tKey = typeSelect.value;
+    const typeObj = route.types[tKey] || Object.values(route.types)[0];
+    if (!typeObj) return;
+
+    const curAmad = amadSelect.value;
+    amadSelect.innerHTML = '';
+    const amadContainer = document.getElementById('amad-container');
+
+    if (typeObj.amad) {
+      amadContainer.style.display = 'block';
+      Object.keys(typeObj.amad).forEach(aKey => {
+        const opt = document.createElement('option');
+        opt.value = aKey;
+        opt.textContent = getLocalizedOptionLabel(typeObj.amad[aKey].label, currentLang);
+        amadSelect.appendChild(opt);
+      });
+      if (curAmad && typeObj.amad[curAmad]) {
+        amadSelect.value = curAmad;
+      }
+    } else {
+      amadContainer.style.display = 'none';
+    }
+
+    onAmadChange();
+  }
+
+  // 4. AMAD change handler
+  function onAmadChange() {
+    const radKey = radSelect.value;
+    const rad = window.DOSIMETRY_DATABASE[radKey];
+    if (!rad) return;
+    const rKey = routeSelect.value;
+    const route = rad.routes[rKey] || Object.values(rad.routes)[0];
+    if (!route) return;
+    const tKey = typeSelect.value;
+    const typeObj = route.types[tKey] || Object.values(route.types)[0];
+    if (!typeObj) return;
+    const aKey = amadSelect.value;
+
+    let dataObj = null;
+    if (typeObj.amad) {
+      dataObj = typeObj.amad[aKey] || Object.values(typeObj.amad)[0];
+    } else {
+      dataObj = typeObj;
+    }
+    if (!dataObj) return;
+
+    const stdData = dataObj.newIcrp || dataObj.legacy;
+    const curBio = bioassaySelect.value;
+    bioassaySelect.innerHTML = '';
+    if (stdData && stdData.bioassay) {
+      Object.keys(stdData.bioassay).forEach(bKey => {
+        const opt = document.createElement('option');
+        opt.value = bKey;
+        opt.textContent = getLocalizedOptionLabel(stdData.bioassay[bKey].label, currentLang);
+        bioassaySelect.appendChild(opt);
+      });
+      if (curBio && stdData.bioassay[curBio]) {
+        bioassaySelect.value = curBio;
+      }
+    }
+
+    performCalculation();
+  }
+
+  // Bind cascading change events explicitly
+  radSelect.addEventListener('change', onRadionuclideChange);
+  routeSelect.addEventListener('change', onRouteChange);
+  typeSelect.addEventListener('change', onTypeChange);
+  amadSelect.addEventListener('change', onAmadChange);
+  bioassaySelect.addEventListener('change', performCalculation);
+
+  // Intake mode radios
+  intakeModeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      const mode = getSelectedIntakeMode();
+      chronicGroup.style.display = (mode === 'chronic') ? 'block' : 'none';
+      unevenGroup.style.display = (mode === 'uneven') ? 'block' : 'none';
+      performCalculation();
+    });
+  });
+
+  function getSelectedIntakeMode() {
+    const checked = document.querySelector('input[name="intake-mode"]:checked');
+    return checked ? checked.value : 'acute';
+  }
+
+  // File handler for uneven hours
+  unevenFileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const text = evt.target.result;
+      const hours = [];
+      const lines = text.split(/\r?\n/);
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        const parts = line.split(',');
+        if (parts.length >= 2) {
+          const val = parseFloat(parts[parts.length - 1]);
+          if (!isNaN(val)) hours.push(val);
+        } else {
+          const val = parseFloat(line.trim());
+          if (!isNaN(val)) hours.push(val);
+        }
+      }
+      if (hours.length > 0) {
+        currentUnevenHours = hours;
+        unevenHoursText.textContent = currentLang === 'en'
+          ? `Loaded (${hours.length} days: ${hours.join(', ')} h)`
+          : `読み込み完了 (${hours.length}日間: ${hours.join(', ')} 時間)`;
+        performCalculation();
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  // Calculate routine
+  function performCalculation() {
+    const radKey = radSelect.value;
+    const rKey = routeSelect.value;
+    const tKey = typeSelect.value;
+    const aKey = amadSelect.value;
+    const bKey = bioassaySelect.value;
+    const mode = getSelectedIntakeMode();
+    const chronicDays = parseFloat(chronicDaysInput.value) || 7;
+    const daysPost = parseFloat(daysPostInput.value) || 2;
+    const activity = parseFloat(measuredActivityInput.value) || 1500;
+
+    try {
+      const result = window.DosimetryCalculator.calculate({
+        radionuclide: radKey,
+        routeKey: rKey,
+        typeKey: tKey,
+        amadKey: aKey,
+        bioassayKey: bKey,
+        intakeMode: mode,
+        chronicDays: chronicDays,
+        unevenHours: currentUnevenHours,
+        daysPostIntake: daysPost,
+        measuredActivity: activity
+      });
+
+      if (result) {
+        renderResults(result);
+      }
+    } catch (err) {
+      console.error("Calculation Error:", err);
+    }
+  }
+
+  function formatSci(val, digits = 2) {
+    if (val === 0 || isNaN(val) || val === null || val === undefined) return '0.00';
+    if (Math.abs(val) >= 1e4 || Math.abs(val) < 0.01) {
+      return val.toExponential(digits);
+    }
+    return val.toFixed(digits);
+  }
+
+  function renderResults(result) {
+    const { legacy, newIcrp, comparison, daysPostIntake, measuredActivity } = result;
+    const dict = I18N[currentLang];
+
+    // New ICRP Cards
+    if (newIcrp) {
+      document.getElementById('res-new-intake').textContent = formatSci(newIcrp.intakeBq) + ' Bq';
+      document.getElementById('res-new-dose-msv').textContent = formatSci(newIcrp.effectiveDoseMsv, 3) + ' mSv';
+      document.getElementById('res-new-dose-sv').textContent = '(' + formatSci(newIcrp.effectiveDoseSv) + ' Sv)';
+      document.getElementById('res-new-mval').textContent = formatSci(newIcrp.mValue, 3) + ' ' + (newIcrp.bioassayUnit || '');
+      document.getElementById('res-new-coeff').textContent = formatSci(newIcrp.e50Coeff) + ' Sv/Bq';
+
+      // Annual limit (20 mSv) bar
+      const limitPct = Math.min(100, (newIcrp.effectiveDoseMsv / 20) * 100);
+      const bar = document.getElementById('new-dose-bar');
+      bar.style.width = limitPct.toFixed(1) + '%';
+      if (newIcrp.effectiveDoseMsv > 20) {
+        bar.style.background = '#c81e28';
+      } else if (newIcrp.effectiveDoseMsv > 5) {
+        bar.style.background = '#b85900';
+      } else {
+        bar.style.background = '#008037';
+      }
+      document.getElementById('new-dose-bar-text').textContent = `${(newIcrp.effectiveDoseMsv / 20 * 100).toFixed(1)}${dict.lblNewLimit}`;
+    } else {
+      document.getElementById('res-new-intake').textContent = '-';
+      document.getElementById('res-new-dose-msv').textContent = '- mSv';
+      document.getElementById('res-new-dose-sv').textContent = '(- Sv)';
+      document.getElementById('res-new-mval').textContent = '-';
+      document.getElementById('res-new-coeff').textContent = '-';
+    }
+
+    // Legacy MONDAL3 Cards
+    if (legacy && currentMode === 'compare') {
+      document.getElementById('res-legacy-intake').textContent = formatSci(legacy.intakeBq) + ' Bq';
+      document.getElementById('res-legacy-dose-msv').textContent = formatSci(legacy.effectiveDoseMsv, 3) + ' mSv';
+      document.getElementById('res-legacy-dose-sv').textContent = '(' + formatSci(legacy.effectiveDoseSv) + ' Sv)';
+      document.getElementById('res-legacy-mval').textContent = formatSci(legacy.mValue, 3) + ' ' + (legacy.bioassayUnit || '');
+      document.getElementById('res-legacy-coeff').textContent = formatSci(legacy.e50Coeff) + ' Sv/Bq';
+    } else if (legacy) {
+      document.getElementById('res-legacy-intake').textContent = formatSci(legacy.intakeBq) + ' Bq';
+      document.getElementById('res-legacy-dose-msv').textContent = formatSci(legacy.effectiveDoseMsv, 3) + ' mSv';
+      document.getElementById('res-legacy-dose-sv').textContent = '(' + formatSci(legacy.effectiveDoseSv) + ' Sv)';
+      document.getElementById('res-legacy-mval').textContent = formatSci(legacy.mValue, 3) + ' ' + (legacy.bioassayUnit || '');
+      document.getElementById('res-legacy-coeff').textContent = formatSci(legacy.e50Coeff) + ' Sv/Bq';
+    }
+
+    // Comparison Delta Banner
+    const diffContainer = document.getElementById('comparison-badge-container');
+    if (currentMode === 'compare' && comparison && legacy && newIcrp) {
+      const pct = comparison.percentChange;
+      const isPositive = pct > 0;
+      const badgeClass = Math.abs(pct) < 1 ? 'badge-neutral' : (isPositive ? 'badge-increase' : 'badge-decrease');
+      const arrow = Math.abs(pct) < 1 ? '● ' : (isPositive ? '▲ +' : '▼ ');
+      const statusText = Math.abs(pct) < 1 ? dict.diffEquivalent : (isPositive ? dict.diffIncrease : dict.diffDecrease);
+      const titleText = currentLang === 'en'
+        ? `${arrow}${Math.abs(pct).toFixed(1)}% ${statusText} (Latest ICRP vs Legacy MONDAL3) / ${dict.diffDiff} ${formatSci(comparison.doseDiffMsv, 4)} mSv`
+        : `${arrow}${Math.abs(pct).toFixed(1)}% ${statusText} (最新ICRP vs 旧MONDAL3) / ${dict.diffDiff} ${formatSci(comparison.doseDiffMsv, 4)} mSv`;
+
+      diffContainer.innerHTML = `
+        <div class="diff-badge ${badgeClass}">
+          <span>${titleText}</span>
+        </div>
+      `;
+    } else {
+      diffContainer.innerHTML = '';
+    }
+
+    // Tissue Doses Table & Modal Handling
+    const tableBody = document.getElementById('tissue-dose-tbody');
+    tableBody.innerHTML = '';
+    
+    // Store current evaluation result for modal
+    window.currentEvaluationResult = {
+      newIcrp: newIcrp,
+      resNew: newIcrp,
+      radKey: radSelect.value,
+      routeText: routeSelect.options[routeSelect.selectedIndex]?.text || '',
+      typeVal: typeSelect.options[typeSelect.selectedIndex]?.text || typeSelect.value
+    };
+
+    const tissueDoses = newIcrp?.tissueDoses || {};
+    const hasTissues = Object.keys(tissueDoses).length > 0;
+
+    if (hasTissues && typeof ICRP_TISSUE_METADATA !== 'undefined') {
+      const effDoseMsv = newIcrp?.effectiveDoseMsv || 0;
+      const primaryMetadata = ICRP_TISSUE_METADATA.filter(m => m.isPrimary);
+      primaryMetadata.forEach(meta => {
+        const tData = tissueDoses[meta.en];
+        if (tData) {
+          const doseMsv = tData.doseMsv;
+          const contribMsv = doseMsv * meta.wt;
+          const contribPct = effDoseMsv > 0 ? (contribMsv / effDoseMsv) * 100 : 0;
+
+          const organNameHtml = currentLang === 'en'
+            ? `<strong>${meta.en}</strong>`
+            : `<strong>${meta.ja}</strong>`;
+
+          const row = document.createElement('tr');
+          row.className = 'tissue-row';
+          row.innerHTML = `
+            <td>${organNameHtml}</td>
+            <td style="text-align: center; color: var(--dads-gray-800); font-weight: 500;">${getWtDisplay(meta, currentLang)}</td>
+            <td style="text-align: right; font-family: var(--font-mono); font-size: 0.82rem;">${formatSci(tData.coeff, 3)}</td>
+            <td style="text-align: right; font-weight: 600; color: var(--dads-blue-700);">${formatSci(doseMsv, 4)}</td>
+            <td style="text-align: right; font-weight: 600; color: #008037;">${formatSci(contribMsv, 4)}</td>
+            <td style="text-align: right; font-weight: 600; color: ${contribPct >= 10 ? '#b85900' : 'var(--dads-gray-800)'};">${contribPct.toFixed(1)}%</td>
+          `;
+          tableBody.appendChild(row);
+        }
+      });
+      const card = document.getElementById('tissue-table-card');
+      if (card) card.style.display = 'flex';
+    } else {
+      tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--dads-gray-600); padding: 20px;">${dict.noTissueData}</td></tr>`;
+      const card = document.getElementById('tissue-table-card');
+      if (card) card.style.display = 'flex';
+    }
+
+    // Render Chart with Mode and Language
+    chart.setDisplayMode(currentMode);
+    chart.setLang(currentLang);
+    chart.render({
+      newPoints: newIcrp?.bioassayPoints || [],
+      legacyPoints: legacy?.bioassayPoints || [],
+      measuredT: daysPostIntake,
+      measuredM: newIcrp?.mValue || legacy?.mValue || 0.5
+    });
+  }
+
+  // Mode and Language Switching Functions
+  function setMode(mode) {
+    currentMode = mode;
+    btnModeLatest.classList.toggle('active', mode === 'latest');
+    btnModeCompare.classList.toggle('active', mode === 'compare');
+    document.body.classList.toggle('mode-latest-only', mode === 'latest');
+    chart.setDisplayMode(mode);
+    updateSubtitlesAndBadges();
+    performCalculation();
+  }
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    btnLangEn.classList.toggle('active', lang === 'en');
+    btnLangJa.classList.toggle('active', lang === 'ja');
+    document.documentElement.lang = lang;
+
+    const dict = I18N[lang];
+
+    // Static text updates
+    document.getElementById('sec1-title').textContent = dict.sec1Title;
+    document.getElementById('lbl-radionuclide').textContent = dict.lblRadionuclide;
+    document.getElementById('lbl-half-life').textContent = dict.lblHalfLife;
+    document.getElementById('lbl-emissions').textContent = dict.lblEmissions;
+    document.getElementById('lbl-route').textContent = dict.lblRoute;
+    document.getElementById('lbl-type').textContent = dict.lblType;
+    document.getElementById('lbl-amad').textContent = dict.lblAmad;
+
+    document.getElementById('sec2-title').textContent = dict.sec2Title;
+    document.getElementById('lbl-intake-mode').textContent = dict.lblIntakeMode;
+    document.getElementById('lbl-mode-acute').textContent = dict.lblModeAcute;
+    document.getElementById('lbl-mode-chronic').textContent = dict.lblModeChronic;
+    document.getElementById('lbl-mode-uneven').textContent = dict.lblModeUneven;
+    document.getElementById('lbl-chronic-days').textContent = dict.lblChronicDays;
+    document.getElementById('lbl-uneven-file').textContent = dict.lblUnevenFile;
+    document.getElementById('uneven-hours-text').textContent = dict.unevenDefaultText;
+    document.getElementById('lbl-bioassay').textContent = dict.lblBioassay;
+    document.getElementById('lbl-days-post').textContent = dict.lblDaysPost;
+    document.getElementById('lbl-measured-activity').textContent = dict.lblMeasuredActivity;
+    document.getElementById('btn-calculate').textContent = dict.btnCalculate;
+    document.getElementById('btn-reset').textContent = dict.btnReset;
+
+    document.getElementById('btn-mode-latest').textContent = dict.modeLatest;
+    document.getElementById('btn-mode-compare').textContent = dict.modeCompare;
+    document.getElementById('text-btn-export-txt').textContent = dict.btnExportTxt;
+    document.getElementById('text-btn-export-csv').textContent = dict.btnExportCsv;
+    document.getElementById('text-btn-print').textContent = dict.btnPrint;
+
+    // Pillar labels
+    document.getElementById('pillar-new-badge').textContent = dict.pillarNewBadge;
+    document.getElementById('lbl-new-dose').textContent = dict.lblNewDose;
+    document.getElementById('lbl-new-intake').textContent = dict.lblNewIntake;
+    document.getElementById('lbl-new-mval').textContent = dict.lblNewMval;
+    document.getElementById('lbl-new-coeff').textContent = dict.lblNewCoeff;
+
+    document.getElementById('pillar-legacy-badge').textContent = dict.pillarLegacyBadge;
+    document.getElementById('lbl-legacy-dose').textContent = dict.lblLegacyDose;
+    document.getElementById('lbl-legacy-note').textContent = dict.lblLegacyNote;
+    document.getElementById('lbl-legacy-intake').textContent = dict.lblLegacyIntake;
+    document.getElementById('lbl-legacy-mval').textContent = dict.lblLegacyMval;
+    document.getElementById('lbl-legacy-coeff').textContent = dict.lblLegacyCoeff;
+
+    // Chart Card
+    document.getElementById('chart-card-title').textContent = dict.chartCardTitle;
+    document.getElementById('btn-log-scale').textContent = dict.chartLog;
+    document.getElementById('btn-linear-scale').textContent = dict.chartLinear;
+    document.getElementById('legend-text-new').textContent = dict.legendNew;
+    document.getElementById('legend-text-legacy').textContent = dict.legendLegacy;
+    document.getElementById('legend-text-measured').textContent = dict.legendMeasured;
+
+    // Tissue Card
+    document.getElementById('tissue-card-title').textContent = dict.tissueCardTitle;
+    document.getElementById('tissue-card-sub').textContent = dict.tissueCardSub;
+    document.getElementById('btn-open-tissue-modal').textContent = dict.btnOpenModal;
+    document.getElementById('btn-open-tissue-modal-bottom').textContent = dict.btnOpenModalBottom;
+    document.getElementById('th-tissue-name').textContent = dict.thTissueName;
+    document.getElementById('th-wt').textContent = dict.thWt;
+    document.getElementById('th-ht-coeff').textContent = dict.thHtCoeff;
+    document.getElementById('th-ht-dose').textContent = dict.thHtDose;
+    document.getElementById('th-contr').textContent = dict.thContr;
+    document.getElementById('th-share').textContent = dict.thShare;
+
+    // Modal elements
+    document.getElementById('modal-title-text').textContent = dict.modalTitle;
+    document.getElementById('modal-formula-prefix').textContent = dict.modalFormulaPrefix;
+    document.getElementById('modal-formula-lead').textContent = dict.modalFormulaLead;
+    document.getElementById('modal-formula-tail').textContent = dict.modalFormulaTail;
+    document.getElementById('modal-remainder-note').textContent = dict.modalRemainderNote;
+    document.getElementById('modal-th-name').textContent = dict.modalThName;
+    document.getElementById('modal-th-wt').textContent = dict.modalThWt;
+    document.getElementById('modal-th-ht-coeff').textContent = dict.modalThHtCoeff;
+    document.getElementById('modal-th-ht-dose').textContent = dict.modalThHtDose;
+    document.getElementById('modal-th-contr').textContent = dict.modalThContr;
+    document.getElementById('modal-th-share').textContent = dict.modalThShare;
+    document.getElementById('modal-table-summary').textContent = dict.modalSummaryText;
+    document.getElementById('btn-modal-copy-csv').textContent = dict.btnModalCopyCsv;
+    document.getElementById('btn-modal-close').textContent = dict.btnModalClose;
+
+    // Refresh dropdowns with new language
+    populateRadionuclides();
+    onRadionuclideChange();
+
+    chart.setLang(lang);
+    updateSubtitlesAndBadges();
+    performCalculation();
+  }
+
+  function updateSubtitlesAndBadges() {
+    const dict = I18N[currentLang];
+    document.getElementById('app-subtitle').textContent = currentMode === 'latest' ? dict.appSubtitleLatest : dict.appSubtitleCompare;
+    document.getElementById('badge-icrp').textContent = dict.badgeIcrp;
+    document.getElementById('badge-mode').textContent = dict.badgeMode;
+    document.getElementById('badge-offline').textContent = dict.badgeOffline;
+  }
+
+  // Event Listeners for Mode and Language Switchers
+  btnModeLatest.addEventListener('click', () => setMode('latest'));
+  btnModeCompare.addEventListener('click', () => setMode('compare'));
+  btnLangEn.addEventListener('click', () => setLanguage('en'));
+  btnLangJa.addEventListener('click', () => setLanguage('ja'));
+
+  // Scale switch events
+  logScaleBtn.addEventListener('click', () => {
+    logScaleBtn.classList.add('active');
+    linearScaleBtn.classList.remove('active');
+    chart.setLogScale(true);
+  });
+
+  linearScaleBtn.addEventListener('click', () => {
+    linearScaleBtn.classList.add('active');
+    logScaleBtn.classList.remove('active');
+    chart.setLogScale(false);
+  });
+
+  // Numeric input live updates
+  [chronicDaysInput, daysPostInput, measuredActivityInput].forEach(el => {
+    el.addEventListener('input', performCalculation);
+  });
+
+  calcBtn.addEventListener('click', performCalculation);
+
+  resetBtn.addEventListener('click', () => {
+    radSelect.value = 'Cs-137';
+    daysPostInput.value = '2';
+    measuredActivityInput.value = '1500';
+    document.querySelector('input[name="intake-mode"][value="acute"]').checked = true;
+    chronicGroup.style.display = 'none';
+    unevenGroup.style.display = 'none';
+    onRadionuclideChange();
+  });
+
+  // Export functions
+  exportTxtBtn.addEventListener('click', () => {
+    const reportText = generateReportText();
+    downloadFile(reportText, 'internal_dose_report.txt', 'text/plain;charset=utf-8');
+  });
+
+  exportCsvBtn.addEventListener('click', () => {
+    const reportCsv = generateReportCsv();
+    downloadFile(reportCsv, 'internal_dose_assessment.csv', 'text/csv;charset=utf-8');
+  });
+
+  printBtn.addEventListener('click', () => {
+    window.print();
+  });
+
+  function generateReportText() {
+    const radKey = radSelect.value;
+    const newDose = document.getElementById('res-new-dose-msv').textContent;
+    const legDose = document.getElementById('res-legacy-dose-msv').textContent;
+    const newIntake = document.getElementById('res-new-intake').textContent;
+    const legIntake = document.getElementById('res-legacy-intake').textContent;
+
+    const isEn = currentLang === 'en';
+    const isLatestOnly = currentMode === 'latest';
+
+    if (isEn) {
+      return `=======================================================
+MONDAL Modernized - Internal Dose Assessment Report
+Generated : ${new Date().toUTCString()}
+Mode      : ${isLatestOnly ? 'Latest ICRP Recommendations Only' : 'Latest ICRP vs Legacy MONDAL3 Comparison'}
+=======================================================
+Radionuclide       : ${radKey}
+Intake Route       : ${routeSelect.options[routeSelect.selectedIndex]?.text || ''}
+Physicochemical    : ${typeSelect.options[typeSelect.selectedIndex]?.text || typeSelect.value}
+Intake Mode        : ${getSelectedIntakeMode()}
+Measured Post-Days : ${daysPostInput.value} days
+Measured Activity  : ${measuredActivityInput.value} Bq
+
+--- RESULTS ---
+[Latest ICRP: Pub 103 / Pub 119 / OIR Series]
+Estimated Intake   : ${newIntake}
+Effective Dose     : ${newDose}
+${!isLatestOnly ? `
+[Legacy MONDAL3: Pub 60 / Pub 68 / Pub 78]
+Estimated Intake   : ${legIntake}
+Effective Dose     : ${legDose}
+` : ''}=======================================================`;
+    } else {
+      return `=======================================================
+MONDAL Modernized - 内部被ばく線量評価計算レポート
+作成日時  : ${new Date().toLocaleString()}
+評価モード: ${isLatestOnly ? '最新ICRP勧告のみモード' : '最新ICRP vs 旧MONDAL3新旧対比モード'}
+=======================================================
+放射性核種         : ${radKey}
+摂取経路           : ${routeSelect.options[routeSelect.selectedIndex]?.text || ''}
+物理化学性状       : ${typeSelect.options[typeSelect.selectedIndex]?.text || typeSelect.value}
+摂取様態           : ${getSelectedIntakeMode()}
+摂取後経過日数     : ${daysPostInput.value} 日
+測定値             : ${measuredActivityInput.value} Bq
+
+--- 評価結果 ---
+[最新 ICRP: Pub 103 / Pub 119 / OIR シリーズ]
+推定摂取量         : ${newIntake}
+預託実効線量       : ${newDose}
+${!isLatestOnly ? `
+[旧 MONDAL3: Pub 60 / Pub 68 / Pub 78]
+推定摂取量         : ${legIntake}
+預託実効線量       : ${legDose}
+` : ''}=======================================================`;
+    }
+  }
+
+  function generateReportCsv() {
+    const isEn = currentLang === 'en';
+    const isLatestOnly = currentMode === 'latest';
+
+    if (isLatestOnly) {
+      if (isEn) {
+        return `Item,Latest_ICRP_Pub103
+Radionuclide,${radSelect.value}
+Intake_Mode,${getSelectedIntakeMode()}
+Elapsed_Days,${daysPostInput.value}
+Measured_Bq,${measuredActivityInput.value}
+Estimated_Intake_Bq,${document.getElementById('res-new-intake').textContent.replace(' Bq','')}
+Effective_Dose_mSv,${document.getElementById('res-new-dose-msv').textContent.replace(' mSv','')}
+`;
+      } else {
+        return `項目,最新ICRP_Pub103
+放射性核種,${radSelect.value}
+摂取様態,${getSelectedIntakeMode()}
+経過日数,${daysPostInput.value}
+測定値_Bq,${measuredActivityInput.value}
+推定摂取量_Bq,${document.getElementById('res-new-intake').textContent.replace(' Bq','')}
+預託実効線量_mSv,${document.getElementById('res-new-dose-msv').textContent.replace(' mSv','')}
+`;
+      }
+    } else {
+      if (isEn) {
+        return `Item,Latest_ICRP_Pub103,Legacy_MONDAL3_Pub60
+Radionuclide,${radSelect.value},${radSelect.value}
+Intake_Mode,${getSelectedIntakeMode()},${getSelectedIntakeMode()}
+Elapsed_Days,${daysPostInput.value},${daysPostInput.value}
+Measured_Bq,${measuredActivityInput.value},${measuredActivityInput.value}
+Estimated_Intake_Bq,${document.getElementById('res-new-intake').textContent.replace(' Bq','')},${document.getElementById('res-legacy-intake').textContent.replace(' Bq','')}
+Effective_Dose_mSv,${document.getElementById('res-new-dose-msv').textContent.replace(' mSv','')},${document.getElementById('res-legacy-dose-msv').textContent.replace(' mSv','')}
+`;
+      } else {
+        return `項目,最新ICRP_Pub103,旧MONDAL3_Pub60
+放射性核種,${radSelect.value},${radSelect.value}
+摂取様態,${getSelectedIntakeMode()},${getSelectedIntakeMode()}
+経過日数,${daysPostInput.value},${daysPostInput.value}
+測定値_Bq,${measuredActivityInput.value},${measuredActivityInput.value}
+推定摂取量_Bq,${document.getElementById('res-new-intake').textContent.replace(' Bq','')},${document.getElementById('res-legacy-intake').textContent.replace(' Bq','')}
+預託実効線量_mSv,${document.getElementById('res-new-dose-msv').textContent.replace(' mSv','')},${document.getElementById('res-legacy-dose-msv').textContent.replace(' mSv','')}
+`;
+      }
+    }
+  }
+
+  function downloadFile(content, fileName, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // --- Full 30-Tissue Modal Handlers ---
+  const tissueModalOverlay = document.getElementById('tissue-modal-overlay');
+  const btnOpenModalTop = document.getElementById('btn-open-tissue-modal');
+  const btnOpenModalBottom = document.getElementById('btn-open-tissue-modal-bottom');
+  const btnCloseModalX = document.getElementById('btn-close-tissue-modal');
+  const btnCloseModalBtn = document.getElementById('btn-modal-close');
+  const btnCopyModalCsv = document.getElementById('btn-modal-copy-csv');
+  const modalSummaryDiv = document.getElementById('modal-condition-summary');
+  const modalTbody = document.getElementById('modal-tissue-tbody');
+
+  function renderMathFormulas() {
+    if (typeof katex !== 'undefined') {
+      const el = document.getElementById('katex-formula-modal');
+      if (el && !el.dataset.katexRendered) {
+        try {
+          katex.render("E(50) = \\sum_{T} \\left( w_T \\times H_T(50) \\right)", el, {
+            throwOnError: false,
+            displayMode: false
+          });
+          el.dataset.katexRendered = "true";
+        } catch (e) {
+          console.warn('KaTeX rendering error:', e);
+        }
+      }
+    }
+  }
+
+  window.addEventListener('load', renderMathFormulas);
+
+  function openTissueModal() {
+    const evalData = window.currentEvaluationResult;
+    if (!evalData || !evalData.newIcrp) return;
+
+    renderMathFormulas();
+
+    const { newIcrp, resNew, radKey, routeText, typeVal } = evalData;
+    const effDoseMsv = resNew ? resNew.effectiveDoseMsv : 0;
+    const intakeBq = resNew ? resNew.intakeBq : 0;
+    const dict = I18N[currentLang];
+
+    if (currentLang === 'en') {
+      modalSummaryDiv.innerHTML = `
+        <span style="color: var(--dads-blue-700); font-weight: 700;">${radKey}</span> | 
+        <span>${routeText} (${typeVal})</span> | 
+        <span>Estimated Intake: <strong>${formatSci(intakeBq, 4)} Bq</strong></span> | 
+        <span>Effective Dose E(50): <strong style="color: var(--dads-blue-700);">${formatSci(effDoseMsv, 4)} mSv</strong></span>
+      `;
+    } else {
+      modalSummaryDiv.innerHTML = `
+        <span style="color: var(--dads-blue-700); font-weight: 700;">${radKey}</span> | 
+        <span>${routeText} (${typeVal})</span> | 
+        <span>推定摂取量: <strong>${formatSci(intakeBq, 4)} Bq</strong></span> | 
+        <span>実効線量 E(50): <strong style="color: var(--dads-blue-700);">${formatSci(effDoseMsv, 4)} mSv</strong></span>
+      `;
+    }
+
+    modalTbody.innerHTML = '';
+    const modalTfoot = document.getElementById('modal-tissue-tfoot');
+    if (modalTfoot) modalTfoot.innerHTML = '';
+
+    const tissueDoses = newIcrp.tissueDoses || {};
+    let totalContribMsv = 0;
+    let totalContribPct = 0;
+
+    if (typeof ICRP_TISSUE_METADATA !== 'undefined') {
+      ICRP_TISSUE_METADATA.forEach((meta, idx) => {
+        const tData = tissueDoses[meta.en];
+        const doseMsv = tData ? tData.doseMsv : (intakeBq * (tData ? tData.coeff : 0) * 1000);
+        const coeff = tData ? tData.coeff : 0;
+        const contribMsv = doseMsv * meta.wt;
+        const contribPct = effDoseMsv > 0 ? (contribMsv / effDoseMsv) * 100 : 0;
+        totalContribMsv += contribMsv;
+        totalContribPct += contribPct;
+
+        const organNameHtml = currentLang === 'en'
+          ? `<strong>${meta.en}</strong>`
+          : `<strong>${meta.ja}</strong> <span style="font-size: 0.8rem; color: var(--dads-gray-600); margin-left: 6px;">${meta.en}</span>`;
+
+        const row = document.createElement('tr');
+        row.className = meta.isPrimary ? 'tissue-row tissue-row-highlight' : 'tissue-row';
+        row.innerHTML = `
+          <td style="text-align: center; color: var(--dads-gray-600); font-size: 0.78rem;">${idx + 1}</td>
+          <td>
+            ${organNameHtml}
+            ${meta.isPrimary ? `<span class="tissue-badge-primary">${dict.badgePrimary}</span>` : ''}
+            ${meta.isRemainderGroup ? `<span style="font-size: 0.65rem; color: var(--dads-gray-600); border: 1px solid var(--dads-gray-300); padding: 1px 4px; border-radius: 3px; margin-left: 4px;">${dict.badgeRemainder}</span>` : ''}
+          </td>
+          <td style="text-align: center; color: var(--dads-gray-800); font-weight: 500;">${getWtDisplay(meta, currentLang)}</td>
+          <td style="text-align: right; font-family: var(--font-mono); font-size: 0.82rem;">${formatSci(coeff, 3)}</td>
+          <td style="text-align: right; font-weight: 600; color: var(--dads-blue-700);">${formatSci(doseMsv, 4)}</td>
+          <td style="text-align: right; font-weight: 600; color: #008037;">${formatSci(contribMsv, 4)}</td>
+          <td style="text-align: right; font-weight: 600; color: ${contribPct >= 10 ? '#b85900' : 'var(--dads-gray-800)'};">${contribPct > 0 ? contribPct.toFixed(1) + '%' : '-'}</td>
+        `;
+        modalTbody.appendChild(row);
+      });
+
+      // Add total footer row
+      if (modalTfoot) {
+        modalTfoot.innerHTML = `
+          <tr>
+            <td style="text-align: center; color: var(--dads-gray-600);">-</td>
+            <td><strong>${dict.modalTotalLabel}</strong></td>
+            <td style="text-align: center; color: var(--dads-blue-700); font-weight: 700;">1.00</td>
+            <td style="text-align: right; color: var(--dads-gray-800); font-size: 0.82rem; font-family: var(--font-mono);">${formatSci(newIcrp.e50Coeff, 3)}</td>
+            <td style="text-align: right; color: var(--dads-gray-600);">-</td>
+            <td style="text-align: right; font-weight: 700; color: #008037; font-size: 0.95rem; font-family: var(--font-mono);">${formatSci(effDoseMsv, 4)}</td>
+            <td style="text-align: right; font-weight: 700; color: var(--dads-blue-700); font-size: 0.95rem;">100.0%</td>
+          </tr>
+        `;
+      }
+    }
+
+    tissueModalOverlay.style.display = 'flex';
+  }
+
+  function closeTissueModal() {
+    tissueModalOverlay.style.display = 'none';
+  }
+
+  if (btnOpenModalTop) btnOpenModalTop.addEventListener('click', openTissueModal);
+  if (btnOpenModalBottom) btnOpenModalBottom.addEventListener('click', openTissueModal);
+  if (btnCloseModalX) btnCloseModalX.addEventListener('click', closeTissueModal);
+  if (btnCloseModalBtn) btnCloseModalBtn.addEventListener('click', closeTissueModal);
+
+  // Close modal on overlay click
+  tissueModalOverlay.addEventListener('click', (e) => {
+    if (e.target === tissueModalOverlay) {
+      closeTissueModal();
+    }
+  });
+
+  // Close modal on ESC key
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && tissueModalOverlay.style.display === 'flex') {
+      closeTissueModal();
+    }
+  });
+
+  // Modal CSV copy
+  if (btnCopyModalCsv) {
+    btnCopyModalCsv.addEventListener('click', () => {
+      const evalData = window.currentEvaluationResult;
+      if (!evalData || !evalData.newIcrp) return;
+
+      const { newIcrp, resNew, radKey } = evalData;
+      const intakeBq = resNew ? resNew.intakeBq : 0;
+      const effDoseMsv = resNew ? resNew.effectiveDoseMsv : 0;
+      const isEn = currentLang === 'en';
+
+      let csv = isEn
+        ? `Index,Organ,wT,hT50_Sv_per_Bq,HT50_mSv,Contribution_to_E50_mSv,Contribution_Pct\n`
+        : `Index,組織名,wT,hT50_Sv_per_Bq,HT50_mSv,実効線量寄与_mSv,寄与率_Pct\n`;
+
+      if (typeof ICRP_TISSUE_METADATA !== 'undefined') {
+        ICRP_TISSUE_METADATA.forEach((meta, idx) => {
+          const tData = newIcrp.tissueDoses?.[meta.en];
+          const coeff = tData ? tData.coeff : 0;
+          const doseMsv = tData ? tData.doseMsv : (intakeBq * coeff * 1000);
+          const contribMsv = doseMsv * meta.wt;
+          const contribPct = effDoseMsv > 0 ? (contribMsv / effDoseMsv) * 100 : 0;
+          const organLabel = isEn ? meta.en : meta.ja;
+          csv += `${idx + 1},"${organLabel}","${getWtDisplay(meta, currentLang)}",${coeff},${doseMsv},${contribMsv},${contribPct.toFixed(2)}\n`;
+        });
+        const totalLabel = isEn ? 'Total (Effective Dose E50)' : '合計 (預託実効線量 E50)';
+        csv += `-,${totalLabel},1.00,${newIcrp.e50Coeff},-,${effDoseMsv},100.00\n`;
+      }
+
+      navigator.clipboard.writeText(csv).then(() => {
+        const origText = btnCopyModalCsv.textContent;
+        btnCopyModalCsv.textContent = isEn ? '✅ Copied!' : '✅ コピー完了！';
+        setTimeout(() => {
+          btnCopyModalCsv.textContent = origText;
+        }, 2000);
+      }).catch(err => {
+        console.error('Clipboard copy failed:', err);
+      });
+    });
+  }
+
+  // Initial boot: Apply Default Language (English) and Default Mode (Latest ICRP)
+  setLanguage('en');
+  setMode('latest');
+});
+
+
+
+</script>
+</body>
+</html>
