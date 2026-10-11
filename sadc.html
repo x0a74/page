@@ -1,105 +1,1786 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>Yokoyama's Simple Diffusion Simulator</title>
-    <link rel="stylesheet" href="./sadc.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simple Atmospheric Dispersion Simulator for ITP, ISCN, JAEA</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- Google Fonts for Digital Agency typography: Noto Sans JP & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           Digital Agency Japan (デジタル庁) Design System Tokens & Base Styles
+           ========================================================================== */
+        :root {
+            /* Primary Colors - Digital Agency Standard Navy & Blue */
+            --da-primary-900: #001b44;
+            --da-primary-800: #002b66;
+            --da-primary-700: #003780;
+            --da-primary-600: #0050b3; /* Main Primary */
+            --da-primary-500: #0b66d0;
+            --da-primary-100: #e5effa;
+            --da-primary-50: #f0f6fc;
+
+            /* Neutral Colors */
+            --da-neutral-900: #1a1a1a; /* Body text high contrast */
+            --da-neutral-800: #333333;
+            --da-neutral-700: #4d4d4d;
+            --da-neutral-600: #626970; /* Subdued text */
+            --da-neutral-400: #999999;
+            --da-neutral-300: #cbd5e1; /* Main borders */
+            --da-neutral-200: #e2e8f0; /* Subtle borders */
+            --da-neutral-100: #f1f5f9; /* Table headers, light fills */
+            --da-neutral-50: #f8f9fa;  /* App background */
+            --da-white: #ffffff;
+
+            /* Semantic / Alert Colors */
+            --da-warning-bg: #fffbeb;
+            --da-warning-border: #f59e0b;
+            --da-warning-text: #92400e;
+            --da-warning-badge: #d97706;
+
+            --da-danger-600: #c9171e;
+            --da-danger-50: #fef2f2;
+
+            --da-success-600: #007b43;
+
+            /* Focus Ring (WCAG AA Compliance) */
+            --da-focus-ring: 0 0 0 3px rgba(0, 80, 179, 0.4);
+
+            /* Shadows */
+            --da-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --da-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --da-shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.12);
+            --da-shadow-modal: 0 20px 48px rgba(0, 27, 68, 0.22);
+
+            /* Radii - Digital Agency standards (subtle, clean) */
+            --da-radius-sm: 4px;
+            --da-radius-md: 6px;
+            --da-radius-lg: 8px;
+
+            /* Layout dimensions */
+            --topbar-height: 62px;
+            --bottom-height: 180px;
+            --sidebar-width: 380px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: "Noto Sans JP", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--da-neutral-50);
+            color: var(--da-neutral-900);
+            font-size: 14px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Focus outline standard */
+        *:focus-visible {
+            outline: 2px solid var(--da-primary-600);
+            outline-offset: 2px;
+        }
+
+        /* ==========================================================================
+           App Grid Layout
+           ========================================================================== */
+        .app {
+            height: 100vh;
+            min-width: 1200px;
+            display: grid;
+            grid-template-rows: var(--topbar-height) 1fr var(--bottom-height);
+            gap: 8px;
+            padding: 8px;
+            background-color: var(--da-neutral-50);
+        }
+
+        /* Common Panel Style */
+        .panel {
+            background: var(--da-white);
+            border: 1px solid var(--da-neutral-300);
+            border-radius: var(--da-radius-md);
+            box-shadow: var(--da-shadow-sm);
+        }
+
+        /* ==========================================================================
+           Header (Digital Agency Header Pattern)
+           ========================================================================== */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            background: var(--da-white);
+            border: 1px solid var(--da-neutral-300);
+            border-radius: var(--da-radius-md);
+            box-shadow: var(--da-shadow-sm);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--da-radius-sm);
+            background: var(--da-primary-700);
+            display: grid;
+            place-items: center;
+            color: var(--da-white);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            box-shadow: 0 2px 4px rgba(0, 39, 102, 0.2);
+        }
+
+        .brand-title-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--da-primary-600);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--da-neutral-900);
+            line-height: 1.25;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* Digital Agency Warning Callout / Notification */
+        .warning-banner {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--da-warning-bg);
+            border: 1px solid var(--da-warning-border);
+            color: var(--da-warning-text);
+            border-radius: var(--da-radius-sm);
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            max-width: 580px;
+            line-height: 1.35;
+        }
+
+        .warning-icon {
+            flex-shrink: 0;
+            width: 15px;
+            height: 15px;
+            fill: var(--da-warning-text);
+        }
+
+        /* Buttons & Selects */
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--da-white);
+            border: 1px solid var(--da-primary-600);
+            color: var(--da-primary-600);
+            border-radius: var(--da-radius-sm);
+            padding: 7px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .btn-secondary:hover {
+            background: var(--da-primary-50);
+            border-color: var(--da-primary-700);
+            color: var(--da-primary-700);
+        }
+
+        .btn-secondary:active {
+            background: var(--da-primary-100);
+        }
+
+        .select-da {
+            border: 1px solid var(--da-neutral-300);
+            border-radius: var(--da-radius-sm);
+            background: var(--da-white);
+            color: var(--da-neutral-900);
+            padding: 7px 28px 7px 10px;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234d4d4d'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .select-da:hover {
+            border-color: var(--da-neutral-600);
+        }
+
+        .select-da:focus {
+            border-color: var(--da-primary-600);
+            box-shadow: var(--da-focus-ring);
+            outline: none;
+        }
+
+        /* ==========================================================================
+           Main Layout: Sidebar & Map Panel
+           ========================================================================== */
+        .main {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            gap: 8px;
+            min-height: 0;
+        }
+
+        /* Controls / Sidebar */
+        .controls {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--da-neutral-300) transparent;
+        }
+
+        .controls::-webkit-scrollbar {
+            width: 6px;
+        }
+        .controls::-webkit-scrollbar-thumb {
+            background: var(--da-neutral-300);
+            border-radius: 3px;
+        }
+
+        /* Section Cards */
+        .section-card {
+            background: var(--da-neutral-50);
+            border: 1px solid var(--da-neutral-200);
+            border-radius: var(--da-radius-sm);
+            padding: 10px 12px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid var(--da-primary-600);
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--da-primary-800);
+            font-size: 13px;
+            letter-spacing: 0.2px;
+        }
+
+        /* Preset Buttons */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--da-neutral-300);
+            background: var(--da-white);
+            color: var(--da-neutral-800);
+            border-radius: var(--da-radius-sm);
+            padding: 7px 8px;
+            font-weight: 600;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--da-primary-600);
+            background: var(--da-primary-50);
+            color: var(--da-primary-700);
+        }
+
+        .btn-outline:active {
+            background: var(--da-primary-100);
+        }
+
+        /* Form Controls & Inputs */
+        .control-row {
+            display: grid;
+            grid-template-columns: 132px 1fr 68px;
+            gap: 8px;
+            align-items: center;
+            margin: 6px 0;
+        }
+
+        .control-label {
+            font-weight: 600;
+            font-size: 11.5px;
+            color: var(--da-neutral-700);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--da-neutral-300);
+            outline: none;
+            transition: background 0.15s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--da-primary-600);
+            border: 2px solid var(--da-white);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.1s ease, background 0.15s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: var(--da-primary-700);
+            transform: scale(1.15);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--da-primary-600);
+            border: 2px solid var(--da-white);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .num-input {
+            border: 1px solid var(--da-neutral-300);
+            border-radius: var(--da-radius-sm);
+            background: var(--da-white);
+            color: var(--da-neutral-900);
+            padding: 5px 6px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: "Roboto Mono", monospace;
+            text-align: right;
+            width: 68px;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .num-input:focus {
+            border-color: var(--da-primary-600);
+            box-shadow: var(--da-focus-ring);
+            outline: none;
+        }
+
+        /* Compass Component */
+        .compass-card {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 10px;
+            align-items: center;
+            background: var(--da-white);
+            border: 1px solid var(--da-neutral-200);
+            border-radius: var(--da-radius-sm);
+            padding: 8px;
+            margin: 6px 0;
+        }
+
+        .compass-svg {
+            width: 110px;
+            height: 110px;
+            display: block;
+        }
+
+        .compass-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .compass-badge {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--da-primary-700);
+            background: var(--da-primary-50);
+            border-radius: var(--da-radius-sm);
+            padding: 2px 6px;
+            align-self: flex-start;
+        }
+
+        .compass-heading {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--da-primary-800);
+            line-height: 1.1;
+        }
+
+        .compass-desc {
+            font-size: 11.5px;
+            color: var(--da-neutral-600);
+            line-height: 1.35;
+        }
+
+        .compass-svg .seg {
+            cursor: pointer;
+            stroke: var(--da-white);
+            stroke-width: 1.2;
+            transition: fill 0.15s ease;
+        }
+
+        .compass-svg .seg:hover {
+            fill: #93c5fd !important;
+        }
+
+        .compass-svg .active {
+            fill: var(--da-primary-600) !important;
+        }
+
+        .compass-svg text {
+            font-size: 8px;
+            font-weight: 700;
+            pointer-events: none;
+            user-select: none;
+            font-family: "Inter", sans-serif;
+        }
+
+        .compass-svg .needle {
+            stroke: var(--da-danger-600);
+            stroke-width: 3;
+            stroke-linecap: round;
+        }
+
+        /* Stability Radio Buttons (Digital Agency Segment Control) */
+        .stability-control {
+            margin-top: 6px;
+        }
+
+        .stability-label {
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--da-neutral-700);
+            margin-bottom: 4px;
+        }
+
+        .stability-group {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+        }
+
+        .stab-opt {
+            cursor: pointer;
+        }
+
+        .stab-opt input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .stab-opt span {
+            display: block;
+            text-align: center;
+            border: 1px solid var(--da-neutral-300);
+            background: var(--da-white);
+            border-radius: var(--da-radius-sm);
+            padding: 6px 0;
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--da-neutral-800);
+            transition: all 0.15s ease;
+        }
+
+        .stab-opt:hover span {
+            border-color: var(--da-primary-600);
+            background: var(--da-primary-50);
+            color: var(--da-primary-700);
+        }
+
+        .stab-opt input:checked + span {
+            background: var(--da-primary-600);
+            border-color: var(--da-primary-600);
+            color: var(--da-white);
+            box-shadow: 0 1px 3px rgba(0, 80, 179, 0.3);
+        }
+
+        .stab-opt input:focus-visible + span {
+            outline: 2px solid var(--da-primary-600);
+            outline-offset: 2px;
+        }
+
+        /* ==========================================================================
+           Map Panel & Overlays
+           ========================================================================= */
+        .map-panel {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--da-radius-md);
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            background: #e2e8f0;
+        }
+
+        /* Digital Agency Floating Cards */
+        .floating-card {
+            position: absolute;
+            z-index: 500;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--da-neutral-300);
+            border-radius: var(--da-radius-md);
+            box-shadow: var(--da-shadow-md);
+            padding: 10px 12px;
+        }
+
+        .hint-card {
+            left: 60px;
+            top: 10px;
+            width: 310px;
+        }
+
+        .hint-card-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .hint-icon {
+            width: 16px;
+            height: 16px;
+            fill: var(--da-primary-600);
+            flex-shrink: 0;
+        }
+
+        .hint-card h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--da-primary-800);
+            margin: 0;
+        }
+
+        .hint-card p {
+            font-size: 12px;
+            color: var(--da-neutral-700);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Legend Card */
+        .legend-card {
+            right: 12px;
+            bottom: 12px;
+            width: 320px;
+        }
+
+        .legend-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--da-neutral-900);
+            margin-bottom: 6px;
+        }
+
+        .gradient-bar {
+            height: 16px;
+            border-radius: var(--da-radius-sm);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0) 0%, rgba(37, 99, 235, 0.58) 33.3%, rgba(34, 197, 94, 0.62) 66.7%, rgba(250, 204, 21, 0.78) 100%);
+            margin-bottom: 6px;
+        }
+
+        .legend-scale {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: "Roboto Mono", monospace;
+            color: var(--da-neutral-700);
+        }
+
+        .legend-note {
+            font-size: 11px;
+            color: var(--da-neutral-600);
+            margin-top: 6px;
+            border-top: 1px dashed var(--da-neutral-200);
+            padding-top: 5px;
+            line-height: 1.35;
+        }
+
+        /* Source Marker & Plume */
+        .source-dot {
+            background: var(--da-danger-600);
+            border: 2px solid var(--da-white);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(201, 23, 30, 0.4);
+            width: 18px;
+            height: 18px;
+            cursor: grab;
+        }
+
+        .source-dot:active {
+            cursor: grabbing;
+        }
+
+        .plume-canvas {
+            pointer-events: none;
+            z-index: 430;
+        }
+
+        /* ==========================================================================
+           Bottom Dock / Results Panel (Digital Agency Tab Pattern)
+           ========================================================================== */
+        .bottom-dock {
+            display: grid;
+            grid-template-rows: 40px 1fr;
+            overflow: hidden;
+            background: var(--da-white);
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 2px;
+            padding: 0 12px;
+            border-bottom: 1px solid var(--da-neutral-300);
+            background: var(--da-neutral-50);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--da-neutral-700);
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+            top: 1px;
+        }
+
+        .tab-btn:hover {
+            color: var(--da-primary-700);
+            background: rgba(0, 80, 179, 0.04);
+        }
+
+        .tab-btn.active {
+            color: var(--da-primary-700);
+            border-bottom-color: var(--da-primary-600);
+            background: var(--da-white);
+            font-weight: 700;
+        }
+
+        .tab-panel-container {
+            padding: 10px 14px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            font-size: 13px;
+        }
+
+        /* Tab Content Grids (Digital Agency Data Display) */
+        .data-grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .data-card {
+            background: var(--da-neutral-50);
+            border: 1px solid var(--da-neutral-200);
+            border-radius: var(--da-radius-sm);
+            padding: 6px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .data-card-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--da-neutral-600);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .data-card-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--da-neutral-900);
+            font-family: "Roboto Mono", monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--da-neutral-600);
+            font-size: 13px;
+            padding: 16px;
+            background: var(--da-neutral-50);
+            border: 1px dashed var(--da-neutral-300);
+            border-radius: var(--da-radius-sm);
+        }
+
+        .empty-icon {
+            width: 20px;
+            height: 20px;
+            fill: var(--da-neutral-600);
+            flex-shrink: 0;
+        }
+
+        /* Formula Container */
+        .formula-container {
+            font-family: "Roboto Mono", Consolas, monospace;
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: var(--da-radius-sm);
+            padding: 10px 12px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            font-size: 12px;
+            max-height: 110px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #475569 #0f172a;
+            border: 1px solid #1e293b;
+        }
+
+        /* ==========================================================================
+           Modal (Digital Agency Modal Dialog)
+           ========================================================================== */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 27, 68, 0.45);
+            backdrop-filter: blur(2px);
+            display: none;
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 960px;
+            max-width: 95vw;
+            max-height: 85vh;
+            background: var(--da-white);
+            border-radius: var(--da-radius-md);
+            border: 1px solid var(--da-neutral-300);
+            box-shadow: var(--da-shadow-modal);
+            display: grid;
+            grid-template-rows: auto 1fr;
+            overflow: hidden;
+        }
+
+        .modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--da-neutral-200);
+            background: var(--da-neutral-50);
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--da-primary-800);
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: 1px solid var(--da-neutral-300);
+            border-radius: var(--da-radius-sm);
+            color: var(--da-neutral-700);
+            padding: 5px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--da-neutral-100);
+            color: var(--da-neutral-900);
+            border-color: var(--da-neutral-400);
+        }
+
+        .modal-body {
+            padding: 18px 20px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .modal-body p {
+            margin-bottom: 12px;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--da-neutral-800);
+        }
+
+        /* Digital Agency Accessible Data Table */
+        .modal-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 13px;
+            border: 1px solid var(--da-neutral-300);
+            line-height: 1.5;
+        }
+
+        .modal-table th,
+        .modal-table td {
+            border: 1px solid var(--da-neutral-200);
+            padding: 8px 12px;
+            vertical-align: top;
+        }
+
+        .modal-table th {
+            background: var(--da-neutral-100);
+            color: var(--da-primary-900);
+            font-weight: 700;
+            text-align: left;
+        }
+
+        .modal-table tbody tr:nth-child(even) {
+            background: var(--da-neutral-50);
+        }
+
+        .modal-table tbody tr:hover {
+            background: var(--da-primary-50);
+        }
+    </style>
 </head>
 
 <body>
-    <div class="page">
-        <header>
-            <h1>Yokoyama's Simple Diffusion Simulator</h1>
+    <div class="app">
+        <!-- Digital Agency Header -->
+        <header class="topbar">
+            <div class="brand-container">
+                <div class="brand-icon">S</div>
+                <div class="brand-title-wrap">
+                    <span class="brand-tag">ITP / ISCN / JAEA</span>
+                    <h1 id="appTitle">Simple Atmospheric Dispersion Simulator</h1>
+                </div>
+            </div>
+
+            <div class="top-actions">
+                <!-- Training notice banner -->
+                <div class="warning-banner" id="warningBanner" role="note">
+                    <svg class="warning-icon" viewBox="0 0 24 24">
+                        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                    </svg>
+                    <span id="warningText"></span>
+                </div>
+
+                <!-- Conditions Dialog Trigger -->
+                <button class="btn-secondary" id="conditionsBtn" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                    </svg>
+                    <span id="conditionsBtnText"></span>
+                </button>
+
+                <!-- Switch to 3D Simulator -->
+                <a href="./sadc_3d.html" class="btn-secondary" style="text-decoration: none;" title="Switch to 3D Simulation">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9zM12 4.15L5.75 7.66 12 11.17l6.25-3.51L12 4.15zM4.99 9.38v5.82L11 18.59v-5.83L4.99 9.38zm14.02 0L13 12.76v5.83l6.01-3.39V9.38z"/>
+                    </svg>
+                    <span>3D View</span>
+                </a>
+
+                <!-- Language Selector -->
+                <select class="select-da" id="langSelect" aria-label="Language Select"></select>
+            </div>
         </header>
 
-        <section class="controls" aria-label="parameters">
-            <div class="col" style="display:none;">
-                <label>lat0, lon0</label>
-                <div style="display:flex;gap:6px;">
-                    <input id="lat0" type="number" step="0.000001" value="35.6895" title="lat" />
-                    <input id="lon0" type="number" step="0.000001" value="139.6917" title="lon" />
-                </div>
-                <div class="footer-note">中心座標（deg）</div>
-            </div>
-
-            <div class="col">
-                <label>Release rate (Bq/s)</label>
-                <input id="Q" type="number" step="any" value="1000" />
-            </div>
-
-            <div class="col">
-                <label>Wind speed (m/s)</label>
-                <input id="U" type="number" step="any" value="0.5" />
-            </div>
-
-            <div class="col">
-                <label>Wind direction (deg, North=0)</label>
-                <input id="windDir" type="number" step="any" value="-90" />
-            </div>
-
-            <div class="col">
-                <label>Decay constant λ (1/s)</label>
-                <input id="lambda" type="number" step="any" value="0" />
-            </div>
-
-            <div class="col">
-                <label>Effective height H (m)</label>
-                <input id="H" type="number" step="any" value="80" />
-            </div>
-
-            <div class="col">
-                <label>Stability</label>
-                <select id="stability">
-                    <option>A</option>
-                    <option>B</option>
-                    <option>C</option>
-                    <option selected>D</option>
-                    <option>E</option>
-                    <option>F</option>
-                </select>
-            </div>
-
-            <div class="col">
-                <label>Calculation radius_m / step_m</label>
-                <div style="display:flex; gap:6px;">
-                    <input id="radius_m" type="number" value="4000" disabled/>
-                    <input id="step_m" type="number" value="50" />
-                </div>
-            </div>
-
-            <div class="col" style="margin-left:auto;">
-                <label>&nbsp;</label>
-                <div style="display:flex; gap:8px;">
-                    <button id="runBtn">Run</button>
-                    <button id="clearBtn">Clear</button>
-                </div>
-            </div>
-        </section>
-
+        <!-- Main Workspace -->
         <main class="main">
-            <section class="panel" id="leftPanel" aria-label="plan view">
-                <div style="padding:6px; font-weight:600;">Plan view (z=0 m)</div>
-                <div class="canvas-wrap">
-                    <canvas id="planCanvas" width="800" height="600"></canvas>
-                </div>
-                <div class="legend" id="planLegend"></div>
-                <div class="status" id="planStatus">準備完了</div>
-            </section>
+            <!-- Sidebar Controls -->
+            <aside class="panel controls" aria-label="Simulation Controls">
+                <!-- Preset Section -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <span class="section-title" id="presetTitle"></span>
+                    </div>
+                    <div class="preset-grid">
+                        <button class="btn-outline" id="presetTokyoBtn" type="button"></button>
+                        <button class="btn-outline" id="recenterBtn" type="button"></button>
+                    </div>
+                </section>
 
-            <section class="panel" id="rightPanel" aria-label="side view">
-                <div style="padding:6px; font-weight:600;">Side view (vertical: z, horizontal: wind direction x)</div>
-                <div class="canvas-wrap">
-                    <canvas id="sideCanvas" width="800" height="600"></canvas>
+                <!-- Release Conditions -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <span class="section-title" id="releaseTitle"></span>
+                    </div>
+                    <div class="control-row">
+                        <label class="control-label" id="qLabel" for="qRange"></label>
+                        <input id="qRange" type="range" min="1000" max="10000000" step="1000" value="10000">
+                        <input class="num-input" id="qNumber" type="number" min="1000" max="10000000" step="1000" value="10000">
+                    </div>
+                    <div class="control-row">
+                        <label class="control-label" id="lamLabel" for="lamRange"></label>
+                        <input id="lamRange" type="range" min="0" max="0.02" step="0.0001" value="0">
+                        <input class="num-input" id="lamNumber" type="number" min="0" max="0.02" step="0.0001" value="0">
+                    </div>
+                    <div class="control-row">
+                        <label class="control-label" id="hLabel" for="hRange"></label>
+                        <input id="hRange" type="range" min="0" max="500" step="1" value="333">
+                        <input class="num-input" id="hNumber" type="number" min="0" max="500" step="1" value="333">
+                    </div>
+                </section>
+
+                <!-- Meteorology -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <span class="section-title" id="metTitle"></span>
+                    </div>
+                    <!-- 16-point Compass -->
+                    <div class="compass-card">
+                        <svg id="compass" class="compass-svg" viewBox="0 0 120 120" role="img" aria-label="Wind Direction Compass"></svg>
+                        <div class="compass-info">
+                            <span class="compass-badge" id="downwindTag">Downwind</span>
+                            <div class="compass-heading" id="dirName">SW</div>
+                            <div class="compass-desc" id="dirHelp"></div>
+                        </div>
+                    </div>
+
+                    <div class="control-row">
+                        <label class="control-label" id="uLabel" for="uRange"></label>
+                        <input id="uRange" type="range" min="0.5" max="20" step="0.1" value="5">
+                        <input class="num-input" id="uNumber" type="number" min="0.5" max="20" step="0.1" value="5">
+                    </div>
+
+                    <div class="stability-control">
+                        <div class="stability-label" id="stabilityLabel"></div>
+                        <div class="stability-group" id="stabilityGroup"></div>
+                    </div>
+                </section>
+
+                <!-- Display & Grid Options -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <span class="section-title" id="displayTitle"></span>
+                    </div>
+                    <div class="control-row">
+                        <label class="control-label" id="zLabel" for="zRange"></label>
+                        <input id="zRange" type="range" min="0" max="300" step="1" value="0">
+                        <input class="num-input" id="zNumber" type="number" min="0" max="300" step="1" value="0">
+                    </div>
+                    <div class="control-row">
+                        <label class="control-label" id="rangeLabel" for="rangeRange"></label>
+                        <input id="rangeRange" type="range" min="500" max="5000" step="100" value="2500">
+                        <input class="num-input" id="rangeNumber" type="number" min="500" max="5000" step="100" value="2500">
+                    </div>
+                    <div class="control-row">
+                        <label class="control-label" id="cellLabel" for="cellRange"></label>
+                        <input id="cellRange" type="range" min="20" max="400" step="10" value="150">
+                        <input class="num-input" id="cellNumber" type="number" min="20" max="400" step="10" value="150">
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Map View -->
+            <section class="panel map-panel" aria-label="Simulation Map">
+                <div id="map"></div>
+
+                <!-- Floating Instruction Card -->
+                <div class="floating-card hint-card">
+                    <div class="hint-card-header">
+                        <svg class="hint-icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                        <h3 id="hintTitle"></h3>
+                    </div>
+                    <p id="hintText"></p>
                 </div>
-                <div class="legend" id="sideLegend"></div>
-                <div class="status" id="sideStatus">準備完了</div>
+
+                <!-- Floating Legend Card -->
+                <div class="floating-card legend-card">
+                    <div class="legend-title" id="legendTitle"></div>
+                    <div class="gradient-bar"></div>
+                    <div class="legend-scale">
+                        <span>1e-17 Bq/m³</span>
+                        <span>1e+1 Bq/m³</span>
+                        <span style="display: none;" id="legendOver"></span>
+                    </div>
+                    <div class="legend-note" id="legendNote"></div>
+                </div>
             </section>
         </main>
+
+        <!-- Bottom Results / Information Dock -->
+        <footer class="panel bottom-dock" aria-label="Results and Formulas">
+            <nav class="tab-bar" id="tabButtons" role="tablist"></nav>
+            <div class="tab-panel-container" id="tabContent" role="tabpanel"></div>
+        </footer>
     </div>
-    <script src="./sadc.js"></script>
-    <script src="./sadc_draw.js"></script>
+
+    <!-- Conditions & Assumptions Modal -->
+    <div class="modal" id="conditionsModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-box">
+            <div class="modal-head">
+                <div class="modal-title" id="modalTitle"></div>
+                <button class="modal-close-btn" id="modalClose" type="button"></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./lang.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        'use strict';
+
+        /* --------------------------------------------------------------------------
+           Simulation Constants & State
+           -------------------------------------------------------------------------- */
+        const TOKYO_TOWER = { lat: 35.65861, lng: 139.74556 };
+        const dirs = [
+            ['N', 0], ['NNE', 22.5], ['NE', 45], ['ENE', 67.5],
+            ['E', 90], ['ESE', 112.5], ['SE', 135], ['SSE', 157.5],
+            ['S', 180], ['SSW', 202.5], ['SW', 225], ['WSW', 247.5],
+            ['W', 270], ['WNW', 292.5], ['NW', 315], ['NNW', 337.5]
+        ];
+        const langNames = {
+            "en": "English", "ja": "日本語", "bn": "বাংলা", "id": "Bahasa Indonesia",
+            "kk": "Қазақша", "mn": "Монгол", "ms": "Bahasa Melayu", "ru": "Русский",
+            "th": "ไทย", "tl": "Tagalog", "tr": "Türkçe", "vi": "Tiếng Việt"
+        };
+        const state = {
+            lang: 'en', directionIndex: 10, stability: 'C', selectedCell: null,
+            sourceLatLng: null, gridData: [], currentStats: null, activeTab: 0
+        };
+
+        const K_SIGMA_Y = 6.7775e-1;
+        const THETA1 = { A: 50.0, B: 40.0, C: 30.0, D: 20.0, E: 15.0, F: 10.0 };
+        const SIGMA_Z_PARAMS_GE_02 = {
+            A: { sigma0: 768.1, P0: 3.9077, P1: 3.898, P2: 1.7330 },
+            B: { sigma0: 122.0, P0: 1.4132, P1: 0.49523, P2: 0.12772 },
+            C: { sigma0: 58.1, P0: 0.8916, P1: -0.001649, P2: 0.0 },
+            D: { sigma0: 31.7, P0: 0.7626, P1: -0.095108, P2: 0.0 },
+            E: { sigma0: 22.2, P0: 0.7117, P1: -0.12697, P2: 0.0 },
+            F: { sigma0: 13.8, P0: 0.6582, P1: -0.1227, P2: 0.0 }
+        };
+        const SIGMA_Z_PARAMS_LT_02 = {
+            A: { sigma0: 165.0, P0: 1.07 },
+            B: { sigma0: 83.7, P0: 0.894 },
+            C: { sigma0: 58.0, P0: 0.891 },
+            D: { sigma0: 33.0, P0: 0.854 },
+            E: { sigma0: 24.4, P0: 0.854 },
+            F: { sigma0: 15.5, P0: 0.822 }
+        };
+        const LOG_MIN = -17;
+        const LOG_MAX = 1;
+        const COLOR_STOPS = [
+            { p: 0, c: [37, 99, 235, 0] },
+            { p: .333, c: [37, 99, 235, .58] },
+            { p: .667, c: [34, 197, 94, .62] },
+            { p: 1, c: [250, 204, 21, .78] }
+        ];
+
+        let map, sourceMarker, sourceCircle, rangeCircle, centerLine, plumeLayer, autoTimer;
+
+        const $ = id => document.getElementById(id);
+        const tr = () => translations[state.lang] || translations.en;
+        const t = k => tr()[k] ?? k;
+        const label = k => tr().labels[k] ?? translations.en.labels[k] ?? k;
+
+        /* --------------------------------------------------------------------------
+           Formatting Utilities
+           -------------------------------------------------------------------------- */
+        function fmt(v, d = 2) {
+            if (!Number.isFinite(v)) return '—';
+            const a = Math.abs(v);
+            if (a >= 10000 || (a > 0 && a < 0.01)) return v.toExponential(2);
+            return v.toLocaleString(state.lang, { maximumFractionDigits: d });
+        }
+
+        function valUnit(v, u, d = 2) {
+            return fmt(v, d) + ' ' + u;
+        }
+
+        /* --------------------------------------------------------------------------
+           Atmospheric Dispersion Core Equations (Gaussian Plume)
+           -------------------------------------------------------------------------- */
+        function sigmaY(x_m, stability) {
+            const x_km = x_m / 1000.0;
+            const theta1 = THETA1[stability];
+            return K_SIGMA_Y * theta1 * (5.0 - Math.log10(x_km)) * x_km;
+        }
+
+        function sigmaZ(x_m, stability) {
+            const x_km = x_m / 1000.0;
+            if (x_km >= 0.2) {
+                const p = SIGMA_Z_PARAMS_GE_02[stability];
+                const logx = Math.log10(x_km);
+                const exponent = p.P0 + p.P1 * logx + p.P2 * (logx ** 2);
+                return p.sigma0 * (x_km ** exponent);
+            }
+            const p = SIGMA_Z_PARAMS_LT_02[stability];
+            return p.sigma0 * (x_km ** p.P0);
+        }
+
+        function airConcentration(Q, lam, U, H, x, y, z, stability) {
+            if (x <= 0.0 || U <= 0.0) return 0.0;
+            const sigY = sigmaY(x, stability);
+            const sigZ = sigmaZ(x, stability);
+            const prefactor = Q / (2.0 * Math.PI * sigY * sigZ * U);
+            const decay = Math.exp(-lam * x / U);
+            const lateral = Math.exp(-(y ** 2) / (2.0 * sigY ** 2));
+            const vertical = Math.exp(-((z - H) ** 2) / (2.0 * sigZ ** 2)) + Math.exp(-((z + H) ** 2) / (2.0 * sigZ ** 2));
+            return prefactor * decay * lateral * vertical;
+        }
+
+        function currentParams() {
+            return {
+                Q: +$('qNumber').value,
+                lam: +$('lamNumber').value,
+                H: +$('hNumber').value,
+                U: +$('uNumber').value,
+                z: +$('zNumber').value,
+                rangeM: +$('rangeNumber').value,
+                cellM: +$('cellNumber').value,
+                angleDeg: dirs[state.directionIndex][1]
+            };
+        }
+
+        /* --------------------------------------------------------------------------
+           Coordinate Transformations & Color Calculations
+           -------------------------------------------------------------------------- */
+        function localToLatLng(dx, dy, o) {
+            return L.latLng(o.lat + dy / 111320, o.lng + dx / (111320 * Math.cos(o.lat * Math.PI / 180)));
+        }
+
+        function latLngToLocal(ll, o) {
+            const n = map.distance([o.lat, o.lng], [ll.lat, o.lng]) * (ll.lat >= o.lat ? 1 : -1);
+            const e = map.distance([o.lat, o.lng], [o.lat, ll.lng]) * (ll.lng >= o.lng ? 1 : -1);
+            return { dx: e, dy: n };
+        }
+
+        function rotateToWind(dx, dy, a) {
+            const th = a * Math.PI / 180;
+            return {
+                x: dx * Math.sin(th) + dy * Math.cos(th),
+                y: dx * Math.cos(th) - dy * Math.sin(th)
+            };
+        }
+
+        function lerp(a, b, p) {
+            return a + (b - a) * p;
+        }
+
+        function colorFromNorm(n) {
+            n = Math.max(0, Math.min(1, n));
+            let a = COLOR_STOPS[0];
+            let b = COLOR_STOPS[3];
+
+            for (let i = 0; i < 3; i++) {
+                if (n >= COLOR_STOPS[i].p && n <= COLOR_STOPS[i + 1].p) {
+                    a = COLOR_STOPS[i];
+                    b = COLOR_STOPS[i + 1];
+                    break;
+                }
+            }
+
+            const p = (n - a.p) / Math.max(1e-9, b.p - a.p);
+            const c = a.c.map((v, i) => lerp(v, b.c[i], p));
+            return `rgba(${c[0].toFixed(0)},${c[1].toFixed(0)},${c[2].toFixed(0)},${c[3].toFixed(3)})`;
+        }
+
+        function getColor(v) {
+            if (v <= 0) return colorFromNorm(0);
+            const lv = Math.log10(v);
+            if (lv >= LOG_MAX) return colorFromNorm(1);
+            if (lv <= LOG_MIN) return colorFromNorm(0);
+            return colorFromNorm((lv - LOG_MIN) / (LOG_MAX - LOG_MIN));
+        }
+
+        /* --------------------------------------------------------------------------
+           Leaflet Custom Plume Canvas Layer
+           -------------------------------------------------------------------------- */
+        const PlumeCanvasLayer = L.Layer.extend({
+            onAdd: function (map) {
+                this._map = map;
+                this._canvas = L.DomUtil.create('canvas', 'plume-canvas leaflet-layer');
+                this._ctx = this._canvas.getContext('2d', { alpha: true });
+                map.getPanes().overlayPane.appendChild(this._canvas);
+                map.on('moveend zoomend resize viewreset', this.redraw, this);
+                this.redraw();
+            },
+            onRemove: function (map) {
+                map.off('moveend zoomend resize viewreset', this.redraw, this);
+                this._canvas.remove();
+            },
+            redraw: function () {
+                if (!this._map || !this._canvas || !state.currentStats) return;
+
+                const size = this._map.getSize();
+                const dpr = window.devicePixelRatio || 1;
+
+                this._canvas.width = Math.round(size.x * dpr);
+                this._canvas.height = Math.round(size.y * dpr);
+                this._canvas.style.width = size.x + 'px';
+                this._canvas.style.height = size.y + 'px';
+
+                L.DomUtil.setPosition(this._canvas, this._map.containerPointToLayerPoint([0, 0]));
+
+                const ctx = this._ctx;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.clearRect(0, 0, size.x, size.y);
+
+                for (const cell of state.gridData) {
+                    if (cell.c <= 0) continue;
+
+                    const sw = this._map.latLngToContainerPoint(cell.bounds.getSouthWest());
+                    const ne = this._map.latLngToContainerPoint(cell.bounds.getNorthEast());
+                    const x = Math.min(sw.x, ne.x);
+                    const y = Math.min(sw.y, ne.y);
+                    const w = Math.abs(ne.x - sw.x);
+                    const h = Math.abs(sw.y - ne.y);
+
+                    if (x > size.x || y > size.y || x + w < 0 || y + h < 0) continue;
+
+                    ctx.fillStyle = getColor(cell.c);
+                    ctx.fillRect(x, y, Math.max(1, w), Math.max(1, h));
+                }
+
+                if (state.selectedCell) {
+                    const c = state.selectedCell;
+                    const sw = this._map.latLngToContainerPoint(c.bounds.getSouthWest());
+                    const ne = this._map.latLngToContainerPoint(c.bounds.getNorthEast());
+                    const x = Math.min(sw.x, ne.x);
+                    const y = Math.min(sw.y, ne.y);
+                    const w = Math.abs(ne.x - sw.x);
+                    const h = Math.abs(sw.y - ne.y);
+
+                    ctx.strokeStyle = '#0050b3';
+                    ctx.lineWidth = 2.5;
+                    ctx.strokeRect(x, y, Math.max(2, w), Math.max(2, h));
+                }
+            }
+        });
+
+        function findCellAtLatLng(ll) {
+            const p = currentParams();
+            const loc = latLngToLocal(ll, state.sourceLatLng);
+            const half = p.cellM / 2;
+            let best = null;
+            let bd = Infinity;
+
+            for (const c of state.gridData) {
+                if (c.c <= 0) continue;
+
+                const ax = Math.abs(loc.dx - c.dx);
+                const ay = Math.abs(loc.dy - c.dy);
+
+                if (ax <= half && ay <= half) {
+                    const d = ax * ax + ay * ay;
+                    if (d < bd) {
+                        best = c;
+                        bd = d;
+                    }
+                }
+            }
+            return best;
+        }
+
+        /* --------------------------------------------------------------------------
+           Grid Simulation Computation
+           -------------------------------------------------------------------------- */
+        function computeGrid() {
+            const p = currentParams();
+            const half = p.cellM / 2;
+            const extent = Math.ceil(p.rangeM / p.cellM) * p.cellM;
+            const rows = [];
+            let max = 0;
+            let minPositive = Infinity;
+
+            for (let dy = -extent; dy <= extent + 1e-9; dy += p.cellM) {
+                for (let dx = -extent; dx <= extent + 1e-9; dx += p.cellM) {
+                    if (Math.sqrt(dx * dx + dy * dy) > p.rangeM + 1e-9) continue;
+
+                    const w = rotateToWind(dx, dy, p.angleDeg);
+                    const c = airConcentration(p.Q, p.lam, p.U, p.H, w.x, w.y, p.z, state.stability);
+
+                    if (c > 0) {
+                        max = Math.max(max, c);
+                        minPositive = Math.min(minPositive, c);
+                    }
+
+                    const center = localToLatLng(dx, dy, state.sourceLatLng);
+                    const sw = localToLatLng(dx - half, dy - half, state.sourceLatLng);
+                    const ne = localToLatLng(dx + half, dy + half, state.sourceLatLng);
+
+                    rows.push({ center, bounds: L.latLngBounds(sw, ne), dx, dy, x: w.x, y: w.y, c });
+                }
+            }
+
+            state.gridData = rows;
+            if (!Number.isFinite(minPositive)) minPositive = 1e-12;
+            state.currentStats = { max, minPositive };
+
+            if (plumeLayer) plumeLayer.redraw();
+            renderTabContent();
+            updateOverlays();
+        }
+
+        function updateOverlays() {
+            const p = currentParams();
+            sourceCircle.setLatLng(state.sourceLatLng);
+            rangeCircle.setLatLng(state.sourceLatLng).setRadius(p.rangeM);
+            centerLine.setLatLngs([
+                state.sourceLatLng,
+                localToLatLng(
+                    Math.sin(p.angleDeg * Math.PI / 180) * p.rangeM,
+                    Math.cos(p.angleDeg * Math.PI / 180) * p.rangeM,
+                    state.sourceLatLng
+                )
+            ]);
+        }
+
+        /* --------------------------------------------------------------------------
+           Bottom Tab Contents (Digital Agency Data Display)
+           -------------------------------------------------------------------------- */
+        function infoCard(k, v) {
+            return `<div class="data-card"><div class="data-card-label">${k}</div><div class="data-card-value">${v}</div></div>`;
+        }
+
+        function renderConditionsTab() {
+            const p = currentParams();
+            const s = state.sourceLatLng;
+
+            return `<div class="data-grid-5">` +
+                `${infoCard(label('Q'), valUnit(p.Q, 'Bq/s', 0))}` +
+                `${infoCard(label('lam'), valUnit(p.lam, '1/s', 4))}` +
+                `${infoCard(label('H'), valUnit(p.H, 'm', 0))}` +
+                `${infoCard(label('U'), valUnit(p.U, 'm/s', 1))}` +
+                `${infoCard(t('downwind'), dirs[state.directionIndex][0] + ' ' + valUnit(p.angleDeg, '°', 1))}` +
+                `${infoCard(label('stability'), state.stability)}` +
+                `${infoCard(label('z'), valUnit(p.z, 'm', 0))}` +
+                `${infoCard(label('range'), valUnit(p.rangeM, 'm', 0))}` +
+                `${infoCard(label('cell'), valUnit(p.cellM, 'm', 0))}` +
+                `${infoCard(t('source'), s.lat.toFixed(5) + ' °, ' + s.lng.toFixed(5) + ' °')}` +
+                `</div>`;
+        }
+
+        function renderSelectedTab() {
+            const c = state.selectedCell;
+            if (!c) {
+                return `<div class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    <span>${t('none')}</span>
+                </div>`;
+            }
+
+            const d = Math.sqrt(c.dx * c.dx + c.dy * c.dy);
+
+            return `<div class="data-grid-5">` +
+                `${infoCard(t('coords'), c.center.lat.toFixed(5) + ' °, ' + c.center.lng.toFixed(5) + ' °')}` +
+                `${infoCard(t('horizontal'), valUnit(d, 'm', 1))}` +
+                `${infoCard(label('x'), valUnit(c.x, 'm', 1))}` +
+                `${infoCard(label('y'), valUnit(c.y, 'm', 1))}` +
+                `${infoCard(label('sigmaY'), c.x > 0 ? valUnit(sigmaY(c.x, state.stability), 'm', 2) : '0 m')}` +
+                `${infoCard(label('sigmaZ'), c.x > 0 ? valUnit(sigmaZ(c.x, state.stability), 'm', 2) : '0 m')}` +
+                `${infoCard(label('C'), valUnit(c.c, 'Bq/m³', 4))}` +
+                `</div>`;
+        }
+
+        function renderFormulaTab() {
+            const c = state.selectedCell;
+            const p = currentParams();
+
+            if (!c) {
+                return `<div class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    <span>${t('none')}</span>
+                </div>`;
+            }
+
+            if (c.x <= 0) {
+                return `<div class="formula-container">${label('x')} = ${valUnit(c.x, 'm', 2)} ≤ 0 m → ${label('C')} = 0 Bq/m³</div>`;
+            }
+
+            const sy = sigmaY(c.x, state.stability);
+            const sz = sigmaZ(c.x, state.stability);
+            const pref = p.Q / (2 * Math.PI * sy * sz * p.U);
+            const decay = Math.exp(-p.lam * c.x / p.U);
+            const lat = Math.exp(-(c.y ** 2) / (2 * sy ** 2));
+            const ver = Math.exp(-((p.z - p.H) ** 2) / (2 * sz ** 2)) + Math.exp(-((p.z + p.H) ** 2) / (2 * sz ** 2));
+
+            return `<div class="formula-container">C [Bq/m³] = Q [Bq/s] / (2π σy [m] σz [m] U [m/s]) × exp(-λ [1/s] x [m] / U [m/s]) × exp(-y²/(2σy²)) × [exp(-(z-H)²/(2σz²)) + exp(-(z+H)²/(2σz²))]\n\n` +
+                `${label('Q')} = ${valUnit(p.Q, 'Bq/s', 0)}\n` +
+                `${label('lam')} = ${valUnit(p.lam, '1/s', 4)}\n` +
+                `${label('U')} = ${valUnit(p.U, 'm/s', 2)}\n` +
+                `${label('H')} = ${valUnit(p.H, 'm', 1)} / ${label('z')} = ${valUnit(p.z, 'm', 1)}\n` +
+                `${label('x')} = ${valUnit(c.x, 'm', 2)} / ${label('y')} = ${valUnit(c.y, 'm', 2)} / ${label('stability')} = ${state.stability}\n` +
+                `${label('sigmaY')} = ${valUnit(sy, 'm', 4)} / ${label('sigmaZ')} = ${valUnit(sz, 'm', 4)}\n` +
+                `${t('prefactor')} = ${fmt(pref, 4)} Bq/m³\n` +
+                `${t('decayTerm')} = ${fmt(decay, 4)} / ${t('lateralTerm')} = ${fmt(lat, 4)} / ${t('verticalTerm')} = ${fmt(ver, 4)}\n` +
+                `${t('result')}: ${label('C')} = ${valUnit(c.c, 'Bq/m³', 6)}</div>`;
+        }
+
+        function renderTabContent() {
+            $('tabContent').innerHTML = ([renderConditionsTab, renderSelectedTab, renderFormulaTab][state.activeTab] || renderConditionsTab)();
+        }
+
+        function createTabs() {
+            const box = $('tabButtons');
+            box.innerHTML = '';
+            t('tabs').forEach((name, i) => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'tab-btn' + (i === state.activeTab ? ' active' : '');
+                b.setAttribute('role', 'tab');
+                b.setAttribute('aria-selected', i === state.activeTab ? 'true' : 'false');
+                b.textContent = name;
+                b.onclick = () => {
+                    state.activeTab = i;
+                    createTabs();
+                    renderTabContent();
+                };
+                box.appendChild(b);
+            });
+        }
+
+        /* --------------------------------------------------------------------------
+           Controls Initialization (Stability & Compass)
+           -------------------------------------------------------------------------- */
+        function createStabilityRadios() {
+            const g = $('stabilityGroup');
+            g.innerHTML = '';
+            'ABCDEF'.split('').forEach(s => {
+                const lab = document.createElement('label');
+                lab.className = 'stab-opt';
+                lab.innerHTML = `<input type="radio" name="stab" value="${s}" ${s === state.stability ? 'checked' : ''}><span>${s}</span>`;
+                lab.querySelector('input').onchange = e => {
+                    state.stability = e.target.value;
+                    scheduleCompute();
+                };
+                g.appendChild(lab);
+            });
+        }
+
+        function polar(cx, cy, r, deg) {
+            const a = (deg - 90) * Math.PI / 180;
+            return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+        }
+
+        function arcPath(cx, cy, r1, r2, a0, a1) {
+            const p1 = polar(cx, cy, r2, a0);
+            const p2 = polar(cx, cy, r2, a1);
+            const p3 = polar(cx, cy, r1, a1);
+            const p4 = polar(cx, cy, r1, a0);
+            return `M ${p1.x} ${p1.y} A ${r2} ${r2} 0 0 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${r1} ${r1} 0 0 0 ${p4.x} ${p4.y} Z`;
+        }
+
+        function createCompass() {
+            const svg = $('compass');
+            svg.innerHTML = '';
+            dirs.forEach((d, i) => {
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', arcPath(60, 60, 20, 56, d[1] - 11.25, d[1] + 11.25));
+                path.setAttribute('fill', i === state.directionIndex ? '#0050b3' : '#f1f5f9');
+                path.setAttribute('class', 'seg' + (i === state.directionIndex ? ' active' : ''));
+                path.onclick = () => {
+                    state.directionIndex = i;
+                    createCompass();
+                    applyTranslations(false);
+                    scheduleCompute();
+                };
+                svg.appendChild(path);
+
+                const p = polar(60, 60, 44, d[1]);
+                const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                txt.setAttribute('x', p.x);
+                txt.setAttribute('y', p.y + 3);
+                txt.setAttribute('text-anchor', 'middle');
+                txt.setAttribute('fill', i === state.directionIndex ? '#ffffff' : '#334155');
+                txt.textContent = d[0];
+                svg.appendChild(txt);
+            });
+
+            const tip = polar(60, 60, 56, dirs[state.directionIndex][1]);
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', '60');
+            line.setAttribute('y1', '60');
+            line.setAttribute('x2', tip.x);
+            line.setAttribute('y2', tip.y);
+            line.setAttribute('class', 'needle');
+            svg.appendChild(line);
+
+            $('dirName').textContent = dirs[state.directionIndex][0] + ' (' + dirs[state.directionIndex][1] + '°)';
+        }
+
+        /* --------------------------------------------------------------------------
+           Assumptions Modal Rendering
+           -------------------------------------------------------------------------- */
+        function renderAssumptions() {
+            const a = assumptions[state.lang] || assumptions.en;
+            let html = `<p>${t('assumptionIntro')}</p><table class="modal-table"><thead><tr><th style="width: 48px;">${t('colNo')}</th><th style="width: 45%;">${t('colAssumption')}</th><th>${t('colActual')}</th></tr></thead><tbody>`;
+            a.forEach(r => html += `<tr><td style="text-align: center; font-weight: 600;">${r.n}</td><td>${r.assumption}</td><td>${r.actual}</td></tr>`);
+
+            $('modalTitle').textContent = t('assumptionTitle');
+            $('modalBody').innerHTML = html + '</tbody></table>';
+        }
+
+        /* --------------------------------------------------------------------------
+           Translations Application & i18n
+           -------------------------------------------------------------------------- */
+        function applyTranslations(rebuildTabs = true) {
+            document.documentElement.lang = state.lang;
+            $('appTitle').textContent = t('title');
+            $('warningText').textContent = t('warning');
+            $('conditionsBtnText').textContent = t('conditionsBtn');
+            $('modalClose').textContent = t('close');
+            $('presetTitle').textContent = t('preset');
+            $('presetTokyoBtn').textContent = t('tokyo');
+            $('recenterBtn').textContent = t('recenter');
+            $('releaseTitle').textContent = t('release');
+            $('metTitle').textContent = t('met');
+            $('displayTitle').textContent = t('display');
+            $('qLabel').textContent = label('Q') + ' (Bq/s)';
+            $('lamLabel').textContent = label('lam') + ' (1/s)';
+            $('hLabel').textContent = label('H') + ' (m)';
+            $('uLabel').textContent = label('U') + ' (m/s)';
+            $('zLabel').textContent = label('z') + ' (m)';
+            $('rangeLabel').textContent = label('range') + ' (m)';
+            $('cellLabel').textContent = label('cell') + ' (m)';
+            $('stabilityLabel').textContent = t('stabilityLabel');
+            $('dirHelp').textContent = t('dirHelp');
+            $('downwindTag').textContent = t('downwind');
+            $('hintTitle').textContent = t('hintTitle');
+            $('hintText').textContent = t('hint');
+            $('legendTitle').textContent = t('legend');
+            $('legendNote').textContent = t('legendNote');
+            $('legendOver').textContent = t('ge') + ' 1e+1 Bq/m³';
+
+            renderAssumptions();
+            if (rebuildTabs) createTabs();
+            renderTabContent();
+        }
+
+        /* --------------------------------------------------------------------------
+           Event Handlers & Synchronization
+           -------------------------------------------------------------------------- */
+        function syncPair(r, n) {
+            const clamp = () => {
+                let v = +n.value;
+                v = Math.max(+n.min, Math.min(+n.max, v));
+                n.value = v;
+                r.value = v;
+            };
+            r.addEventListener('input', () => {
+                n.value = r.value;
+                scheduleCompute();
+            });
+            n.addEventListener('change', () => {
+                clamp();
+                scheduleCompute();
+            });
+        }
+
+        function scheduleCompute() {
+            clearTimeout(autoTimer);
+            autoTimer = setTimeout(computeGrid, 90);
+        }
+
+        function selectCell(cell, ll = null) {
+            state.selectedCell = cell;
+            if (plumeLayer) plumeLayer.redraw();
+
+            state.activeTab = 1;
+            createTabs();
+            renderTabContent();
+
+            L.popup({ maxWidth: 280 })
+                .setLatLng(ll || cell.center)
+                .setContent(`<b>${t('popupC')}</b><br>${label('C')}: ${valUnit(cell.c, 'Bq/m³', 6)}<br>${label('x')}: ${valUnit(cell.x, 'm', 1)}<br>${label('y')}: ${valUnit(cell.y, 'm', 1)}`)
+                .openOn(map);
+        }
+
+        function recenterToSource() {
+            map.panTo(state.sourceLatLng);
+        }
+
+        function resetTokyoTower() {
+            state.sourceLatLng = L.latLng(TOKYO_TOWER.lat, TOKYO_TOWER.lng);
+            sourceMarker.setLatLng(state.sourceLatLng);
+            $('hRange').value = $('hNumber').value = 333;
+            map.setView(state.sourceLatLng, 14);
+            computeGrid();
+        }
+
+        /* --------------------------------------------------------------------------
+           App Initialization
+           -------------------------------------------------------------------------- */
+        function init() {
+            state.sourceLatLng = L.latLng(TOKYO_TOWER.lat, TOKYO_TOWER.lng);
+
+            ['en', 'ja', 'bn', 'id', 'kk', 'mn', 'ms', 'ru', 'th', 'tl', 'tr', 'vi'].forEach(k => {
+                $('langSelect').insertAdjacentHTML('beforeend', `<option value="${k}">${langNames[k]}</option>`);
+            });
+
+            $('langSelect').value = state.lang;
+            $('langSelect').onchange = e => {
+                state.lang = e.target.value;
+                applyTranslations();
+            };
+
+            $('conditionsBtn').onclick = () => {
+                $('conditionsModal').classList.add('show');
+                renderAssumptions();
+            };
+
+            $('modalClose').onclick = () => $('conditionsModal').classList.remove('show');
+
+            $('conditionsModal').onclick = e => {
+                if (e.target.id === 'conditionsModal') {
+                    $('conditionsModal').classList.remove('show');
+                }
+            };
+
+            // Close on Escape key
+            window.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && $('conditionsModal').classList.contains('show')) {
+                    $('conditionsModal').classList.remove('show');
+                }
+            });
+
+            ['q', 'lam', 'h', 'u', 'z', 'range', 'cell'].forEach(x => syncPair($(x + 'Range'), $(x + 'Number')));
+
+            $('presetTokyoBtn').onclick = resetTokyoTower;
+            $('recenterBtn').onclick = recenterToSource;
+
+            createStabilityRadios();
+            createCompass();
+
+            map = L.map('map', {
+                center: state.sourceLatLng,
+                zoom: 14,
+                dragging: true,
+                scrollWheelZoom: true,
+                preferCanvas: true
+            });
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            plumeLayer = new PlumeCanvasLayer().addTo(map);
+
+            map.on('click', e => {
+                const c = findCellAtLatLng(e.latlng);
+                if (c) selectCell(c, e.latlng);
+            });
+
+            const icon = L.divIcon({
+                className: '',
+                html: '<div class="source-dot"></div>',
+                iconSize: [18, 18],
+                iconAnchor: [9, 9]
+            });
+
+            sourceMarker = L.marker(state.sourceLatLng, { draggable: true, icon }).addTo(map);
+
+            sourceCircle = L.circle(state.sourceLatLng, {
+                radius: 18,
+                color: '#c9171e',
+                weight: 2,
+                fillColor: '#ef4444',
+                fillOpacity: .15
+            }).addTo(map);
+
+            rangeCircle = L.circle(state.sourceLatLng, {
+                radius: +$('rangeNumber').value,
+                color: '#0050b3',
+                weight: 1.5,
+                dashArray: '6 7',
+                fill: false,
+                opacity: .75
+            }).addTo(map);
+
+            centerLine = L.polyline([], {
+                color: '#003780',
+                weight: 3,
+                dashArray: '8 8',
+                opacity: .85
+            }).addTo(map);
+
+            sourceMarker.on('drag', e => {
+                state.sourceLatLng = e.target.getLatLng();
+                updateOverlays();
+            });
+
+            sourceMarker.on('dragend', e => {
+                state.sourceLatLng = e.target.getLatLng();
+                computeGrid();
+            });
+
+            applyTranslations();
+            computeGrid();
+        }
+
+        window.addEventListener('load', init);
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atmospheric Dispersion 3D Simulator</title>
+    <!-- Google Fonts for Digital Agency typography: Noto Sans JP & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           Digital Agency Design System Tokens & Light/Dark Theme Variables
+           ========================================================================== */
+        :root {
+            /* Brand Colors */
+            --da-primary-700: #003780;
+            --da-primary-600: #0050b3;
+            --da-primary-500: #0b66d0;
+            --da-primary-100: #e5effa;
+            --da-primary-50: #f0f6fc;
+
+            /* Alert / Status */
+            --da-warning-bg: #fffbeb;
+            --da-warning-border: #f59e0b;
+            --da-warning-text: #92400e;
+
+            /* Dimensions & Radii */
+            --da-radius-sm: 4px;
+            --da-radius-md: 6px;
+            --da-radius-lg: 8px;
+            --da-header-height: 56px;
+        }
+
+        /* Light Theme (Default, Digital Agency Standard) */
+        body.theme-light {
+            --theme-bg: #f1f5f9;
+            --theme-surface: rgba(255, 255, 255, 0.94);
+            --theme-surface-solid: #ffffff;
+            --theme-border: #cbd5e1;
+            --theme-border-subtle: #e2e8f0;
+            --theme-text-main: #1a1a1a;
+            --theme-text-sub: #4d4d4d;
+            --theme-text-muted: #626970;
+            --theme-card-bg: #f8f9fa;
+            --theme-input-bg: #ffffff;
+            --theme-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --theme-shadow-panel: 0 8px 24px rgba(0, 27, 68, 0.12);
+            --theme-toggle-bg: #e2e8f0;
+            --theme-toggle-text: #1a1a1a;
+        }
+
+        /* Dark Theme */
+        body.theme-dark {
+            --theme-bg: #050505;
+            --theme-surface: rgba(15, 23, 42, 0.92);
+            --theme-surface-solid: #0f172a;
+            --theme-border: #334155;
+            --theme-border-subtle: #1e293b;
+            --theme-text-main: #f8fafc;
+            --theme-text-sub: #cbd5e1;
+            --theme-text-muted: #94a3b8;
+            --theme-card-bg: rgba(30, 41, 59, 0.7);
+            --theme-input-bg: #1e293b;
+            --theme-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+            --theme-shadow-panel: 0 12px 32px rgba(0, 0, 0, 0.6);
+            --theme-toggle-bg: #334155;
+            --theme-toggle-text: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: "Noto Sans JP", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--theme-bg);
+            color: var(--theme-text-main);
+            font-size: 14px;
+            line-height: 1.5;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        /* Focus Ring */
+        *:focus-visible {
+            outline: 2px solid var(--da-primary-600);
+            outline-offset: 2px;
+        }
+
+        /* ==========================================================================
+           Three.js Canvas
+           ========================================================================== */
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* ==========================================================================
+           Header (Digital Agency Standard)
+           ========================================================================== */
+        .topbar {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            height: var(--da-header-height);
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            background: var(--theme-surface);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--theme-border);
+            border-radius: var(--da-radius-md);
+            box-shadow: var(--theme-shadow-panel);
+            transition: background 0.25s ease, border-color 0.25s ease;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--da-radius-sm);
+            background: var(--da-primary-700);
+            display: grid;
+            place-items: center;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            box-shadow: 0 2px 4px rgba(0, 39, 102, 0.25);
+        }
+
+        .brand-title-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-tag {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--da-primary-600);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        body.theme-dark .brand-tag {
+            color: #60a5fa;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--theme-text-main);
+            line-height: 1.25;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* Notice Banner */
+        .warning-banner {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--da-warning-bg);
+            border: 1px solid var(--da-warning-border);
+            color: var(--da-warning-text);
+            border-radius: var(--da-radius-sm);
+            padding: 4px 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        .warning-icon {
+            flex-shrink: 0;
+            width: 14px;
+            height: 14px;
+            fill: var(--da-warning-text);
+        }
+
+        /* 2D Switch Link */
+        .btn-link-2d {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: 1px solid var(--theme-border);
+            color: var(--theme-text-main);
+            border-radius: var(--da-radius-sm);
+            padding: 6px 10px;
+            font-size: 12.5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+
+        .btn-link-2d:hover {
+            border-color: var(--da-primary-600);
+            color: var(--da-primary-600);
+            background: var(--theme-card-bg);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--theme-toggle-bg);
+            border: 1px solid var(--theme-border);
+            color: var(--theme-toggle-text);
+            border-radius: var(--da-radius-sm);
+            padding: 6px 10px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--da-primary-600);
+        }
+
+        .theme-icon {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        /* Language Select */
+        .select-da {
+            border: 1px solid var(--theme-border);
+            border-radius: var(--da-radius-sm);
+            background-color: var(--theme-input-bg);
+            color: var(--theme-text-main);
+            padding: 6px 26px 6px 10px;
+            font-size: 12.5px;
+            font-weight: 500;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23626970'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 14px;
+            transition: border-color 0.15s ease;
+        }
+
+        .select-da:focus {
+            border-color: var(--da-primary-600);
+            outline: none;
+        }
+
+        /* ==========================================================================
+           Floating UI Control Panel
+           ========================================================================== */
+        #ui-panel {
+            position: absolute;
+            top: 76px;
+            right: 12px;
+            z-index: 10;
+            background: var(--theme-surface);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--theme-border);
+            border-radius: var(--da-radius-md);
+            padding: 16px;
+            width: 340px;
+            max-height: calc(100vh - 96px);
+            overflow-y: auto;
+            box-shadow: var(--theme-shadow-panel);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: background 0.25s ease, border-color 0.25s ease;
+            scrollbar-width: thin;
+        }
+
+        .panel-section-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--da-primary-600);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--theme-text-main);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--theme-text-sub);
+        }
+
+        .val-display {
+            font-family: "Roboto Mono", monospace;
+            font-weight: 700;
+            color: var(--da-primary-600);
+            font-size: 13px;
+        }
+
+        body.theme-dark .val-display {
+            color: #60a5fa;
+        }
+
+        /* Stability Segment Control */
+        .stability-selector {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+            margin-top: 2px;
+        }
+
+        .stab-btn {
+            background: var(--theme-card-bg);
+            border: 1px solid var(--theme-border);
+            color: var(--theme-text-main);
+            padding: 6px 0;
+            border-radius: var(--da-radius-sm);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-weight: 700;
+            font-size: 12px;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .stab-btn:hover {
+            border-color: var(--da-primary-600);
+            background: var(--da-primary-50);
+            color: var(--da-primary-700);
+        }
+
+        body.theme-dark .stab-btn:hover {
+            background: rgba(0, 80, 179, 0.2);
+            color: #93c5fd;
+        }
+
+        .stab-btn.active {
+            background: var(--da-primary-600);
+            border-color: var(--da-primary-600);
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 80, 179, 0.35);
+        }
+
+        body.theme-dark .stab-btn.active {
+            background: #2563eb;
+            border-color: #3b82f6;
+            color: #ffffff;
+        }
+
+        /* Range Slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--theme-border);
+            outline: none;
+            transition: background 0.15s ease;
+            margin-top: 4px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--da-primary-600);
+            border: 2px solid #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        body.theme-dark input[type="range"]::-webkit-slider-thumb {
+            background: #3b82f6;
+            border-color: #0f172a;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--da-primary-600);
+            border: 2px solid #ffffff;
+            cursor: pointer;
+        }
+
+        /* Info Card */
+        .info-card {
+            background: var(--theme-card-bg);
+            border: 1px solid var(--theme-border-subtle);
+            border-radius: var(--da-radius-sm);
+            padding: 10px 12px;
+            font-size: 11.5px;
+            color: var(--theme-text-sub);
+            line-height: 1.5;
+        }
+
+        /* ==========================================================================
+           Floating Stats Card (Bottom-Left)
+           ========================================================================== */
+        #stats {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            z-index: 10;
+            background: var(--theme-surface);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--theme-border);
+            border-radius: var(--da-radius-md);
+            padding: 10px 14px;
+            box-shadow: var(--theme-shadow-panel);
+            color: var(--theme-text-sub);
+            font-size: 11.5px;
+            line-height: 1.5;
+            max-width: 320px;
+            pointer-events: none;
+            transition: background 0.25s ease, border-color 0.25s ease;
+        }
+
+        #stats strong {
+            color: var(--theme-text-main);
+            font-size: 12px;
+        }
+
+        /* Mouse Control Instruction Tooltip */
+        .mouse-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--theme-text-muted);
+            margin-top: 4px;
+            border-top: 1px dashed var(--theme-border-subtle);
+            padding-top: 4px;
+        }
+    </style>
+</head>
+
+<body class="theme-light">
+    <!-- 3D Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- Digital Agency Top Header -->
+    <header class="topbar">
+        <div class="brand-container">
+            <div class="brand-icon">3D</div>
+            <div class="brand-title-wrap">
+                <span class="brand-tag">ITP / ISCN / JAEA</span>
+                <h1 id="appTitle">Atmospheric Dispersion 3D Simulator</h1>
+            </div>
+        </div>
+
+        <div class="top-actions">
+            <!-- Training Notice Banner -->
+            <div class="warning-banner" role="note">
+                <svg class="warning-icon" viewBox="0 0 24 24">
+                    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                </svg>
+                <span id="warningText">Training Model Only</span>
+            </div>
+
+            <!-- Switch to 2D Map Simulator -->
+            <a href="./sadc_.html" class="btn-link-2d" title="Switch to 2D Map Simulator">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+                </svg>
+                <span>2D Map</span>
+            </a>
+
+            <!-- Theme Switcher (Light / Dark) -->
+            <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle Light/Dark Theme">
+                <svg class="theme-icon" id="themeIcon" viewBox="0 0 24 24">
+                    <!-- Default shows Moon icon for switching to dark -->
+                    <path d="M12.3 2a10 10 0 0 0-1.9 20 10 10 0 0 0 9.8-7.7 8 8 0 0 1-7.9-12.3z"/>
+                </svg>
+                <span id="themeText">Dark</span>
+            </button>
+
+            <!-- Language Dropdown -->
+            <select class="select-da" id="langSelect" aria-label="Language Selector"></select>
+        </div>
+    </header>
+
+    <!-- UI Controls Panel -->
+    <aside id="ui-panel" aria-label="Simulation Parameters">
+        <div class="panel-section-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/>
+            </svg>
+            <span id="sectionTitle">Simulation Controls</span>
+        </div>
+
+        <!-- Atmospheric Stability -->
+        <div class="control-group">
+            <div class="control-label-row">
+                <span id="lbl-stability-name">Atmospheric Stability</span>
+                <span id="stab-val" class="val-display">C</span>
+            </div>
+            <div class="stability-selector" role="radiogroup" aria-label="Atmospheric Stability">
+                <button class="stab-btn" data-val="A" type="button">A</button>
+                <button class="stab-btn" data-val="B" type="button">B</button>
+                <button class="stab-btn active" data-val="C" type="button">C</button>
+                <button class="stab-btn" data-val="D" type="button">D</button>
+                <button class="stab-btn" data-val="E" type="button">E</button>
+                <button class="stab-btn" data-val="F" type="button">F</button>
+            </div>
+        </div>
+
+        <!-- Wind Speed U -->
+        <div class="control-group">
+            <div class="control-label-row">
+                <span id="lbl-wind-name">Wind speed U</span>
+                <span id="wind-val" class="val-display">5.0 m/s</span>
+            </div>
+            <input type="range" id="wind-slider" min="0.5" max="20" step="0.1" value="5.0" aria-label="Wind speed">
+        </div>
+
+        <!-- Release Height H -->
+        <div class="control-group">
+            <div class="control-label-row">
+                <span id="lbl-height-name">Release height H</span>
+                <span id="height-val" class="val-display">100 m</span>
+            </div>
+            <input type="range" id="height-slider" min="0" max="500" step="10" value="100" aria-label="Release height">
+        </div>
+
+        <!-- Physics Info Card -->
+        <div class="info-card" id="infoText"></div>
+    </aside>
+
+    <!-- Bottom-Left Stats Card -->
+    <div id="stats" aria-live="polite"></div>
+
+    <!-- Scripts -->
+    <script src="./lang.js"></script>
+    <script src="./lang_3d.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        'use strict';
+
+        /* --------------------------------------------------------------------------
+           Atmospheric Dispersion Physics Functions (Identical to 2D & SADC Specs)
+           -------------------------------------------------------------------------- */
+        const K_SIGMA_Y = 6.7775e-1;
+        const THETA1 = { A: 50.0, B: 40.0, C: 30.0, D: 20.0, E: 15.0, F: 10.0 };
+        const SIGMA_Z_PARAMS_GE_02 = {
+            A: { sigma0: 768.1, P0: 3.9077, P1: 3.898, P2: 1.7330 },
+            B: { sigma0: 122.0, P0: 1.4132, P1: 0.49523, P2: 0.12772 },
+            C: { sigma0: 58.1, P0: 0.8916, P1: -0.001649, P2: 0.0 },
+            D: { sigma0: 31.7, P0: 0.7626, P1: -0.095108, P2: 0.0 },
+            E: { sigma0: 22.2, P0: 0.7117, P1: -0.12697, P2: 0.0 },
+            F: { sigma0: 13.8, P0: 0.6582, P1: -0.1227, P2: 0.0 }
+        };
+        const SIGMA_Z_PARAMS_LT_02 = {
+            A: { sigma0: 165.0, P0: 1.07 },
+            B: { sigma0: 83.7, P0: 0.894 },
+            C: { sigma0: 58.0, P0: 0.891 },
+            D: { sigma0: 33.0, P0: 0.854 },
+            E: { sigma0: 24.4, P0: 0.854 },
+            F: { sigma0: 15.5, P0: 0.822 }
+        };
+
+        function sigmaY(x_m, stability) {
+            if (x_m < 1) return 0.1;
+            const x_km = x_m / 1000.0;
+            const theta1 = THETA1[stability];
+            return K_SIGMA_Y * theta1 * (5.0 - Math.log10(x_km)) * x_km;
+        }
+
+        function sigmaZ(x_m, stability) {
+            if (x_m < 1) return 0.1;
+            const x_km = x_m / 1000.0;
+            if (x_km >= 0.2) {
+                const p = SIGMA_Z_PARAMS_GE_02[stability];
+                const logx = Math.log10(x_km);
+                const exponent = p.P0 + p.P1 * logx + p.P2 * (logx ** 2);
+                return p.sigma0 * (x_km ** exponent);
+            }
+            const p = SIGMA_Z_PARAMS_LT_02[stability];
+            return p.sigma0 * (x_km ** p.P0);
+        }
+
+        // Box-Muller Normal Distribution Random
+        function randn_bm() {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+        }
+
+        /* --------------------------------------------------------------------------
+           Simulation State & Theme Configuration
+           -------------------------------------------------------------------------- */
+        const state = {
+            lang: 'en',
+            stability: 'C',
+            windSpeed: 5.0,
+            height: 100.0,
+            maxDistance: 5000.0,
+            scale: 10.0, // 1 Three.js unit = 10 meters
+            theme: localStorage.getItem('sadc_theme') || 'light' // default light for Digital Agency
+        };
+
+        const langNames = {
+            "en": "English", "ja": "日本語", "bn": "বাংলা", "id": "Bahasa Indonesia",
+            "kk": "Қазақша", "mn": "Монгол", "ms": "Bahasa Melayu", "ru": "Русский",
+            "th": "ไทย", "tl": "Tagalog", "tr": "Türkçe", "vi": "Tiếng Việt"
+        };
+
+        const getLocal = k => (typeof localStrings !== 'undefined' && localStrings[state.lang] && localStrings[state.lang][k]) || (typeof localStrings !== 'undefined' && localStrings.en[k]) || k;
+        const t = k => (typeof translations !== 'undefined' && translations[state.lang] && translations[state.lang][k]) || (typeof translations !== 'undefined' && translations.en[k]) || k;
+        const label = k => (t('labels') && t('labels')[k]) || k;
+
+        /* --------------------------------------------------------------------------
+           Translations Application
+           -------------------------------------------------------------------------- */
+        function applyTranslations() {
+            document.documentElement.lang = state.lang;
+            const titleText = getLocal('appTitle') || t('title');
+            document.title = titleText;
+            document.getElementById('appTitle').textContent = titleText;
+
+            document.getElementById('lbl-stability-name').textContent = t('stabilityLabel') || 'Atmospheric Stability';
+            document.getElementById('stab-val').textContent = state.stability;
+
+            document.getElementById('lbl-wind-name').textContent = label('U') || 'Wind speed U';
+            document.getElementById('wind-val').textContent = state.windSpeed.toFixed(1) + ' m/s';
+
+            document.getElementById('lbl-height-name').textContent = label('H') || 'Release height H';
+            document.getElementById('height-val').textContent = state.height + ' m';
+
+            document.getElementById('warningText').textContent = state.lang === 'ja'
+                ? '研修用途限定の簡易モデルです'
+                : 'Simplified training model only';
+
+            document.getElementById('sectionTitle').textContent = state.lang === 'ja'
+                ? 'シミュレーション制御'
+                : 'Simulation Controls';
+
+            document.getElementById('infoText').textContent = getLocal('infoText');
+
+            const mouseHint = state.lang === 'ja'
+                ? '左ドラッグ: 回転 / 右ドラッグ: 移動 / ホイール: 拡大縮小'
+                : 'Left drag: Rotate / Right drag: Pan / Scroll: Zoom';
+
+            document.getElementById('stats').innerHTML = `
+                <strong>${getLocal('statsTitle')}</strong><br>
+                ${getLocal('statsUnit')}<br>
+                ${getLocal('statsMaxDist')}<br>
+                ${getLocal('statsParticles')}<br>
+                <span style="font-size: 0.72rem; color: var(--theme-text-muted); margin-top: 4px; display:inline-block;">${getLocal('statsNote')}</span>
+                <div class="mouse-hint">${mouseHint}</div>
+            `;
+
+            updateThemeButtonText();
+        }
+
+        function updateThemeButtonText() {
+            const btn = document.getElementById('themeToggleBtn');
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+
+            if (state.theme === 'dark') {
+                // Currently dark -> button shows switch to Light (Sun icon)
+                icon.innerHTML = '<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0-1.41-1.41l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0-1.41-1.41l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>';
+                text.textContent = state.lang === 'ja' ? 'ライト' : 'Light';
+            } else {
+                // Currently light -> button shows switch to Dark (Moon icon)
+                icon.innerHTML = '<path d="M12.3 2a10 10 0 0 0-1.9 20 10 10 0 0 0 9.8-7.7 8 8 0 0 1-7.9-12.3z"/>';
+                text.textContent = state.lang === 'ja' ? 'ダーク' : 'Dark';
+            }
+        }
+
+        /* --------------------------------------------------------------------------
+           Three.js Scene & Object Setup
+           -------------------------------------------------------------------------- */
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 4000);
+        camera.position.set(-90, 70, 140);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.target.set(160, 0, 0);
+
+        // Lighting
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        dirLight.position.set(100, 220, 60);
+        scene.add(dirLight);
+
+        const ambientLight = new THREE.AmbientLight(0x888888);
+        scene.add(ambientLight);
+
+        // Stack (煙突)
+        const stackGeo = new THREE.CylinderGeometry(1.6, 2.8, 1, 16);
+        const stackMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.5 });
+        const stackMesh = new THREE.Mesh(stackGeo, stackMat);
+        scene.add(stackMesh);
+
+        function updateStackHeight() {
+            const hUnit = state.height / state.scale;
+            stackMesh.scale.y = hUnit || 0.1;
+            stackMesh.position.y = (hUnit || 0.1) / 2;
+        }
+
+        // Grid (XY平面 - 地表)
+        let gridHelper;
+        function setupGrid(isDark) {
+            if (gridHelper) scene.remove(gridHelper);
+            const mainColor = isDark ? 0x475569 : 0x94a3b8;
+            const subColor = isDark ? 0x1e293b : 0xd8e2ed;
+            gridHelper = new THREE.GridHelper(1000, 100, mainColor, subColor);
+            gridHelper.position.set(250, 0, 0);
+            scene.add(gridHelper);
+        }
+
+        /* --------------------------------------------------------------------------
+           Particle System Setup (60,000 Particles)
+           -------------------------------------------------------------------------- */
+        const PARTICLE_COUNT = 60000;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(PARTICLE_COUNT * 3);
+        const colors = new Float32Array(PARTICLE_COUNT * 3);
+
+        const baseOffset = new Float32Array(PARTICLE_COUNT * 2); // [randZ (横), randY (縦)]
+        const ages = new Float32Array(PARTICLE_COUNT);
+
+        const MIN_WIND_SPEED = 0.5;
+        const SPEED_SCALE = 15;
+        const MAX_TIME = state.maxDistance / (MIN_WIND_SPEED * SPEED_SCALE);
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            ages[i] = Math.random() * MAX_TIME;
+            baseOffset[i * 2] = randn_bm();
+            baseOffset[i * 2 + 1] = randn_bm();
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        // Soft Radial Particle Texture
+        const canvas = document.createElement('canvas');
+        canvas.width = 64; canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+        grad.addColorStop(0, 'rgba(255,255,255,1)');
+        grad.addColorStop(0.5, 'rgba(255,255,255,0.7)');
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 64, 64);
+        const texture = new THREE.CanvasTexture(canvas);
+
+        const particleMaterial = new THREE.PointsMaterial({
+            size: 4.8,
+            map: texture,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.65,
+            depthWrite: false,
+            blending: THREE.NormalBlending
+        });
+
+        const particleSystem = new THREE.Points(geometry, particleMaterial);
+        scene.add(particleSystem);
+
+        const baseLumas = new Float32Array(PARTICLE_COUNT);
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            baseLumas[i] = 0.75 + Math.random() * 0.5;
+        }
+
+        // Stability Colors (Optimized for both Light and Dark backgrounds)
+        const stabColorsLight = {
+            'A': new THREE.Color(0xd92d20), // Red
+            'B': new THREE.Color(0xe65100), // Orange
+            'C': new THREE.Color(0xf59e0b), // Amber/Yellow
+            'D': new THREE.Color(0x059669), // Green
+            'E': new THREE.Color(0x0284c7), // Cyan/Sky
+            'F': new THREE.Color(0x4f46e5)  // Indigo/Purple
+        };
+
+        const stabColorsDark = {
+            'A': new THREE.Color(0xff4444),
+            'B': new THREE.Color(0xff9944),
+            'C': new THREE.Color(0xffdd44),
+            'D': new THREE.Color(0x44dd44),
+            'E': new THREE.Color(0x38bdf8),
+            'F': new THREE.Color(0x818cf8)
+        };
+
+        const bouncedColorLight = new THREE.Color(0x334155); // Dark Slate for ground reflection in Light Mode
+        const bouncedColorDark = new THREE.Color(0xffffff);  // Bright White in Dark Mode
+
+        /* --------------------------------------------------------------------------
+           Dynamic Theme Switching Function
+           -------------------------------------------------------------------------- */
+        function applyTheme(theme) {
+            state.theme = theme;
+            localStorage.setItem('sadc_theme', theme);
+            const isDark = (theme === 'dark');
+
+            document.body.className = isDark ? 'theme-dark' : 'theme-light';
+
+            // Three.js Scene Colors
+            const bgColor = isDark ? 0x050505 : 0xf1f5f9;
+            renderer.setClearColor(bgColor, 1);
+            scene.fog = new THREE.FogExp2(bgColor, isDark ? 0.002 : 0.0016);
+
+            // Grid & Stack Colors
+            setupGrid(isDark);
+            stackMat.color.setHex(isDark ? 0x64748b : 0x475569);
+
+            // Lighting adjustments
+            ambientLight.color.setHex(isDark ? 0x404040 : 0x94a3b8);
+            dirLight.intensity = isDark ? 0.8 : 1.1;
+
+            // Particle material blending
+            if (isDark) {
+                particleMaterial.blending = THREE.AdditiveBlending;
+                particleMaterial.opacity = 0.52;
+                particleMaterial.size = 4.5;
+            } else {
+                particleMaterial.blending = THREE.NormalBlending;
+                particleMaterial.opacity = 0.65;
+                particleMaterial.size = 4.8;
+            }
+            particleMaterial.needsUpdate = true;
+
+            updateThemeButtonText();
+        }
+
+        /* --------------------------------------------------------------------------
+           Event Handlers & Interactivity
+           -------------------------------------------------------------------------- */
+        // Theme Toggle Click
+        document.getElementById('themeToggleBtn').addEventListener('click', () => {
+            const nextTheme = (state.theme === 'dark') ? 'light' : 'dark';
+            applyTheme(nextTheme);
+        });
+
+        // Language Select
+        const langSelect = document.getElementById('langSelect');
+        Object.keys(langNames).forEach(k => {
+            const opt = document.createElement('option');
+            opt.value = k;
+            opt.textContent = langNames[k];
+            langSelect.appendChild(opt);
+        });
+        langSelect.value = state.lang;
+        langSelect.addEventListener('change', e => {
+            state.lang = e.target.value;
+            applyTranslations();
+        });
+
+        // Atmospheric Stability Radios
+        document.querySelectorAll('.stab-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                document.querySelectorAll('.stab-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                state.stability = e.target.dataset.val;
+                document.getElementById('stab-val').textContent = state.stability;
+            });
+        });
+
+        // Wind Speed Slider
+        document.getElementById('wind-slider').addEventListener('input', e => {
+            state.windSpeed = parseFloat(e.target.value);
+            document.getElementById('wind-val').textContent = state.windSpeed.toFixed(1) + ' m/s';
+        });
+
+        // Release Height Slider
+        document.getElementById('height-slider').addEventListener('input', e => {
+            state.height = parseFloat(e.target.value);
+            document.getElementById('height-val').textContent = state.height + ' m';
+            updateStackHeight();
+        });
+
+        /* --------------------------------------------------------------------------
+           Animation Loop (Realtime Monte Carlo Gaussian Plume Propagation)
+           -------------------------------------------------------------------------- */
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const dt = clock.getDelta();
+            const posArray = geometry.attributes.position.array;
+            const colArray = geometry.attributes.color.array;
+
+            const isDark = (state.theme === 'dark');
+            const baseColor = (isDark ? stabColorsDark : stabColorsLight)[state.stability];
+            const bouncedColor = isDark ? bouncedColorDark : bouncedColorLight;
+
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                ages[i] += dt;
+
+                if (ages[i] > MAX_TIME) {
+                    ages[i] -= MAX_TIME;
+                    baseOffset[i * 2] = randn_bm();
+                    baseOffset[i * 2 + 1] = randn_bm();
+                }
+
+                const xm = ages[i] * state.windSpeed * SPEED_SCALE;
+
+                if (xm > state.maxDistance) {
+                    posArray[i * 3] = -9999;
+                    posArray[i * 3 + 1] = -9999;
+                    posArray[i * 3 + 2] = -9999;
+                    colArray[i * 3] = 0;
+                    colArray[i * 3 + 1] = 0;
+                    colArray[i * 3 + 2] = 0;
+                    continue;
+                }
+
+                const sy = sigmaY(xm, state.stability);
+                const sz = sigmaZ(xm, state.stability);
+
+                const actualX = xm;
+                const actualZ = baseOffset[i * 2] * sy;
+                let actualY = state.height + baseOffset[i * 2 + 1] * sz;
+
+                let isBounced = false;
+                if (actualY < 0) {
+                    actualY = Math.abs(actualY);
+                    isBounced = true;
+                }
+
+                posArray[i * 3] = actualX / state.scale;
+                posArray[i * 3 + 1] = actualY / state.scale;
+                posArray[i * 3 + 2] = actualZ / state.scale;
+
+                const luma = baseLumas[i];
+                if (isBounced) {
+                    colArray[i * 3] = bouncedColor.r * luma;
+                    colArray[i * 3 + 1] = bouncedColor.g * luma;
+                    colArray[i * 3 + 2] = bouncedColor.b * luma;
+                } else {
+                    colArray[i * 3] = baseColor.r * luma;
+                    colArray[i * 3 + 1] = baseColor.g * luma;
+                    colArray[i * 3 + 2] = baseColor.b * luma;
+                }
+            }
+
+            geometry.attributes.position.needsUpdate = true;
+            geometry.attributes.color.needsUpdate = true;
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize Theme, Stack, Translations and Start Loop
+        updateStackHeight();
+        applyTheme(state.theme);
+        applyTranslations();
+        animate();
+    </script>
+</body>
+
+</html>
